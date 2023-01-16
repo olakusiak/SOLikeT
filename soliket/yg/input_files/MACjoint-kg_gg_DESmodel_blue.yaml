@@ -1,0 +1,181 @@
+#output: /global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_a_shotnoise_blue_1-4
+output:  /Users/aleksandra/software/Likelihoods_sz/soliket/ymap/chains/cosmo_joint_test
+
+likelihood:
+  soliket.joint_KXG_GXG_PS_Likelihood:
+    sz_data_directory: "/Users/aleksandra/software/Likelihoods_sz/soliket/ymap/data/"
+    #sz_data_directory: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/data/"
+    kxg_ps_file: "Bandpowers_Cross_Sample1_Sample6.dat"
+    gxg_ps_file: "Bandpowers_Auto_Sample1.dat"
+    cov_joint_ps_file_kg_kg: "Covariance_1515_blue.txt"
+    cov_joint_ps_file_kg_gg: "Covariance_1511_blue.txt"
+    cov_joint_ps_file_gg_gg: "Covariance_1111_blue.txt"
+    wind_funct_file_gg: "cl_highL6000_sz_mask_C1+gaussian_filter20_windows_auto.txt"
+    wind_funct_file_kg: "cl_highL6000_sz_mask_C1+gaussian_filter20_windows_cross.txt"
+    tranfer_funct_file_gg: "clgg_highL6000_sz_mask_C1+gaussian_filter20_smooth_blue_transfer_namaster.txt"
+    tranfer_funct_file_kg: "clkg_highL6000_sz_mask_C1+gaussian_filter20_smooth_blue_transfer_namaster.txt"
+    s_file: "s_blue.txt"
+params:
+  alpha_s_HOD:
+    prior:
+      min: 0.1
+      max: 2.5
+    ref:
+      dist: norm
+      loc: 1.4271830
+      scale: 0.01
+    proposal: 0.03
+    latex: \alpha_{HOD}
+  sigma_log10M_HOD:
+    prior:
+      min: 0.01
+      max: 0.80
+    ref:
+      dist: norm
+      loc: 0.3
+      scale: 0.01
+    proposal: 0.03
+    latex: \sigma_{HOD}
+  logM1_prime:
+    prior:
+      min: 11.35
+      max: 13.85
+    ref:
+      dist: norm
+      loc: 1.3156640E+01
+      scale: 0.005
+    proposal: 0.005
+    latex: \log(10^{10} M1_\mathrm{prime})
+    drop: true
+  M1_prime_HOD:
+    value: 'lambda logM1_prime: 10**(logM1_prime)'
+    latex: M1_\mathrm{prime}
+  logM_min_HOD:
+    prior:
+      min: 10.85
+      max: 12.35
+    ref:
+      dist: norm
+      loc: 1.2202442E+01
+      scale: 0.005
+    proposal: 0.005
+    latex: \log(10^{10} M_\mathrm{min})
+    drop: true
+  M_min_HOD:
+    value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
+    latex: M_\mathrm{min}
+  x_out_truncated_nfw_profile_satellite_galaxies:
+    prior:
+      min: 0.1
+      max: 1.8
+    ref:
+      dist: norm
+      loc: 1.0
+      scale: 0.01
+    proposal: 0.02
+    latex: a
+  A_shot_noise:
+    prior:
+      min: -2.0
+      max: 2.0
+    ref:
+      dist: norm
+      loc: 0.0
+      scale: 0.01
+    proposal: 0.005
+    latex: A_{sn}
+
+
+
+
+# sampler:
+#     mcmc:
+#       covmat: auto
+#       #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+#       Rminus1_stop: 0.01
+#       learn_proposal: True
+#       learn_proposal_Rminus1_max: 100.0
+#       learn_proposal_Rminus1_max_early: 300.0
+#       #drag: true
+#       #output_every: 10s
+#       proposal_scale: 2.4
+#       max_tries: 5000
+sampler:
+    evaluate:
+      override:
+        sigma_log10M_HOD: 0.68660116
+        alpha_s_HOD: 1.3039425
+        logM_min_HOD: 11.795964
+        logM1_prime: 12.701308
+        A_shot_noise: -0.25547369
+        x_out_truncated_nfw_profile_satellite_galaxies: 1.0868995
+        # #Omega_m: 0.312216
+        # h: 0.6766
+        # omega_cdm: 0.11933
+
+theory:
+  soliket.ymap.classy_sz:
+     extra_args:
+             output: 'gal_lens_1h, gal_lens_2h, lens_lensmag_1h, lens_lensmag_2h, gal_gal_1h, gal_gal_2h, gal_lensmag_1h, gal_lensmag_2h, lensmag_lensmag_1h, lensmag_lensmag_2h'
+             galaxy_sample : 'unwise'
+             galaxy_sample_id : 'blue'
+             UNWISE_dndz_file :  "/Users/aleksandra/software/class_sz/sz_auxiliary_files/UNWISE_galaxy_distributions/normalised_dndz_cosmos.txt"
+             #UNWISE_dndz_file :  '/global/homes/a/akusiak/software/class_sz/sz_auxiliary_files/UNWISE_galaxy_distributions/normalised_dndz_cosmos.txt'
+
+             ### Precision
+             redshift_epsabs : 1.0e-40
+             redshift_epsrel : 0.0005
+             mass_epsabs : 1.0e-40
+             mass_epsrel : 0.0005
+             dell : 10
+             multipoles_sz : 'ell_mock'
+             ell_max : 1600.0
+             ell_min : 2.0
+             ndim_masses : 150
+             ndim_redshifts : 150
+
+             P_k_max_h/Mpc : 50.0
+             k_min_for_pk_class_sz : 0.0001
+             k_max_for_pk_class_sz : 10.0
+             k_per_decade_class_sz : 20.0
+
+             z_min : 0.005
+             M_min : 7.0e8
+             M_max : 3.5e15
+
+             hm_consistency : 1
+             sz_verbose : 0
+             nonlinear_verbose : 0
+
+             delta for galaxies : "200c"
+             delta for matter density: "200c"
+             mass function: 'T08M200c'
+             concentration parameter: 'B13'
+
+
+            ### Cosmology
+             omega_b : 0.02242
+             omega_cdm : 0.11933
+             h : 0.6766
+             #sigma8: 0.8102
+             tau_reio : 0.0561
+             ln10^{10}A_s : 3.047
+             n_s : 0.9665
+
+             k_pivot : 0.05
+             N_ncdm : 1
+             N_ur : 2.0328
+             m_ncdm : 0.06
+
+             ####HOD PARAMS
+             # sigma_log10M_HOD: 8.3612025E-01
+             # alpha_s_HOD: 1.4251577E+00
+             # M1_prime_HOD: 1.4342990E+13
+             # M_min_HOD: 1.5938318E+12
+             #A_shot_noise_blue = 3.8836691E-01
+             #x_out_truncated_nfw_profile_satellite_galaxies: 1.0
+             M0_HOD: 0
+             M0 equal M_min (HOD): 'no'
+             x_out_truncated_nfw_profile: 1.0
+# stop_at_error: True
+# debug: True
