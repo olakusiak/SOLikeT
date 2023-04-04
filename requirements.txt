@@ -1,0 +1,17 @@
+numpy
+scipy
+pandas
+scikit-learn
+pyyaml
+py-bobyqa
+packaging
+tqdm
+portalocker
+dill
+fuzzywuzzy
+astropy
+getdist
+cobaya
+pyccl
+sacc
+fgspectra

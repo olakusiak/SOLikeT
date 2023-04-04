@@ -4,7 +4,8 @@ Make sure that this returns the same result as original mflike.MFLike from LAT_M
 import os
 import tempfile
 import unittest
-from distutils.version import LooseVersion
+import pytest
+from packaging.version import Version
 
 import camb
 import mflike  # noqa
@@ -57,7 +58,7 @@ nuisance_params = {
 }
 
 
-if LooseVersion(camb.__version__) < LooseVersion('1.3'):
+if Version(camb.__version__) < Version('1.3'):
     chi2s = {"tt": 1384.5669,
              "te": 1400.2760,
              "ee": 1428.7597,
@@ -78,7 +79,9 @@ class MFLikeTest(unittest.TestCase):
         from cobaya.install import install
 
         install({"likelihood": {"mflike.MFLike": None}},
-                path=packages_path, skip_global=True)
+                path=packages_path, skip_global=False, force=True, debug=True)
+        install({"likelihood": {"soliket.MFLike": None}},
+                path=packages_path, skip_global=False, force=True, debug=True)
 
     def get_mflike_type(self, as_string=False):
         if self.orig:
@@ -91,6 +94,7 @@ class MFLikeTest(unittest.TestCase):
         else:
             return eval(t)
 
+    @pytest.mark.skip(reason="don't want to install 300Mb of data!")
     def test_mflike(self):
         # As of now, there is not a mechanism
         # in soliket to ensure there is .loglike that can be called like this
@@ -155,6 +159,7 @@ class MFLikeTest(unittest.TestCase):
 
             self.assertAlmostEqual(-2 * (loglike - my_mflike.logp_const), chi2, 2)
 
+    @pytest.mark.skip(reason="don't want to install 300Mb of data!")
     def test_cobaya(self):
         mflike_type = self.get_mflike_type(as_string=True)
 
