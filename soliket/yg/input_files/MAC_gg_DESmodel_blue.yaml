@@ -1,15 +1,14 @@
 #output: /global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_a_shotnoise_blue_1-4
-output:  /Users/aleksandra/software/Likelihoods_sz/soliket/ymap/chains/cosmo_joint_test_gg
+output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/cosmo_joint_test_gg
 
 likelihood:
   #soliket.joint_KXG_GXG_PS_Likelihood:
-  soliket.GXG_GXM_MXM_PS_Likelihood:
-    sz_data_directory: "/Users/aleksandra/software/Likelihoods_sz/soliket/ymap/data/"
-    #sz_data_directory: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/data/"
-    gxg_ps_file: "Bandpowers_Auto_Sample1.dat"
-    cov_joint_ps_file_gg_gg: "Covariance_1111_blue.txt"
-    wind_funct_file_gg: "cl_highL6000_sz_mask_C1+gaussian_filter20_windows_auto.txt"
-    tranfer_funct_file_gg: "clgg_highL6000_sz_mask_C1+gaussian_filter20_smooth_blue_transfer_namaster.txt"
+  soliket.GXG_Likelihood:
+    data_directory: "/Users/aleksandra/software/SOLikeT/soliket/yg/data/"
+    gxg_data_file: "Bandpowers_Auto_Sample1.dat"
+    cov_gxg_data_file: "Covariance_1111_blue.txt"
+    bp_wind_file: "cl_highL6000_sz_mask_C1+gaussian_filter20_windows_auto.txt"
+    #tranfer_funct_file: "clgg_highL6000_sz_mask_C1+gaussian_filter20_smooth_blue_transfer_namaster.txt"
     s_file: "s_blue.txt"
 params:
   alpha_s_HOD:

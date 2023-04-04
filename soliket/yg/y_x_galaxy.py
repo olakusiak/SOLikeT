@@ -1,8 +1,7 @@
 """
 .. module:: yxg
 
-:Synopsis: Definition of simplistic y-map power spectrum likelihood using pre-computed frequency dependent  templates
-           for yxg powerspectrum (A_yxg), and foregrounds, e.g., A_cib, A_ir, A_rs, A_cn.
+:Synopsis: Definition y-galaxy power spectrum likelihood .
 
 :running boris: $ /usr/local/anaconda3/bin/mpirun -np 4 /usr/local/anaconda3/bin/cobaya-run soliket/ymap/input_files/yxg_ps.yaml -f
 :running ola: $ /Users/boris/opt/anaconda3/bin/mpirun -np 4 /Users/boris/opt/anaconda3/bin/cobaya-run soliket/ymap/input_files/yxg_ps_template.yaml -f
