@@ -1,0 +1,214 @@
+#output: /global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/kg_DES_alpha_sigma_M1prime_Mmin_a_blue_2-11
+output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/yg_test_Maglim
+
+likelihood:
+  soliket.yg.y_x_galaxy.YXG_Likelihood:
+    data_directory: "/Users/aleksandra/software/SOLikeT/soliket/yg/data/"
+    yxg_data_file: "yg_ACT_DR6_healpy_4096ilc_SZ_deproj_cib_beta_1p4_cibdBeta_yy_noKspaceCor_DES_Maglim_1.txt"
+    cov_yxg_data_file: "yg_cov_ACT_DR6_healpy_4096ilc_SZ_deproj_cib_beta_1p4_cibdBeta_yy_noKspaceCor_DES_Maglim_1.txt"
+    bp_wind_file: "bandpower_window_function_namaster.txt.npy"
+    # wind_funct_file_kg: "cl_highL6000_sz_mask_C1+gaussian_filter20_windows_cross.txt"
+    # tranfer_funct_file_kg: "clkg_highL6000_sz_mask_C1+gaussian_filter20_smooth_blue_transfer_namaster.txt"
+    s_file: "s_blue.txt"
+params:
+  alpha_s_HOD:
+    prior:
+      min: 0.1
+      max: 2.5
+    ref:
+      dist: norm
+      loc: 1.4271830
+      scale: 0.01
+    proposal: 0.03
+    latex: \alpha_{HOD}
+  sigma_log10M_HOD:
+    prior:
+      min: 0.01
+      max: 1.20
+    ref:
+      dist: norm
+      loc: 0.3
+      scale: 0.01
+    proposal: 0.03
+    latex: \sigma_{HOD}
+
+
+
+
+
+sampler:
+    mcmc:
+      covmat: auto
+      #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+      Rminus1_stop: 0.01
+      learn_proposal: True
+      learn_proposal_Rminus1_max: 100.0
+      learn_proposal_Rminus1_max_early: 300.0
+      #drag: true
+      #output_every: 10s
+      proposal_scale: 2.4
+      max_tries: 5000
+# sampler:
+#     evaluate:
+#       override:
+#         sigma_log10M_HOD:  0.29
+#         alpha_s_HOD: 1.74
+        # logM_min_HOD: 11.795964
+        # logM1_prime: 12.701308
+        # #A_shot_noise: -0.25547369
+        # x_out_truncated_nfw_profile_satellite_galaxies: 1.0868995
+        # # #Omega_m: 0.312216
+        # h: 0.6766
+        # omega_cdm: 0.11933
+
+theory :
+  classy_szfast.classy_sz.classy_sz:
+     extra_args:
+
+                 output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h'
+                 galaxy_sample : 'custom'
+                 full_path_to_dndz_gal :  "/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_bin1.txt"
+
+                 ### Precision
+                 redshift_epsabs : 1.0e-40
+                 redshift_epsrel : 0.0005
+                 mass_epsabs : 1.0e-40
+                 mass_epsrel : 0.0005
+
+                 #dell : 50
+                 dlogell: 0.3
+                 multipoles_sz : 'ell_mock'
+                 ell_max : 9000.0
+                 ell_min : 2.0
+                 ndim_masses : 80
+                 ndim_redshifts : 30
+                 P_k_max_h/Mpc : 50.0
+                 k_min_for_pk_class_sz : 0.0001
+                 k_max_for_pk_class_sz : 10.0
+                 k_per_decade_class_sz : 20.0
+                 z_min : 0.005
+                 z_max : 2.
+                 M_min : 1.0e10
+                 M_max : 3.5e15
+                 hm_consistency : 0
+                 class_sz_verbose : 0
+                 nonlinear_verbose : 0
+
+                 delta for galaxies : "200c"
+                 delta for matter density: "200c"
+                 mass function: 'T08M200c'
+                 concentration parameter: 'B13'
+
+                ### Cosmology
+                 omega_b : 0.02242
+                 omega_cdm : 0.11933
+                 h : 0.6766
+                 #sigma8: 0.8102
+                 tau_reio : 0.0561
+                 ln10^{10}A_s : 3.047
+                 n_s : 0.9665
+                 k_pivot : 0.05
+                 N_ncdm : 1
+                 N_ur : 2.0328
+                 m_ncdm : 0.06
+
+                 ####HOD PARAMS
+                 M_min_HOD: 387673885784.0424 #10**11.76 *0.6737
+                 M1_prime_HOD:  17316756388513.84 #(10** 13.41) *0.6737
+                 # sigma_log10M_HOD : 0.29
+                 # alpha_s_HOD : 1.74
+                 x_out_truncated_nfw_profile_satellite_galaxies: 0.76
+                 Delta_z_lens : -9e-3
+                 Delta_z_source : 0.0
+
+                 M0_HOD: 0
+                 M0 equal M_min (HOD): 'no'
+                 x_out_truncated_nfw_profile: 1.0
+
+                 #### Pressure profile
+                 n_m_pressure_profile : 50 # default: 100, decrease for faster
+                 n_z_pressure_profile : 50 # default: 100, decrease for faster
+                 pressure profile : 'B12'
+                 use_fft_for_profiles_transform : 1
+                 N_samp_fftw : 512
+                 x_min_gas_pressure_fftw : 1e-4
+                 x_max_gas_pressure_fftw : 1e3
+
+
+
+
+
+#              output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h'
+#              galaxy_sample : 'unwise'
+#              galaxy_sample_id : 'blue'
+#              UNWISE_dndz_file :  "/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/normalised_dndz_cosmos.txt"
+#
+#              # pressure profile: 'B12'  # check source/input.c for default parameter values of Battaglia et al profile (B12)
+#              # concentration parameter: 'D08'
+#              # units for tSZ spectrum: 'dimensionless'
+#              # #'n_ell_pressure_profile' : 100,
+#              # n_m_pressure_profile : 100
+#              # n_z_pressure_profile : 100
+#              # x_outSZ: 4.
+#              # truncate_wrt_rvir: 0
+#              # pressure_profile_epsrel: 1e-3
+#              # pressure_profile_epsabs: 1e-40
+#
+#                        ### Precision
+#              redshift_epsabs : 1.0e-40
+#              redshift_epsrel : 0.0005
+#              mass_epsabs : 1.0e-40
+#              mass_epsrel : 0.0005
+#              dell : 200
+#              multipoles_sz : 'ell_mock'
+#              ell_max : 8200.0
+#              ell_min : 2.0
+#              ndim_masses : 150
+#              ndim_redshifts : 150
+#
+#              P_k_max_h/Mpc : 50.0
+#              k_min_for_pk_class_sz : 0.0001
+#              k_max_for_pk_class_sz : 10.0
+#              k_per_decade_class_sz : 20.0
+#
+#              z_min : 0.005
+#              M_min : 7.0e8
+#              M_max : 3.5e15
+#
+#              hm_consistency : 1
+#              class_sz_verbose : 0
+#              nonlinear_verbose : 0
+#
+#              delta for galaxies : "200c"
+#              delta for matter density: "200c"
+#              mass function: 'T08M200c'
+#              concentration parameter: 'B13'
+#
+#
+#             ### Cosmology
+#              omega_b : 0.02242
+#              omega_cdm : 0.11933
+#              h : 0.6766
+#              #sigma8: 0.8102
+#              tau_reio : 0.0561
+#              ln10^{10}A_s : 3.047
+#              n_s : 0.9665
+#
+#              k_pivot : 0.05
+#              N_ncdm : 1
+#              N_ur : 2.0328
+#              m_ncdm : 0.06
+#
+#              ####HOD PARAMS
+#              # sigma_log10M_HOD: 8.3612025E-01
+#              # alpha_s_HOD: 1.4251577E+00
+#              # M1_prime_HOD: 1.4342990E+13
+#              # M_min_HOD: 1.5938318E+12
+#              #A_shot_noise_blue = 3.8836691E-01
+#              #x_out_truncated_nfw_profile_satellite_galaxies: 1.0
+#              M0_HOD: 0
+#              M0 equal M_min (HOD): 'no'
+#              x_out_truncated_nfw_profile: 1.0
+# stop_at_error: True
+debug: False
+timing: True

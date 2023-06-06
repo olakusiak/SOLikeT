@@ -1,28 +1,29 @@
 theory:
-  soliket.yg.classy_sz:
+  classy_szfast.classy_sz.classy_sz:
     extra_args:
       output: tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h
       galaxy_sample: unwise
       galaxy_sample_id: blue
-      UNWISE_dndz_file: /Users/aleksandra/software/class_sz/sz_auxiliary_files/UNWISE_galaxy_distributions/normalised_dndz_cosmos.txt
+      UNWISE_dndz_file: /Users/aleksandra/software/class_sz/class_sz_auxiliary_files/normalised_dndz_cosmos.txt
       redshift_epsabs: 1.0e-40
       redshift_epsrel: 0.0005
       mass_epsabs: 1.0e-40
       mass_epsrel: 0.0005
-      dell: 50
+      dlogell: 0.3
       multipoles_sz: ell_mock
-      ell_max: 8200.0
+      ell_max: 9000.0
       ell_min: 2.0
-      ndim_masses: 150
-      ndim_redshifts: 150
+      ndim_masses: 80
+      ndim_redshifts: 30
       P_k_max_h/Mpc: 50.0
       k_min_for_pk_class_sz: 0.0001
       k_max_for_pk_class_sz: 10.0
       k_per_decade_class_sz: 20.0
       z_min: 0.005
-      M_min: 700000000.0
+      z_max: 2.0
+      M_min: 10000000000.0
       M_max: 3500000000000000.0
-      hm_consistency: 1
+      hm_consistency: 0
       class_sz_verbose: 0
       nonlinear_verbose: 0
       delta for galaxies: 200c
@@ -42,8 +43,15 @@ theory:
       M0_HOD: 0
       M0 equal M_min (HOD): 'no'
       x_out_truncated_nfw_profile: 1.0
+      n_m_pressure_profile: 50
+      n_z_pressure_profile: 50
+      pressure profile: B12
+      use_fft_for_profiles_transform: 1
+      N_samp_fftw: 512
+      x_min_gas_pressure_fftw: 0.0001
+      x_max_gas_pressure_fftw: 1000.0
 likelihood:
-  soliket.YXG_Likelihood:
+  soliket.yg.y_x_galaxy.YXG_Likelihood:
     data_directory: /Users/aleksandra/software/SOLikeT/soliket/yg/data/
     yxg_data_file: yg_ACT_DR6_healpy_8192_comptony_CIBdeproj_betaCIB_1.4_unwise_blue.txt
     cov_yxg_data_file: yg_cov_ACT_DR6_healpy_8192_comptony_CIBdeproj_betaCIB_1.4_unwise_blue.txt
@@ -76,4 +84,4 @@ sampler:
       sigma_log10M_HOD: 0.68660116
       alpha_s_HOD: 1.3039425
 output: yg_test
-stop_at_error: true
+timing: true

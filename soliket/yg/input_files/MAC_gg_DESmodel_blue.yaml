@@ -2,14 +2,16 @@
 output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/cosmo_joint_test_gg
 
 likelihood:
-  #soliket.joint_KXG_GXG_PS_Likelihood:
-  soliket.GXG_Likelihood:
+  GXG_Likelihood:
     data_directory: "/Users/aleksandra/software/SOLikeT/soliket/yg/data/"
     gxg_data_file: "Bandpowers_Auto_Sample1.dat"
     cov_gxg_data_file: "Covariance_1111_blue.txt"
-    bp_wind_file: "cl_highL6000_sz_mask_C1+gaussian_filter20_windows_auto.txt"
-    #tranfer_funct_file: "clgg_highL6000_sz_mask_C1+gaussian_filter20_smooth_blue_transfer_namaster.txt"
+    wind_funct_file_gg: "cl_highL6000_sz_mask_C1+gaussian_filter20_windows_auto.txt"
+    tranfer_funct_file_gg: "clgg_highL6000_sz_mask_C1+gaussian_filter20_smooth_blue_transfer_namaster.txt"
     s_file: "s_blue.txt"
+    pixwind_file: "pixel_window_bin_nside2048.txt"
+    n_degsq_data: 3409
+    Nbins: 40
 params:
   alpha_s_HOD:
     prior:
@@ -110,7 +112,7 @@ sampler:
         # omega_cdm: 0.11933
 
 theory:
-  soliket.yg.classy_sz:
+  classy_szfast.classy_sz.classy_sz:
      extra_args:
              output: 'gal_lens_1h, gal_lens_2h, lens_lensmag_1h, lens_lensmag_2h, gal_gal_1h, gal_gal_2h, gal_lensmag_1h, gal_lensmag_2h, lensmag_lensmag_1h, lensmag_lensmag_2h'
              galaxy_sample : 'unwise'
@@ -125,7 +127,7 @@ theory:
              mass_epsrel : 0.0005
              dell : 10
              multipoles_sz : 'ell_mock'
-             ell_max : 1600.0
+             ell_max : 6200.0
              ell_min : 2.0
              ndim_masses : 150
              ndim_redshifts : 150

@@ -57,9 +57,10 @@ class YXG_Likelihood(GaussianLikelihood):
         super().initialize()
 
 
+    # def get_requirements(self):
+    #     return {"Cl_yxg": {}, "Cl_yxmu": {}}
     def get_requirements(self):
         return {"Cl_yxg": {}, "Cl_yxmu": {}}
-
     # this is the data to fit
     def _get_data(self):
         x_data = self.ell
@@ -97,7 +98,8 @@ class YXG_Likelihood(GaussianLikelihood):
     def _get_theory(self, **params_values):
         s=self.s
         bpwf=self.bpwf[:,0,:]
-        print("bpwf: ", bpwf)
+        #print("bpwf: ", bpwf)
+
         # ########
         # Cl_yxg
         ########
@@ -105,10 +107,11 @@ class YXG_Likelihood(GaussianLikelihood):
         ell_theory_yg = theory_yg['ell']
         dl_1h_theory_yg = theory_yg['1h']
         dl_2h_theory_yg = theory_yg['2h']
-        #print("cl_1h_theory_yg:", cl_1h_theory_yg)
+
+        #print("cl_1h_theory_yg:", dl_1h_theory_yg)
         dl_theory_yg = np.asarray(list(dl_1h_theory_yg)) + np.asarray(list(dl_2h_theory_yg))
         ell_yg_bin, dl_yg_bin = self._bin(ell_theory_yg, dl_theory_yg, self.ell, bpwf, Nellbins=40, conv2cl=True)
-        print("yg bin: ", ell_yg_bin, dl_yg_bin)
+        #print("yg bin: ", ell_yg_bin, dl_yg_bin)
 
         # ########
         # Cl_yxmu
@@ -121,7 +124,7 @@ class YXG_Likelihood(GaussianLikelihood):
         ell_ym_bin, dl_ym_bin =  self._bin(ell_theory_ym, dl_theory_ym, self.ell, bpwf, Nellbins=40, conv2cl=True)
 
         #print("ym bin: ", ell_ym_bin, dl_ym_bin)
-        #rint("yg:", 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin))
+        print("yg:", 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin))
 
         # unit conversion:
         return 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin) #1e-6*(dl_yg_bin+(5-2s)*dl_ym_bin)

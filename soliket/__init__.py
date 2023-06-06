@@ -8,7 +8,8 @@ from .xcorr import XcorrLikelihood  # noqa: F401
 from .foreground import Foreground
 from .bandpass import BandPass
 from .cosmopower import CosmoPower, CosmoPowerDerived
-
+from .yg.galaxy_x_galaxy import GXG_Likelihood
+from .yg.y_x_galaxy import YXG_Likelihood
 try:
     from .clusters import ClusterLikelihood  # noqa: F401
 except ImportError:
