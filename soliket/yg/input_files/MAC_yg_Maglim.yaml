@@ -1,5 +1,5 @@
-#output: /global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/kg_DES_alpha_sigma_M1prime_Mmin_a_blue_2-11
-output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/yg_test_Maglim
+#output: /global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/g_DES_alpha_sigma_M1prime_Mmin_a_blue_2-11
+output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/yg_test_Maglim1_
 
 likelihood:
   soliket.yg.y_x_galaxy.YXG_Likelihood:
@@ -10,6 +10,8 @@ likelihood:
     # wind_funct_file_kg: "cl_highL6000_sz_mask_C1+gaussian_filter20_windows_cross.txt"
     # tranfer_funct_file_kg: "clkg_highL6000_sz_mask_C1+gaussian_filter20_smooth_blue_transfer_namaster.txt"
     s_file: "s_blue.txt"
+    pixwind_file: "pixel_window_bin_nside4096.txt"
+    Nbins: 40
 params:
   alpha_s_HOD:
     prior:
@@ -32,27 +34,23 @@ params:
     proposal: 0.03
     latex: \sigma_{HOD}
 
-
-
-
-
-sampler:
-    mcmc:
-      covmat: auto
-      #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
-      Rminus1_stop: 0.01
-      learn_proposal: True
-      learn_proposal_Rminus1_max: 100.0
-      learn_proposal_Rminus1_max_early: 300.0
-      #drag: true
-      #output_every: 10s
-      proposal_scale: 2.4
-      max_tries: 5000
 # sampler:
-#     evaluate:
-#       override:
-#         sigma_log10M_HOD:  0.29
-#         alpha_s_HOD: 1.74
+#     mcmc:
+#       covmat: auto
+#       #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+#       Rminus1_stop: 0.01
+#       learn_proposal: True
+#       learn_proposal_Rminus1_max: 100.0
+#       learn_proposal_Rminus1_max_early: 300.0
+#       #drag: true
+#       #output_every: 10s
+#       proposal_scale: 2.4
+#       max_tries: 5000
+sampler:
+    evaluate:
+      override:
+        sigma_log10M_HOD:  0.29
+        alpha_s_HOD: 1.74
         # logM_min_HOD: 11.795964
         # logM1_prime: 12.701308
         # #A_shot_noise: -0.25547369
@@ -64,7 +62,6 @@ sampler:
 theory :
   classy_szfast.classy_sz.classy_sz:
      extra_args:
-
                  output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h'
                  galaxy_sample : 'custom'
                  full_path_to_dndz_gal :  "/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_bin1.txt"

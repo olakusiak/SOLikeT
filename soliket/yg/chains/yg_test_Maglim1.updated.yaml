@@ -1,0 +1,137 @@
+theory:
+  classy_szfast.classy_sz.classy_sz:
+    use_class_sz_fast_mode: 0
+    lensing_lkl: SOLikeT
+    ell_factor: false
+    path: null
+    speed: 0.2
+    stop_at_error: false
+    extra_args:
+      output: tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h
+      galaxy_sample: custom
+      full_path_to_dndz_gal: /Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_bin1.txt
+      redshift_epsabs: 1.0e-40
+      redshift_epsrel: 0.0005
+      mass_epsabs: 1.0e-40
+      mass_epsrel: 0.0005
+      dlogell: 0.3
+      multipoles_sz: ell_mock
+      ell_max: 9000.0
+      ell_min: 2.0
+      ndim_masses: 80
+      ndim_redshifts: 30
+      P_k_max_h/Mpc: 50.0
+      k_min_for_pk_class_sz: 0.0001
+      k_max_for_pk_class_sz: 10.0
+      k_per_decade_class_sz: 20.0
+      z_min: 0.005
+      z_max: 2.0
+      M_min: 10000000000.0
+      M_max: 3500000000000000.0
+      hm_consistency: 0
+      class_sz_verbose: 0
+      nonlinear_verbose: 0
+      delta for galaxies: 200c
+      delta for matter density: 200c
+      mass function: T08M200c
+      concentration parameter: B13
+      omega_b: 0.02242
+      omega_cdm: 0.11933
+      h: 0.6766
+      tau_reio: 0.0561
+      ln10^{10}A_s: 3.047
+      n_s: 0.9665
+      k_pivot: 0.05
+      N_ncdm: 1
+      N_ur: 2.0328
+      m_ncdm: 0.06
+      M_min_HOD: 387673885784.0424
+      M1_prime_HOD: 17316756388513.84
+      x_out_truncated_nfw_profile_satellite_galaxies: 0.76
+      Delta_z_lens: -0.009
+      Delta_z_source: 0.0
+      M0_HOD: 0
+      M0 equal M_min (HOD): 'no'
+      x_out_truncated_nfw_profile: 1.0
+      n_m_pressure_profile: 50
+      n_z_pressure_profile: 50
+      pressure profile: B12
+      use_fft_for_profiles_transform: 1
+      N_samp_fftw: 512
+      x_min_gas_pressure_fftw: 0.0001
+      x_max_gas_pressure_fftw: 1000.0
+    ignore_obsolete: false
+    use_renames: false
+    renames:
+      As: A_s
+      ns: n_s
+      nrun: alpha_s
+      nrunrun: beta_s
+      nt: n_t
+      ntrun: alpha_t
+      rdrag: rs_drag
+      omegak: Omega_k
+      omegal: Omega_Lambda
+      w: w0_fld
+      wa: wa_fld
+      omegabh2: omega_b
+      omegab: Omega_b
+      omegach2: omega_cdm
+      omegac: Omega_cdm
+      omegam: Omega_m
+      omegan: Omega_nu
+      tau: tau_reio
+      zrei: z_reio
+      deltazrei: reionization_width
+      helium_redshift: helium_fullreio_redshift
+      helium_delta_redshift: helium_fullreio_width
+      yhe: YHe
+      yheused: YHe
+    version: v2.9.4
+likelihood:
+  soliket.yg.y_x_galaxy.YXG_Likelihood:
+    data_directory: /Users/aleksandra/software/SOLikeT/soliket/yg/data/
+    yxg_data_file: yg_ACT_DR6_healpy_4096ilc_SZ_deproj_cib_beta_1p4_cibdBeta_yy_noKspaceCor_DES_Maglim_1.txt
+    cov_yxg_data_file: yg_cov_ACT_DR6_healpy_4096ilc_SZ_deproj_cib_beta_1p4_cibdBeta_yy_noKspaceCor_DES_Maglim_1.txt
+    s_file: s_blue.txt
+    bp_wind_file: bandpower_window_function_namaster.txt.npy
+    name: Gaussian
+    datapath: null
+    covpath: null
+    ncovsims: null
+    type: []
+    speed: -1
+    stop_at_error: false
+    version: null
+params:
+  alpha_s_HOD:
+    prior:
+      min: 0.1
+      max: 2.5
+    ref:
+      dist: norm
+      loc: 1.427183
+      scale: 0.01
+    proposal: 0.03
+    latex: \alpha_{HOD}
+  sigma_log10M_HOD:
+    prior:
+      min: 0.01
+      max: 1.2
+    ref:
+      dist: norm
+      loc: 0.3
+      scale: 0.01
+    proposal: 0.03
+    latex: \sigma_{HOD}
+sampler:
+  evaluate:
+    N: 1
+    override:
+      sigma_log10M_HOD: 0.29
+      alpha_s_HOD: 1.74
+    seed: null
+    version: null
+output: yg_test_Maglim1
+timing: true
+version: 3.3.1

@@ -47,7 +47,7 @@ class YXG_Likelihood(GaussianLikelihood):
         #self.cvg = np.diag(self.cvg)
         self.cvg = cov[1:, 1:]
         self.covmat = self.cvg
-        print("ell ola:", self.ell)
+        #print("ell ola:", self.ell)
         print("yg ola:", self.yg)
 
         self.inv_covmat = np.linalg.inv(self.covmat)
@@ -124,7 +124,7 @@ class YXG_Likelihood(GaussianLikelihood):
         ell_ym_bin, dl_ym_bin =  self._bin(ell_theory_ym, dl_theory_ym, self.ell, bpwf, Nellbins=40, conv2cl=True)
 
         #print("ym bin: ", ell_ym_bin, dl_ym_bin)
-        print("yg:", 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin))
+        #print("yg:", 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin))
 
         # unit conversion:
         return 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin) #1e-6*(dl_yg_bin+(5-2s)*dl_ym_bin)

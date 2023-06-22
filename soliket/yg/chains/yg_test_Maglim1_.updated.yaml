@@ -131,40 +131,13 @@ params:
     proposal: 0.03
     latex: \sigma_{HOD}
 sampler:
-  mcmc:
-    burn_in: 0
-    max_tries: 5000
-    covmat: auto
-    covmat_params: null
-    proposal_scale: 2.4
-    output_every: 60s
-    learn_every: 40d
-    temperature: 1
-    learn_proposal: true
-    learn_proposal_Rminus1_max: 100.0
-    learn_proposal_Rminus1_max_early: 300.0
-    learn_proposal_Rminus1_min: 0.0
-    max_samples: .inf
-    Rminus1_stop: 0.01
-    Rminus1_cl_stop: 0.2
-    Rminus1_cl_level: 0.95
-    Rminus1_single_split: 4
-    measure_speeds: true
-    oversample_power: 0.4
-    oversample_thin: true
-    drag: false
-    blocking:
-    - - 1
-      - - alpha_s_HOD
-        - sigma_log10M_HOD
-    callback_function: null
-    callback_every: null
+  evaluate:
+    N: 1
+    override:
+      sigma_log10M_HOD: 0.29
+      alpha_s_HOD: 1.74
     seed: null
-    check_every: null
-    oversample: null
-    drag_limits: null
-    fallback_covmat_scale: 4
-    version: 3.3.1
-output: yg_test_Maglim
+    version: null
+output: yg_test_Maglim1_
 timing: true
 version: 3.3.1

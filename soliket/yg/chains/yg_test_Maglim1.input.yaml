@@ -83,13 +83,9 @@ params:
     proposal: 0.03
     latex: \sigma_{HOD}
 sampler:
-  mcmc:
-    covmat: auto
-    Rminus1_stop: 0.01
-    learn_proposal: true
-    learn_proposal_Rminus1_max: 100.0
-    learn_proposal_Rminus1_max_early: 300.0
-    proposal_scale: 2.4
-    max_tries: 5000
-output: yg_test_Maglim
+  evaluate:
+    override:
+      sigma_log10M_HOD: 0.29
+      alpha_s_HOD: 1.74
+output: yg_test_Maglim1
 timing: true
