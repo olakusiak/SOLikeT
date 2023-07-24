@@ -28,6 +28,8 @@ class YXG_Likelihood(GaussianLikelihood):
     cov_yxg_data_file: Optional[str] = None
     s_file: Optional[str] = None #s for lens mag
     bp_wind_file: Optional[str] = None
+    pixwind_file: Optional[str] = None
+    Nbins: Optional[str] = None
 
     # Load the data
     def initialize(self):
@@ -35,19 +37,22 @@ class YXG_Likelihood(GaussianLikelihood):
         self.covfile = self.cov_yxg_data_file
         self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
         self.bpwf = np.load(os.path.join(self.data_directory, self.bp_wind_file))[0]
+        print("here")
+        self.pw_bin  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_file))
+        Npoints = self.Nbins
 
         D = np.loadtxt(os.path.join(self.data_directory, self.datafile))
         cov = np.loadtxt(os.path.join(self.data_directory, self.covfile))
 
-        self.ell = D[0,1:]
-        self.yg = D[1,1:]
-        self.sigma_tot = D[2,1:]
+        self.ell = D[0,:Npoints]
+        self.yg = D[1,:Npoints]
+        self.sigma_tot = D[2,:Npoints]
 
         #self.cvg = np.asarray(self.sigma_tot)**2.
         #self.cvg = np.diag(self.cvg)
-        self.cvg = cov[1:, 1:]
-        self.covmat = self.cvg
-        #print("ell ola:", self.ell)
+        #self.cvg = cov [:, 1:]
+        self.covmat =  cov[:Npoints,:Npoints]
+        print("ell ola:", self.ell)
         print("yg ola:", self.yg)
 
         self.inv_covmat = np.linalg.inv(self.covmat)
@@ -61,6 +66,7 @@ class YXG_Likelihood(GaussianLikelihood):
     #     return {"Cl_yxg": {}, "Cl_yxmu": {}}
     def get_requirements(self):
         return {"Cl_yxg": {}, "Cl_yxmu": {}}
+
     # this is the data to fit
     def _get_data(self):
         x_data = self.ell
@@ -71,12 +77,12 @@ class YXG_Likelihood(GaussianLikelihood):
         cov = self.covmat
         return cov
 
-    def _bin(self, ell_theory, cl_theory, ell_data, bpwf, Nellbins=40, conv2cl=True,):
+    def _bin(self, ell_theory, cl_theory, ell_data, bpwf, pix_win, Nellbins=31, conv2cl=True,):
         """
         Interpolate the theory dl's, and bin according to the bandpower window function (bpwf)
         """
         #interpolate
-        new_ell = np.arange(2, 8000, 1)
+        new_ell = np.arange(2, 6000, 1)
         cl_theory_log = np.log(cl_theory)
         f_int =  interp1d(ell_theory, cl_theory_log)
         inter_cl_log = np.asarray(f_int(new_ell))
@@ -84,6 +90,8 @@ class YXG_Likelihood(GaussianLikelihood):
         if conv2cl==True: #go from dls to cls because the bpwf mutliplies by ell*(ell+1)/2pi
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
 
+        #multiply by the pixel window function (from healpix for given nside)
+        inter_cl = inter_cl*(pix_win[2:6000])**2
         #bin according to the bpwf
         cl_binned = np.zeros(Nellbins)
         for i in range (Nellbins):
@@ -98,7 +106,9 @@ class YXG_Likelihood(GaussianLikelihood):
     def _get_theory(self, **params_values):
         s=self.s
         bpwf=self.bpwf[:,0,:]
-        #print("bpwf: ", bpwf)
+        pixwin = self.pw_bin
+        Npoints = self.Nbins
+        print(s)
 
         # ########
         # Cl_yxg
@@ -108,10 +118,11 @@ class YXG_Likelihood(GaussianLikelihood):
         dl_1h_theory_yg = theory_yg['1h']
         dl_2h_theory_yg = theory_yg['2h']
 
-        #print("cl_1h_theory_yg:", dl_1h_theory_yg)
+        print("cl_1h_theory_yg:", dl_1h_theory_yg[:10])
+        print("cl_2h_theory_yg:", dl_2h_theory_yg[:10])
         dl_theory_yg = np.asarray(list(dl_1h_theory_yg)) + np.asarray(list(dl_2h_theory_yg))
-        ell_yg_bin, dl_yg_bin = self._bin(ell_theory_yg, dl_theory_yg, self.ell, bpwf, Nellbins=40, conv2cl=True)
-        #print("yg bin: ", ell_yg_bin, dl_yg_bin)
+        ell_yg_bin, dl_yg_bin = self._bin(ell_theory_yg, dl_theory_yg, self.ell, bpwf, pixwin, Nellbins=Npoints, conv2cl=True)
+        print("yg bin: ", dl_yg_bin[:10])
 
         # ########
         # Cl_yxmu
@@ -121,10 +132,10 @@ class YXG_Likelihood(GaussianLikelihood):
         cl_1h_theory_ym = theory_ym['1h']
         cl_2h_theory_ym = theory_ym['2h']
         dl_theory_ym = np.asarray((cl_1h_theory_ym)) + np.asarray((cl_2h_theory_ym))
-        ell_ym_bin, dl_ym_bin =  self._bin(ell_theory_ym, dl_theory_ym, self.ell, bpwf, Nellbins=40, conv2cl=True)
+        ell_ym_bin, dl_ym_bin =  self._bin(ell_theory_ym, dl_theory_ym, self.ell, bpwf, pixwin, Nellbins=Npoints, conv2cl=True)
 
-        #print("ym bin: ", ell_ym_bin, dl_ym_bin)
-        #print("yg:", 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin))
-
+        print("ym bin: ", dl_ym_bin[:10])
+        print("yg:", 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin))
+        print("ell theory:", ell_yg_bin)
         # unit conversion:
-        return 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin) #1e-6*(dl_yg_bin+(5-2s)*dl_ym_bin)
+        return 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin)
