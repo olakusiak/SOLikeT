@@ -37,7 +37,6 @@ class YXG_Likelihood(GaussianLikelihood):
         self.covfile = self.cov_yxg_data_file
         self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
         self.bpwf = np.load(os.path.join(self.data_directory, self.bp_wind_file))[0]
-        print("here")
         self.pw_bin  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_file))
         Npoints = self.Nbins
 
@@ -108,21 +107,21 @@ class YXG_Likelihood(GaussianLikelihood):
         bpwf=self.bpwf[:,0,:]
         pixwin = self.pw_bin
         Npoints = self.Nbins
-        print(s)
+        print("s:",s)
 
         # ########
         # Cl_yxg
         ########
         theory_yg = self.theory.get_Cl_yxg()
         ell_theory_yg = theory_yg['ell']
-        dl_1h_theory_yg = theory_yg['1h']
-        dl_2h_theory_yg = theory_yg['2h']
+        cl_1h_theory_yg = theory_yg['1h']
+        cl_2h_theory_yg = theory_yg['2h']
 
-        print("cl_1h_theory_yg:", dl_1h_theory_yg[:10])
-        print("cl_2h_theory_yg:", dl_2h_theory_yg[:10])
-        dl_theory_yg = np.asarray(list(dl_1h_theory_yg)) + np.asarray(list(dl_2h_theory_yg))
+        #print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
+        #print("cl_2h_theory_yg:", cl_2h_theory_yg[:10])
+        dl_theory_yg = np.asarray(list(cl_1h_theory_yg)) + np.asarray(list(cl_2h_theory_yg))
         ell_yg_bin, dl_yg_bin = self._bin(ell_theory_yg, dl_theory_yg, self.ell, bpwf, pixwin, Nellbins=Npoints, conv2cl=True)
-        print("yg bin: ", dl_yg_bin[:10])
+        #print("yg bin: ", dl_yg_bin[:10])
 
         # ########
         # Cl_yxmu
@@ -131,11 +130,12 @@ class YXG_Likelihood(GaussianLikelihood):
         ell_theory_ym = theory_ym['ell']
         cl_1h_theory_ym = theory_ym['1h']
         cl_2h_theory_ym = theory_ym['2h']
+        #print("cl_1h_theory_ym:", cl_1h_theory_ym[:10])
+        #print("cl_2h_theory_ym:", cl_2h_theory_ym[:10])
         dl_theory_ym = np.asarray((cl_1h_theory_ym)) + np.asarray((cl_2h_theory_ym))
         ell_ym_bin, dl_ym_bin =  self._bin(ell_theory_ym, dl_theory_ym, self.ell, bpwf, pixwin, Nellbins=Npoints, conv2cl=True)
 
-        print("ym bin: ", dl_ym_bin[:10])
-        print("yg:", 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin))
+
         print("ell theory:", ell_yg_bin)
-        # unit conversion:
+        print("cl tot:", 1e-6*(dl_yg_bin+2*(s-1)*dl_ym_bin))
         return 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin)

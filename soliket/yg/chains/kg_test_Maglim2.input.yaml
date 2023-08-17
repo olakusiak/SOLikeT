@@ -1,0 +1,112 @@
+theory:
+  classy_szfast.classy_sz.classy_sz:
+    extra_args:
+      output: gal_gallens_1h,gal_gallens_2h,gallens_lensmag_1h, gallens_lensmag_2h,IA_gal_2h
+      galaxy_sample: custom
+      full_path_to_dndz_gal: /Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_bin2.txt
+      full_path_to_source_dndz_gal: /Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_source_normalized_bin4.txt
+      redshift_epsabs: 1.0e-40
+      redshift_epsrel: 0.0005
+      mass_epsabs: 1.0e-40
+      mass_epsrel: 0.0005
+      ndim_masses: 150
+      ndim_redshifts: 150
+      class_sz_verbose: 0
+      nonlinear_verbose: 0
+      P_k_max_h/Mpc: 100.0
+      k_min_for_pk_class_sz: 0.0001
+      k_max_for_pk_class_sz: 70.0
+      k_per_decade_class_sz: 20.0
+      use_fft_for_profiles_transform: 1
+      N_samp_fftw: 1024
+      l_min_samp_fftw: 1.0e-12
+      l_max_samp_fftw: 1000000000000.0
+      x_min_gas_pressure_fftw: 0.0001
+      x_max_gas_pressure_fftw: 1000.0
+      dlogell: 0.3
+      multipoles_sz: ell_mock
+      ell_max: 8200.0
+      ell_min: 2.0
+      z_min: 1.0e-08
+      z_max: 2.0
+      M_min: 10000000000.0
+      M_max: 3500000000000000.0
+      hm_consistency: 1
+      delta for galaxies: 200c
+      delta for matter density: 200c
+      mass function: T08M200c
+      concentration parameter: D08
+      omega_b: 0.02242
+      omega_cdm: 0.11933
+      h: 0.6766
+      tau_reio: 0.0561
+      ln10^{10}A_s: 3.047
+      n_s: 0.9665
+      k_pivot: 0.05
+      N_ncdm: 1
+      N_ur: 2.0328
+      m_ncdm: 0.06
+      M0_HOD: 0
+      M0 equal M_min (HOD): 'no'
+      x_out_truncated_nfw_profile: 1.0
+      x_out_truncated_nfw_profile_satellite_galaxies: 1.07
+      Delta_z_lens: -0.035
+      Delta_z_source: 0.0
+      csat_over_cdm: 1.0
+      f_cen_HOD: 1.0
+likelihood:
+  soliket.yg.galaxy_x_kappa.GXK_Likelihood:
+    data_directory: /Users/aleksandra/software/SOLikeT/soliket/yg/data/
+    gk_data_file: gglens_DES_healpy_1024_Maglim2_kappa4.txt
+    cov_gk_data_file: gglens_cov_DES_healpy_1024_Maglim2_kappa4.txt
+    bp_wind_file: bandpower_window_function_namaster.txt.npy
+    s_file: alpha_lensmag_Maglim2.txt
+    pixwind_file: pixel_window_bin_nside1024.txt
+    Nbins: 10
+params:
+  alpha_s_HOD:
+    prior:
+      min: 0.1
+      max: 2.5
+    ref: 1.85
+    proposal: 0.03
+    latex: \alpha_{HOD}
+  sigma_log10M_HOD:
+    prior:
+      min: 0.01
+      max: 1.2
+    ref: 0.3
+    proposal: 0.03
+    latex: \sigma_{HOD}
+  logM1_prime:
+    prior:
+      min: 11.35
+      max: 14.0
+    ref: 13.248466547352677
+    proposal: 0.005
+    latex: \log(10^{10} M1_\mathrm{prime})
+    drop: true
+  M1_prime_HOD:
+    value: 'lambda logM1_prime: 10**(logM1_prime)'
+    latex: M1_\mathrm{prime}
+  logM_min_HOD:
+    prior:
+      min: 10.85
+      max: 12.85
+    ref: 11.738466547352678
+    proposal: 0.005
+    latex: \log(10^{10} M_\mathrm{min})
+    drop: true
+  M_min_HOD:
+    value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
+    latex: M_\mathrm{min}
+sampler:
+  evaluate:
+    override:
+      sigma_log10M_HOD: 0.3
+      alpha_s_HOD: 1.85
+      logM_min_HOD: 11.738466547352678
+      logM1_prime: 13.248466547352677
+output: kg_test_Maglim2
+stop_at_error: true
+timing: true

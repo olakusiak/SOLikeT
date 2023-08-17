@@ -33,31 +33,25 @@ class GXK_Likelihood(GaussianLikelihood):
 
     # Load the templates
     def initialize(self):
-
-
         Npoints = self.Nbins
         print(Npoints)
         self.datafile = self.gk_data_file
         self.covfile = self.cov_gk_data_file
-
+        self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
         self.pw_bin  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_file))
         self.bpwf = np.load(os.path.join(self.data_directory, self.bp_wind_file))[0]
 
-        cov = np.loadtxt(os.path.join(self.data_directory, self.covfile))
         D = np.loadtxt(os.path.join(self.data_directory, self.datafile))
-        cov=cov[1:Npoints,1:Npoints]
-        self.ell = D[0,1:Npoints]
-        self.ell_full = D[0,]
-        self.gk = D[1,1:Npoints]
-        self.sigma = D[2,1:Npoints]
+        cov = np.loadtxt(os.path.join(self.data_directory, self.covfile))
+
+        self.ell = D[0,:Npoints]
+        self.gk = D[1,:Npoints]
+        self.sigma = D[2,:Npoints]
+
+        self.covmat =  cov[:Npoints,:Npoints]
+        print("ell ola:", self.ell)
         print("gk ola:", self.gk)
 
-        # s for the lensing magnification
-        self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
-        self.cvg = cov
-        self.covmat = self.cvg
-        # self.covmat = np.asarray(self.sigma)**2.
-        # self.covmat = np.diag(self.covmat)
 
         # now compute the iverse and det of covariance matrix
         self.inv_covmat = np.linalg.inv(self.covmat)
@@ -67,7 +61,7 @@ class GXK_Likelihood(GaussianLikelihood):
 
 
     def get_requirements(self):
-        return {"Cl_gxkgal": {}, } #add mu terms "Cl_gxmu": {}, "Cl_muxmu": {}}
+        return {"Cl_kgxg": {}, "Cl_kgxmu": {}, "Cl_IAxg": {}} #add mu terms "Cl_gxmu": {}, "Cl_muxmu": {}}
 
     # this is the data to fit
     def _get_data(self):
@@ -78,73 +72,77 @@ class GXK_Likelihood(GaussianLikelihood):
     def _get_cov(self):
         cov = self.covmat
         return cov
-    def binning(self, ell_class, dl_class, ell_alex, wind_func, Nellbins=9):
-        #interpolate and transform to cl's (Alex data is in cl's)
-        dl_class = np.log(dl_class)  #in log
-        f_kg = interp1d(ell_class, dl_class)
-        new_ell = np.arange(2, ell_alex[Nellbins], 1) # up to 1051.5
-        #print(new_ell)
-        inter_dls=np.asarray(f_kg(new_ell))
-        inter_dls = np.exp(inter_dls)
-        inter_cls = inter_dls*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
-        #binning
-        clbinned = np.zeros(Nellbins)
+    def _bin(self, ell_theory, cl_theory, ell_data, bpwf, pix_win, Nellbins, conv2cl=True,):
+        """
+        Interpolate the theory dl's, and bin according to the bandpower window function (bpwf)
+        """
+        #interpolate
+        new_ell = np.arange(2, 2400, 1)
+        cl_theory_log = np.log(cl_theory)
+        f_int =  interp1d(ell_theory, cl_theory_log)
+        inter_cl_log = np.asarray(f_int(new_ell))
+        inter_cl= np.exp(inter_cl_log)
+        if conv2cl==True: #go from dls to cls because the bpwf mutliplies by ell*(ell+1)/2pi
+            inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
+
+        #multiply by the pixel window function (from healpix for given nside)
+        inter_cl = inter_cl*(pix_win[2:2400])**2
+        #bin according to the bpwf
+        cl_binned = np.zeros(Nellbins)
         for i in range (Nellbins):
-            #bandpower window function / C_i_binned = \sum_{ell} W_i(ell) C_ell
-            wi = wind_func[i]
+            wi = bpwf[i]
             # wi starts from ell=2 according to Alex, email 1-9-22; could add ell=0,1, but would contribute nothing to the sum
-            ci_binned = np.sum(wi[2:len(inter_cls)+2]*inter_cls)
-            #ci_binned = np.sum(wi[2:1504]*inter_cls[:1502])
-            #ci_binned = np.sum(wi[2:5852]*inter_cls[:6002]) #cutting 1500 only changes chi2 by 0.04
-            clbinned[i]=ci_binned
-            #clbinned.append(ci_binned)
-        #print(clbinned)
-        return ell_alex, clbinned
+            cl_binned[i] = np.sum(wi[2:len(inter_cl)+2]*inter_cl)
+        #print("clbinned:", cl_binned)
+        return ell_data, cl_binned
 
     def _get_theory(self, **params_values):
         s=self.s
         pixwin = self.pw_bin
         Npoints = self.Nbins
         bpwf=self.bpwf[:,0,:]
-        print("Healpix pixwin", pixwin)
-        print("Namaster bpwf: ", bpwf)
-        ########
-        # Cl_gxg
-        ########
-        theory = self.theory.get_Cl_gxkgal()
-        #print(theory)
-        cl_ell_theory = theory['ell']
-        dl_1h_theory = theory['1h']
-        dl_2h_theory = theory['2h']
-        ell = np.asarray(list(cl_ell_theory))
+        print("Npoints:", Npoints)
+        print("s:",s)
+        #print("Healpix pixwin", pixwin)
+        #print("Namaster bpwf: ", bpwf)
 
-        dl_gk_theory = np.asarray(list(dl_1h_theory)) + np.asarray(list(dl_2h_theory))
-        print('dl_gk_theory ', dl_gk_theory)
-        ell_gk_binned, cl_gk_binned = self.binning(ell, dl_gk_theory, self.ell_full, bpwf, Nellbins=Npoints)
+        ########
+        # Cl_kgxg
+        ########
+        theory_kg = self.theory.get_Cl_kgxg()
+        ell_theory_kg = theory_kg['ell']
+        dl_1h_theory_kg = theory_kg['1h']
+        dl_2h_theory_kg = theory_kg['2h']
+        dl_gk_theory = np.asarray(list(dl_1h_theory_kg)) + np.asarray(list(dl_2h_theory_kg))
+        #print('dl_gk_theory ', dl_gk_theory)
+        ell_gk_binned, cl_gk_binned = self._bin(ell_theory_kg, dl_gk_theory, self.ell, bpwf, pixwin, Npoints, conv2cl=True)
         # print(cl_ell_theory)
-        # print('cl gg theory: ', dl_1h_theory)
+        print('cl gg theory: ', dl_1h_theory_kg)
         #vprint('cl gg: ', cl_gg_binned)
         # print('ell gg: ', ell_gg_binned)
 
-        # # ########
-        # # Cl_gxmu
         # ########
-        # theory_gm = self.theory.get_Cl_gxmu()
-        # cl_ell_theory_gm = theory_gm['ell']
-        # dl_1h_theory_gm = theory_gm['1h']
-        # dl_2h_theory_gm = theory_gm['2h']
-        # ell = np.asarray(list(cl_ell_theory))
-        # dl_gm_theory = np.asarray(list(dl_1h_theory_gm)) + np.asarray(list(dl_2h_theory_gm))
-        # ell_gm_binned, cl_gm_binned = self.binning(ell, dl_gm_theory, self.ell_full, wind_gg, Nellbins=Npoints)
-        # #print('cl gm: ', cl_gm_binned)
-            #print("total cl + SN: ", cl_gg_binned + 2*(5*s-2)*cl_gm_binned + (5*s-2)*(5*s-2)*cl_mm_binned + shot_noise)
-        #print("total ell: ", ell_mm_binned)
-        cl_gg = cl_gg_binned #+ 2*(5*s-2)*cl_gm_binned
-        # print(cl_gg)
-        #apply TF
-        trans = np.append(trans_gg, np.ones(Npoints-len(trans_gg)))
-        gg = cl_gg *trans
-        #cut the first point in gg
-        gg = gg[1:]
-        #print(gg)
-        return gg
+        # Cl_kgxmu
+        ########
+        theory_km = self.theory.get_Cl_kgxmu()
+        ell_theory_km = theory_km['ell']
+        dl_1h_theory_km = theory_km['1h']
+        dl_2h_theory_km = theory_km['2h']
+        dl_km_theory = np.asarray(list(dl_1h_theory_km)) + np.asarray(list(dl_2h_theory_km))
+        ell_km_binned, cl_km_binned = self._bin(ell_theory_km, dl_km_theory, self.ell, bpwf, pixwin, Npoints, conv2cl=True)
+        #print('cl gm: ', cl_gm_binned)
+
+        # ########
+        # Cl_IAxg
+        ########
+        theory_IA = self.theory.get_Cl_IAxg()
+        ell_theory_IA = theory_IA['ell']
+        dl_2h_theory_IA = theory_IA['2h']
+        ell_IA_binned, cl_IA_binned = self._bin(ell_theory_km, dl_2h_theory_IA, self.ell, bpwf, pixwin, Npoints, conv2cl=True)
+        #print("cl_IA_2h: ", cl_IA_binned)
+
+        cl_tot = cl_gk_binned + 2*(s-1)*cl_km_binned - cl_IA_binned
+        print("ell bin: ", ell_km_binned)
+        print("total cl bin: ", cl_tot)
+
+        return cl_tot
