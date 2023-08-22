@@ -51,8 +51,8 @@ class YXG_Likelihood(GaussianLikelihood):
         #self.cvg = np.diag(self.cvg)
         #self.cvg = cov [:, 1:]
         self.covmat =  cov[:Npoints,:Npoints]
-        print("ell ola:", self.ell)
-        print("yg ola:", self.yg)
+        #print("ell ola:", self.ell)
+        #print("yg ola:", self.yg)
 
         self.inv_covmat = np.linalg.inv(self.covmat)
         self.det_covmat = np.linalg.det(self.covmat)
@@ -107,7 +107,7 @@ class YXG_Likelihood(GaussianLikelihood):
         bpwf=self.bpwf[:,0,:]
         pixwin = self.pw_bin
         Npoints = self.Nbins
-        print("s:",s)
+        #print("s:",s)
 
         # ########
         # Cl_yxg
@@ -136,6 +136,6 @@ class YXG_Likelihood(GaussianLikelihood):
         ell_ym_bin, dl_ym_bin =  self._bin(ell_theory_ym, dl_theory_ym, self.ell, bpwf, pixwin, Nellbins=Npoints, conv2cl=True)
 
 
-        print("ell theory:", ell_yg_bin)
-        print("cl tot:", 1e-6*(dl_yg_bin+2*(s-1)*dl_ym_bin))
+        #print("ell theory:", ell_yg_bin)
+        #print("cl tot:", 1e-6*(dl_yg_bin+2*(s-1)*dl_ym_bin))
         return 1e-6*(dl_yg_bin+(5*s-2)*dl_ym_bin)
