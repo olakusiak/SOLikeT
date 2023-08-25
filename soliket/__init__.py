@@ -11,6 +11,7 @@ from .cosmopower import CosmoPower, CosmoPowerDerived
 from .yg.galaxy_x_galaxy import GXG_Likelihood
 from .yg.galaxy_x_kappa import GXK_Likelihood
 from .yg.y_x_galaxy import YXG_Likelihood
+from .yg.joint_yg_kg import YXG_KXG_Likelihood
 try:
     from .clusters import ClusterLikelihood  # noqa: F401
 except ImportError:

@@ -4,9 +4,9 @@ output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/kg_test_Maglim2
 likelihood:
   soliket.yg.galaxy_x_kappa.GXK_Likelihood:
     data_directory: "/Users/aleksandra/software/SOLikeT/soliket/yg/data/"
-    gk_data_file: "gglens_DES_healpy_1024_Maglim2_kappa4.txt"
-    cov_gk_data_file: "gglens_cov_DES_healpy_1024_Maglim2_kappa4.txt"
-    bp_wind_file: "bandpower_window_function_namaster.txt.npy"
+    gk_data_file: "gglens_DES_healpy_1024_Maglim2_kappa4_dl.txt"
+    cov_gk_data_file: "gglens_cov_DES_healpy_1024_Maglim2_kappa4_dl.txt"
+    bp_wind_file: "bpwf_namaster_ggkappa_Maglim_ellmax2201_dl.npy"
     s_file: "alpha_lensmag_Maglim2.txt"
     pixwind_file: "pixel_window_bin_nside1024.txt"
     Nbins: 10
