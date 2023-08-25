@@ -58,14 +58,14 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         self.ell_kg_full = D_kg[0,:Np_kg]
         self.kg = D_kg[1,1:Np_kg]
         self.sigma_kg = D_kg[2,1:Np_kg]
-        print("ell ola:", self.ell_yg)
-        print("yg ola:", self.yg)
-        print("yg shape: ", self.yg.shape)
-        print("ell ola:", self.ell_kg)
-        print("kg ola:", self.kg)
-        print("kg shape: ", self.kg.shape)
-
-        print("cov shape",cov.shape)
+        # print("ell ola:", self.ell_yg)
+        # print("yg ola:", self.yg)
+        # print("yg shape: ", self.yg.shape)
+        # print("ell ola:", self.ell_kg)
+        # print("kg ola:", self.kg)
+        # print("kg shape: ", self.kg.shape)
+        #
+        # print("cov shape",cov.shape)
         self.covmat =  cov#[:Npoints,:Npoints]
         self.inv_covmat = np.linalg.inv(self.covmat)
         self.det_covmat = np.linalg.det(self.covmat)
@@ -139,7 +139,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         #print("cl_2h_theory_yg:", cl_2h_theory_yg[:10])
         dl_theory_yg = np.asarray(list(cl_1h_theory_yg)) + np.asarray(list(cl_2h_theory_yg))
         ell_yg_bin, dl_yg_bin = self._bin(ell_theory_yg, dl_theory_yg, self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-        print("yg bin: ", dl_yg_bin[:10])
+        #print("yg bin: ", dl_yg_bin[:10])
 
         # ########
         # Cl_yxmu
@@ -164,7 +164,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         #print('dl_gk_theory ', dl_gk_theory)
         ell_gk_bin, cl_gk_bin = self._bin(ell_theory_kg, dl_gk_theory, self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
         # print('cl gk theory: ', dl_1h_theory_kg)
-        # print('cl gg: ', cl_gk_bin)
+        #print('cl kg: ', cl_gk_bin)
 
         # ########
         # Cl_kgxmu
@@ -175,7 +175,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         dl_2h_theory_km = theory_km['2h']
         dl_km_theory = np.asarray(list(dl_1h_theory_km)) + np.asarray(list(dl_2h_theory_km))
         ell_km_bin, cl_km_bin = self._bin(ell_theory_km, dl_km_theory, self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-        #print('cl gm: ', cl_gm_binned)
+        #print('cl gm: ', cl_km_bin)
 
         #########
         # Cl_IAxg
@@ -184,14 +184,14 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         ell_theory_IA = theory_IA['ell']
         dl_2h_theory_IA = theory_IA['2h']
         ell_IA_bin, cl_IA_bin = self._bin(ell_theory_km, dl_2h_theory_IA, self.ell_kg, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-        #print("cl_IA_2h: ", cl_IA_binned)
+        #print("cl_IA_2h: ", cl_IA_bin)
 
         kg = cl_gk_bin + 2*(alpha-1)*cl_km_bin - cl_IA_bin
         yg = 1.e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)
-        print("yg: ", yg)
-        print("kg: ", kg)
-        print("yg + kg shape",yg.shape+kg.shape)
+        #print("yg: ", yg)
+        #print("kg: ", kg)
+        #print("yg + kg shape",yg.shape+kg.shape)
 
         cl_joint = np.concatenate((kg[1:], yg[1:]), axis=0) #remove the first bin ell=50
-        print("cl joint:", cl_joint)
+        #print("cl joint:", cl_joint)
         return cl_joint
