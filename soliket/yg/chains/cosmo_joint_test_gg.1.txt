@@ -1,2 +1,0 @@
-#        weight    minuslogpost     alpha_s_HOD sigma_log10M_HOD     logM1_prime    logM_min_HOD x_out_truncated_nfw_profile_satellite_galaxies    A_shot_noise    M1_prime_HOD       M_min_HOD   minuslogprior minuslogprior__0            chi2 chi2__soliket.GXG_Likelihood
-              1   1.3068039e+20       1.4139603       0.87429123       13.203262       12.381665                                      1.1111005      0.83314427   1.5968422e+13   2.4080472e+12       4.3917789        4.3917789   2.6136079e+20                2.6136079e+20

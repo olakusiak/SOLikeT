@@ -1,2 +1,0 @@
-#        weight    minuslogpost     alpha_s_HOD sigma_log10M_HOD   minuslogprior minuslogprior__0            chi2 chi2__soliket.yg.y_x_galaxy.YXG_Likelihood
-              1       46286.453       1.3039425       0.68660116        1.049422         1.049422       92570.806                                  92570.806

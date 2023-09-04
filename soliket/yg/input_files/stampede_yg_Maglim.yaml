@@ -1,0 +1,190 @@
+output:  /work2/08134/tg874331/stampede2/software/SOLikeT/soliket/yg/chains/yg_test_Maglim3_
+
+likelihood:
+  soliket.yg.y_x_galaxy.YXG_Likelihood:
+    data_directory: "/work2/08134/tg874331/stampede2/software/SOLikeT/soliket/yg/data/"
+    yxg_data_file: "yg_ACT_DR6_healpy_4096ilc_SZ_deproj_cib_cibdBeta_1.15_24.00_yy_DES_Maglim_2.txt"
+    cov_yxg_data_file: "yg_cov_ACT_DR6_healpy_4096ilc_SZ_deproj_cib_cibdBeta_1.15_24.00_yy_DES_Maglim_2.txt"
+    bp_wind_file: "bpwf_namaster_yg_MaglimxACT_ellmax6001.npy"
+    s_file: "alpha_lensmag_Maglim2.txt"
+    pixwind_file: "pixel_window_bin_nside4096.txt"
+    Nbins: 31
+params:
+    P0GNFW:
+      prior:
+        min: 0.0001
+        max: 12.00
+      ref:  0.2
+        # dist: norm
+        # loc: 0.2
+        # scale: 0.1
+      proposal: 0.1
+      latex: P0_{GNFW}
+    betaGNFW: #outer slope
+      prior:
+        min: 0.01
+        max: 10.0
+      ref: 5.4807
+      proposal: 0.1
+      latex: \beta_{GNFW}
+    alpha_s_HOD:
+      prior:
+        min: 0.1
+        max: 2.5
+      ref: 1.85
+      proposal: 0.03
+      latex: \alpha_{HOD}
+    sigma_log10M_HOD:
+      prior:
+        min: 0.01
+        max: 1.20
+      ref: 0.3
+      proposal: 0.03
+      latex: \sigma_{HOD}
+    logM1_prime:
+      prior:
+        min: 11.35
+        max: 14.
+      ref: 13.42
+      proposal: 0.005
+      latex: \log(10^{10} M1_\mathrm{prime})
+      drop: true
+    M1_prime_HOD:
+      value: 'lambda logM1_prime: 10**(logM1_prime)'
+      latex: M1_\mathrm{prime}
+    logM_min_HOD:
+      prior:
+        min: 10.85
+        max: 12.85
+      ref: 11.91
+      proposal: 0.005
+      latex: \log(10^{10} M_\mathrm{min})
+      drop: true
+    M_min_HOD:
+      value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
+      latex: M_\mathrm{min}
+
+sampler:
+    mcmc:
+      covmat: auto
+      #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+      Rminus1_stop: 0.01
+      learn_proposal: True
+      learn_proposal_Rminus1_max: 100.0
+      learn_proposal_Rminus1_max_early: 300.0
+      #drag: true
+      #output_every: 10s
+      proposal_scale: 2.4
+      max_tries: 5000
+# sampler:
+#     evaluate:
+#       override:
+#         P0GNFW: 0.2
+#         #c500: 1.156
+#         #alphaGNFW: 1.062
+#         betaGNFW:  5.4807
+#         #gammaGNFW: 0.3292
+#         #B: 1.53
+#         sigma_log10M_HOD:  0.30
+#         alpha_s_HOD: 1.85
+#         logM_min_HOD: 11.738466547352678
+#         logM1_prime: 13.248466547352677
+
+
+theory :
+  classy_szfast.classy_sz.classy_sz:
+     extra_args:
+                 output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h'
+                 galaxy_sample : 'custom'
+                 full_path_to_dndz_gal :  "/work2/08134/tg874331/stampede2/software/class_sz/class_sz_auxiliary_files/nz_maglim_bin2.txt"
+                 full_path_to_source_dndz_gal: '/work2/08134/tg874331/stampede2/software/class_sz/class_sz_auxiliary_files/nz_source_normalized_bin4.txt' # source galaxies
+
+                 ### Precision
+                 redshift_epsabs : 1.0e-40
+                 redshift_epsrel : 0.0005
+                 mass_epsabs : 1.0e-40
+                 mass_epsrel : 0.0005
+                 ndim_masses : 150
+                 ndim_redshifts : 150
+                 class_sz_verbose : 0
+                 nonlinear_verbose : 0
+
+                 P_k_max_h/Mpc : 100.0
+                 k_min_for_pk_class_sz : 0.0001
+                 k_max_for_pk_class_sz : 70.0
+                 k_per_decade_class_sz : 20.0
+
+                 ## fast params
+                 use_fft_for_profiles_transform : 1
+                 N_samp_fftw : 1024
+                 l_min_samp_fftw: 1e-12
+                 l_max_samp_fftw: 1e12
+                 x_min_gas_pressure_fftw : 1e-4
+                 x_max_gas_pressure_fftw : 1e3
+
+                 dlogell: 0.3
+                 multipoles_sz: 'ell_mock'
+                 ell_max: 8200.0
+                 ell_min: 2.0
+
+                 z_min : 0.005
+                 z_max : 2.0
+                 M_min : 1.0e10
+                 M_max : 3.5e15
+
+                 hm_consistency : 1
+                 delta for galaxies : "200c"
+                 delta for matter density: "200c"
+                 mass function: 'T08M200c'
+                 concentration parameter: 'D08'
+
+                 ### Cosmology
+                 ### Planck 2018 (last column Table 2)
+                 omega_b: 0.02242
+                 omega_cdm: 0.11933
+                 #sigma8=  0.8102
+                 h: 0.6766
+                 tau_reio: 0.0561
+                 ln10^{10}A_s: 3.047
+                 n_s: 0.9665
+
+                 k_pivot: 0.05
+                 N_ncdm: 1 # neutrinos??
+                 N_ur: 2.0328
+                 m_ncdm: 0.06
+
+                 ####HOD PARAMS
+                 #M_min_HOD: 547603918739.7538 #10**11.91 *0.6737
+                 #M1_prime_HOD:  17720115461399.184 #(10** 13.42) *0.6737
+                 #sigma_log10M_HOD : 0.30
+                 #alpha_s_HOD : 1.85
+                 M0_HOD: 0
+                 M0 equal M_min (HOD): 'no'
+                 x_out_truncated_nfw_profile: 1.0 #for lensingst  
+                 x_out_truncated_nfw_profile_satellite_galaxies: 1.07
+                 Delta_z_lens : -3.5e-2
+                 Delta_z_source : 0.0
+                 csat_over_cdm:  1.0
+                 f_cen_HOD: 1.0
+
+                 # #### Pressure profile
+                 pressure profile : 'Custom. GNFW'
+                 units for tSZ spectrum: 'dimensionless'
+                 c500: 1.156
+                 alphaGNFW: 1.062
+                 #betaGNFW:  5.4807
+                 gammaGNFW: 0.3292
+                 B: 1.53
+                 # # x_outSZ: 4.
+                 # # truncate_wrt_rvir: 0
+
+                 # n_m_pressure_profile : 100 # default: 100, decrease for faster
+                 # n_z_pressure_profile : 100 # default: 100, decrease for faster
+                 # # #n_ell_pressure_profile : 100,
+                 # pressure_profile_epsrel: 1e-3
+                 # pressure_profile_epsabs: 1e-40
+
+
+stop_at_error: True
+debug: False
+timing: True

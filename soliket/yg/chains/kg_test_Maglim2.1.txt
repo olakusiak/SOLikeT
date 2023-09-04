@@ -1,2 +1,0 @@
-#        weight    minuslogpost     alpha_s_HOD sigma_log10M_HOD     logM1_prime    logM_min_HOD    M1_prime_HOD       M_min_HOD   minuslogprior minuslogprior__0            chi2 chi2__soliket.yg.galaxy_x_kappa.GXK_Likelihood
-              1       96.405857            1.85              0.3       13.248467       11.738467   1.7720115e+13   5.4760392e+11       2.7171289        2.7171289       187.37746                                      187.37746
