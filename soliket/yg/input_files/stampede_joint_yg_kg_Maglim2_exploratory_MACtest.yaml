@@ -1,4 +1,4 @@
-output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim2_ev_test
+output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim2_explore_8-26
 
 likelihood:
   soliket.yg.joint_yg_kg.YXG_KXG_Likelihood:
@@ -16,7 +16,7 @@ likelihood:
 params:
     P0GNFW:
       prior:
-        min: 0.0001
+        min: 0.01
         max: 12.00
       ref:  0.2
         # dist: norm
@@ -82,37 +82,35 @@ params:
     #   value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
     #   latex: M_\mathrm{min}
 
-sampler:
-    mcmc:
-      covmat: auto
-      #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
-      Rminus1_stop: 0.01
-      learn_proposal: True
-      learn_proposal_Rminus1_max: 100.0
-      learn_proposal_Rminus1_max_early: 300.0
-      #drag: true
-      #output_every: 10s
-      proposal_scale: 2.4
-      max_tries: 5000
 # sampler:
-#     evaluate:
-#       override:
-#         P0GNFW: 0.1
-#         #c500: 1.156
-#         #alphaGNFW: 1.062
-#         betaGNFW:  5.4807
-#         #gammaGNFW: 0.3292
-#         #B: 1.53
-#         sigma_log10M_HOD:  0.30
-#         alpha_s_HOD: 1.85
-#         # logM_min_HOD: 11.738466547352678
-#         # logM1_prime: 13.248466547352677
+#     mcmc:
+#       covmat: auto
+#       #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+#       Rminus1_stop: 0.1
+#       learn_proposal: True
+#       learn_proposal_Rminus1_max: 100.0
+#       learn_proposal_Rminus1_max_early: 300.0
+#       #drag: true
+#       #output_every: 10s
+#       proposal_scale: 2.4
+#       max_tries: 5000
+sampler: #Initial point: P0GNFW:0.7683341, betaGNFW:7.674098, alpha_s_HOD:2.068693, sigma_log10M_HOD:0.3675917, logM1_prime:13.41691, logM_min_HOD:11.5867
+    evaluate:
+      override:
+        P0GNFW: 0.5086542077288667
+        #c500: 1.156
+        #alphaGNFW: 1.062
+        betaGNFW: 0.5086542077288667
+        #gammaGNFW: 0.3292
+        #B: 1.53
+        sigma_log10M_HOD: 0.43338008479900103
+        alpha_s_HOD: 2.2266983742346684
+        #M_min_HOD: 1277110743236.0828
+       # M1_prime: 23845015969951.39
 
 
 theory :
   classy_szfast.classy_sz.classy_sz:
-     use_class_sz_nocosmo_mode : 1
-  # classy_szfast.classy_sz.classy_sz:
      extra_args:
                  output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h,gal_gallens_1h,gal_gallens_2h,gallens_lensmag_1h, gallens_lensmag_2h,IA_gal_2h'
                  galaxy_sample : 'custom'
@@ -162,10 +160,10 @@ theory :
                  ### Planck 2018 (last column Table 2)
                  omega_b: 0.02242
                  omega_cdm: 0.11933
-                 sigma8:  0.8102
+                 #sigma8=  0.8102
                  h: 0.6766
                  tau_reio: 0.0561
-                 # ln10^{10}A_s: 3.047
+                 ln10^{10}A_s: 3.047
                  n_s: 0.9665
 
                  k_pivot: 0.05
@@ -174,8 +172,8 @@ theory :
                  m_ncdm: 0.06
 
                  ####HOD PARAMS
-                 #M_min_HOD: 547603918739.7538 #10**11.91 *0.6737
-                 #M1_prime_HOD:  17720115461399.184 #(10** 13.42) *0.6737
+                 M_min_HOD: 155065740526.0624 #10**11.91 *0.6737
+                 M1_prime_HOD:  18577998608582.72 #(10** 13.42) *0.6737
                  #sigma_log10M_HOD : 0.30
                  #alpha_s_HOD : 1.85
                  M0_HOD: 0
@@ -202,14 +200,14 @@ theory :
                  #x_out_truncated_nfw_profile_electrons: 1. # tbd
                  #x_outSZ: 4. ## is this necesarry??
                  # # truncate_wrt_rvir: 0 ??
-                 # pressure_profile_epsrel: 1e-3
-                 # pressure_profile_epsabs: 1e-40
+                #  pressure_profile_epsrel: 1e-3
+                #  pressure_profile_epsabs: 1e-40
 
-                 # n_m_pressure_profile : 100 # default: 100, decrease for faster
-                 # n_z_pressure_profile : 100 # default: 100, decrease for faster
-                 # #n_ell_pressure_profile : 100,
+                #  n_m_pressure_profile : 100 # default: 100, decrease for faster
+                #  n_z_pressure_profile : 100 # default: 100, decrease for faster
+                #  #n_ell_pressure_profile : 100,
 
 
 stop_at_error: True
-debug: False
+debug: True
 timing: True
