@@ -101,8 +101,8 @@ theory:
     input_params:
     - P0GNFW
     - betaGNFW
-    - alpha_s_HOD
-    - sigma_log10M_HOD
+    - M1_prime_HOD
+    - M_min_HOD
     output_params: []
 likelihood:
   soliket.yg.joint_yg_kg.YXG_KXG_Likelihood:
@@ -137,25 +137,35 @@ params:
     latex: P0_{GNFW}
   betaGNFW:
     prior:
-      min: 0.01
+      min: 4.01
       max: 10.0
     ref: 5.4807
     proposal: 0.1
     latex: \beta_{GNFW}
-  alpha_s_HOD:
+  logM1_prime:
     prior:
-      min: 0.1
-      max: 2.5
-    ref: 1.85
-    proposal: 0.03
-    latex: \alpha_{HOD}
-  sigma_log10M_HOD:
+      min: 11.35
+      max: 14.0
+    ref: 13.42
+    proposal: 0.005
+    latex: \log(10^{10} M1_\mathrm{prime})
+    drop: true
+  M1_prime_HOD:
+    value: 'lambda logM1_prime: 10**(logM1_prime)'
+    latex: M1_\mathrm{prime}
+    derived: true
+  logM_min_HOD:
     prior:
-      min: 0.01
-      max: 1.2
-    ref: 0.3
-    proposal: 0.03
-    latex: \sigma_{HOD}
+      min: 10.85
+      max: 12.85
+    ref: 11.91
+    proposal: 0.005
+    latex: \log(10^{10} M_\mathrm{min})
+    drop: true
+  M_min_HOD:
+    value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
+    latex: M_\mathrm{min}
+    derived: true
 sampler:
   mcmc:
     burn_in: 0
@@ -183,8 +193,8 @@ sampler:
     - - 1
       - - P0GNFW
         - betaGNFW
-        - alpha_s_HOD
-        - sigma_log10M_HOD
+        - logM1_prime
+        - logM_min_HOD
     callback_function: null
     callback_every: null
     seed: null

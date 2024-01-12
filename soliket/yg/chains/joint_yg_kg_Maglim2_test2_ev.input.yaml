@@ -116,14 +116,12 @@ params:
     value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
     latex: M_\mathrm{min}
 sampler:
-  mcmc:
-    covmat: auto
-    Rminus1_stop: 0.01
-    learn_proposal: true
-    learn_proposal_Rminus1_max: 100.0
-    learn_proposal_Rminus1_max_early: 300.0
-    proposal_scale: 2.4
-    max_tries: 5000
-output: joint_yg_kg_Maglim2_ev_test
+  evaluate:
+    override:
+      P0GNFW: 0.1
+      betaGNFW: 5.4807
+      logM_min_HOD: 11.738466547352678
+      logM1_prime: 13.248466547352677
+output: joint_yg_kg_Maglim2_test2_ev
 stop_at_error: true
 timing: true

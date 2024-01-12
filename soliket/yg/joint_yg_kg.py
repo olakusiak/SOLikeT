@@ -79,7 +79,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
     # def get_requirements(self):
     #     return {"Cl_yxg": {}, "Cl_yxmu": {}}
     def get_requirements(self):
-        return {"Cl_yxg": {}, "Cl_yxmu": {},"Cl_kgxg": {}}
+        return {"Cl_yxg": {}, "Cl_yxmu": {},"Cl_kgxg": {}, "Cl_IAxg": {}, "Cl_kgxmu":{}}
 
     # this is the data to fit
     def _get_data(self):
@@ -165,30 +165,30 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         # print('cl gk theory: ', dl_1h_theory_kg)
         #print('cl kg: ', cl_gk_bin)
 
-        # # ########
-        # # Cl_kgxmu
         # ########
-        # theory_km = self.theory.get_Cl_kgxmu()
-        # ell_theory_km = theory_km['ell']
-        # dl_1h_theory_km = theory_km['1h']
-        # dl_2h_theory_km = theory_km['2h']
-        # dl_km_theory = np.asarray(list(dl_1h_theory_km)) + np.asarray(list(dl_2h_theory_km))
-        # ell_km_bin, cl_km_bin = self._bin(ell_theory_km, dl_km_theory, self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-        # #print('cl gm: ', cl_km_bin)
-        #
-        # #########
-        # # Cl_IAxg
-        # ########
-        # theory_IA = self.theory.get_Cl_IAxg()
-        # ell_theory_IA = theory_IA['ell']
-        # dl_2h_theory_IA = theory_IA['2h']
-        # ell_IA_bin, cl_IA_bin = self._bin(ell_theory_km, dl_2h_theory_IA, self.ell_kg, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-        # #print("cl_IA_2h: ", cl_IA_bin)
+        # Cl_kgxmu
+        ########
+        theory_km = self.theory.get_Cl_kgxmu()
+        ell_theory_km = theory_km['ell']
+        dl_1h_theory_km = theory_km['1h']
+        dl_2h_theory_km = theory_km['2h']
+        dl_km_theory = np.asarray(list(dl_1h_theory_km)) + np.asarray(list(dl_2h_theory_km))
+        ell_km_bin, cl_km_bin = self._bin(ell_theory_km, dl_km_theory, self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
+        #print('cl gm: ', cl_km_bin)
 
-        kg = cl_gk_bin #+ 2*(alpha-1)*cl_km_bin - cl_IA_bin
+        #########
+        # Cl_IAxg
+        ########
+        theory_IA = self.theory.get_Cl_IAxg()
+        ell_theory_IA = theory_IA['ell']
+        dl_2h_theory_IA = theory_IA['2h']
+        ell_IA_bin, cl_IA_bin = self._bin(ell_theory_km, dl_2h_theory_IA, self.ell_kg, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
+        print("cl_IA_2h: ", cl_IA_bin)
+
+        kg = cl_gk_bin + 2*(alpha-1)*cl_km_bin - cl_IA_bin
         yg = 1.e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)
-        print("yg: ", yg)
-        print("kg: ", kg)
+        # print("yg: ", yg)
+        # print("kg: ", kg)
         #print("yg + kg shape",yg.shape+kg.shape)
 
         cl_joint = np.concatenate((kg[1:], yg[1:]), axis=0) #remove the first bin ell=50

@@ -1,6 +1,11 @@
 theory:
   classy_szfast.classy_sz.classy_sz:
+    use_class_sz_fast_mode: 0
     use_class_sz_nocosmo_mode: 1
+    lensing_lkl: SOLikeT
+    path: null
+    speed: 0.2
+    stop_at_error: false
     extra_args:
       output: tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h,gal_gallens_1h,gal_gallens_2h,gallens_lensmag_1h,
         gallens_lensmag_2h,IA_gal_2h
@@ -65,19 +70,63 @@ theory:
       alphaGNFW: 1.062
       gammaGNFW: 0.3292
       B: 1.53
+    ignore_obsolete: false
+    use_renames: false
+    renames:
+      As: A_s
+      ns: n_s
+      nrun: alpha_s
+      nrunrun: beta_s
+      nt: n_t
+      ntrun: alpha_t
+      rdrag: rs_drag
+      omegak: Omega_k
+      omegal: Omega_Lambda
+      w: w0_fld
+      wa: wa_fld
+      omegabh2: omega_b
+      omegab: Omega_b
+      omegach2: omega_cdm
+      omegac: Omega_cdm
+      omegam: Omega_m
+      omegan: Omega_nu
+      tau: tau_reio
+      zrei: z_reio
+      deltazrei: reionization_width
+      helium_redshift: helium_fullreio_redshift
+      helium_delta_redshift: helium_fullreio_width
+      yhe: YHe
+      yheused: YHe
+    version: v2.9.4
+    input_params:
+    - P0GNFW
+    - betaGNFW
+    - M1_prime_HOD
+    - M_min_HOD
+    output_params: []
 likelihood:
   soliket.yg.joint_yg_kg.YXG_KXG_Likelihood:
     data_directory: /Users/aleksandra/software/SOLikeT/soliket/yg/data/
     yxg_data_file: yg_ACT_DR6_healpy_4096ilc_SZ_deproj_cib_cibdBeta_1.15_24.00_yy_DES_Maglim_2_cl.txt
     gxk_data_file: gglens_DES_healpy_1024_Maglim2_kappa4_cl.txt
     cov_data_file: combined_cov_gk_gy_Maglim2_cl.txt
+    s_file: alpha_lensmag_Maglim2.txt
     bp_wind_yg_file: bpwf_namaster_yg_MaglimxACT_ellmax6001_cl.npy
     bp_wind_gk_file: bpwf_namaster_ggkappa_Maglim_ellmax2201_cl.npy
-    s_file: alpha_lensmag_Maglim2.txt
     pixwind_4096_file: pixel_window_bin_nside4096.txt
     pixwind_1024_file: pixel_window_bin_nside1024.txt
     Nbins_yg: 31
     Nbins_kg: 10
+    name: Gaussian
+    datapath: null
+    covpath: null
+    ncovsims: null
+    type: []
+    speed: -1
+    stop_at_error: false
+    version: null
+    input_params: []
+    output_params: []
 params:
   P0GNFW:
     prior:
@@ -104,6 +153,7 @@ params:
   M1_prime_HOD:
     value: 'lambda logM1_prime: 10**(logM1_prime)'
     latex: M1_\mathrm{prime}
+    derived: true
   logM_min_HOD:
     prior:
       min: 10.85
@@ -115,15 +165,18 @@ params:
   M_min_HOD:
     value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
     latex: M_\mathrm{min}
+    derived: true
 sampler:
-  mcmc:
-    covmat: auto
-    Rminus1_stop: 0.01
-    learn_proposal: true
-    learn_proposal_Rminus1_max: 100.0
-    learn_proposal_Rminus1_max_early: 300.0
-    proposal_scale: 2.4
-    max_tries: 5000
-output: joint_yg_kg_Maglim2_ev_test
+  evaluate:
+    N: 1
+    override:
+      P0GNFW: 0.1
+      betaGNFW: 5.4807
+      logM_min_HOD: 11.738466547352678
+      logM1_prime: 13.248466547352677
+    seed: null
+    version: null
+output: joint_yg_kg_Maglim2_test2_ev
 stop_at_error: true
 timing: true
+version: 3.3.1
