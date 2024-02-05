@@ -1,17 +1,17 @@
-output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim2_test2_ev_2-2
+output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim2_test2_ev_1-11
 
 likelihood:
   soliket.yg.joint_yg_kg.YXG_KXG_Likelihood:
     data_directory: "/Users/aleksandra/software/SOLikeT/soliket/yg/data/"
-    yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_2_dl.txt"
-    gxk_data_file: "gglens_DES_healpy_1024_Maglim2_kappa4_dl.txt"
-    cov_data_file: "cov/combined_cov_gk_gy_Maglim2_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
-    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax6001.npy"
-    bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_dl.npy"
+    yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_1.77_10.14_yy_DES_Maglim_2_cl.txt"
+    gxk_data_file: "gglens_DES_healpy_1024_Maglim2_kappa4_cl.txt"
+    cov_data_file: "combined_cov_gk_gy_Maglim2_cl.txt"
+    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax6001_cl.npy"
+    bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_cl.npy"
     s_file: "const/alpha_lensmag_Maglim2.txt"
     pixwind_4096_file: "const/pixel_window_bin_nside4096.txt"
     pixwind_1024_file: "const/pixel_window_bin_nside1024.txt"
-    Nbins_yg: 21
+    Nbins_yg: 29
     Nbins_kg: 10
 params:
     P0GNFW:
