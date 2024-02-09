@@ -5,10 +5,10 @@ likelihood:
   soliket.yg.galaxy_x_kappa.GXK_Likelihood:
     data_directory: "/Users/aleksandra/software/SOLikeT/soliket/yg/data/"
     gk_data_file: "gglens_DES_healpy_1024_Maglim2_kappa4_dl.txt"
-    cov_gk_data_file: "gglens_cov_DES_healpy_1024_Maglim2_kappa4_dl.txt"
-    bp_wind_file: "bpwf_namaster_ggkappa_Maglim_ellmax2201_dl.npy"
-    s_file: "alpha_lensmag_Maglim2.txt"
-    pixwind_file: "pixel_window_bin_nside1024.txt"
+    cov_data_file: "cov/combined_cov_gk_gy_Maglim2_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
+    bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_dl.npy"
+    s_file: "const/alpha_lensmag_Maglim2.txt"
+    pixwind_1024_file: "const/pixel_window_bin_nside1024.txt"
     Nbins: 10
 params:
     alpha_s_HOD:
@@ -69,6 +69,7 @@ sampler:
         logM1_prime: 13.248466547352677
 theory :
   classy_szfast.classy_sz.classy_sz:
+     use_class_sz_nocosmo_mode : 1
      extra_args:
                  output: 'gal_gallens_1h,gal_gallens_2h,gallens_lensmag_1h, gallens_lensmag_2h,IA_gal_2h'
                  galaxy_sample : 'custom'
@@ -138,10 +139,12 @@ theory :
                  M0 equal M_min (HOD): 'no'
                  x_out_truncated_nfw_profile: 1.0 #for lensing
                  x_out_truncated_nfw_profile_satellite_galaxies: 1.07
-                 Delta_z_lens : -3.5e-2
-                 Delta_z_source : 0.0
+                 # Delta_z_lens : -3.5e-2
+                 # Delta_z_source : 0.0
                  csat_over_cdm:  1.0
                  f_cen_HOD: 1.0
+                 Delta_z_lens : 0.0
+                 Delta_z_source : 0.0
 
 
                  # n_m_pressure_profile : 100 # default: 100, decrease for faster
@@ -150,5 +153,5 @@ theory :
                  # pressure_profile_epsrel: 1e-3
                  # pressure_profile_epsabs: 1e-40
 stop_at_error: True
-debug: True
+debug: False
 timing: True

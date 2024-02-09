@@ -27,34 +27,33 @@ class YXG_Likelihood(GaussianLikelihood):
     yxg_data_file: Optional[str] = None
     cov_data_file: Optional[str] = None
     s_file: Optional[str] = None #s for lens mag
-    bp_wind_file: Optional[str] = None
-    pixwind_file: Optional[str] = None
+    bp_wind_yg_file: Optional[str] = None
+    pixwind_4096_file: Optional[str] = None
     Nbins: Optional[str] = None
 
     # Load the data
     def initialize(self):
         self.datafile = self.yxg_data_file
-        self.covfile = self.cov_data_file
+        # self.covfile = self.cov_data_file
         self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
-        self.bpwf = np.load(os.path.join(self.data_directory, self.bp_wind_file))[0]
-        self.pw_bin  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_file))
+        self.bpwf = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
+        self.pw_bin  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
         Npoints = self.Nbins
 
-        D = np.loadtxt(os.path.join(self.data_directory, self.datafile))
-        cov = np.loadtxt(os.path.join(self.data_directory, self.covfile))
+        D = np.loadtxt(os.path.join(self.data_directory, self.yxg_data_file))
+        cov = np.loadtxt(os.path.join(self.data_directory, self.cov_data_file))
 
-        self.ell = D[0,1:Npoints]
-        self.yg = D[1,1:Npoints]
-        self.sigma_tot = D[2,1:Npoints]
-        #self.cvg = cov [:, 1:]
-        self.covmat =  cov[9:,9:] #cut kg (9data points) + ell=50
-        #print("ell ola:", self.ell)
-        #print("yg ola:", self.yg)
+        self.ell = D[0,:Npoints]
+        self.yg = D[1,:Npoints]
+        self.sigma_tot = D[2,:Npoints]
+        self.covmat =  cov[10:,10:] #cut 10 kg data points
+        print("ell ola:", self.ell)
+        print("yg ola:", self.yg)
+        print("sigma ola:", self.sigma_tot**2)
+        print("cov :", np.diag(self.covmat))
 
         self.inv_covmat = np.linalg.inv(self.covmat)
         self.det_covmat = np.linalg.det(self.covmat)
-        #print(np.linalg.eig(self.covmat))
-        #print('[reading ref yxg data files] read-in completed.')
         super().initialize()
 
 
@@ -104,7 +103,7 @@ class YXG_Likelihood(GaussianLikelihood):
         bpwf=self.bpwf[:,0,:]
         pixwin = self.pw_bin
         Npoints = self.Nbins
-        ellmax_bin = 6000
+        ellmax_bin = 5600
 
         # ########
         # Cl_yxg
@@ -133,6 +132,6 @@ class YXG_Likelihood(GaussianLikelihood):
         ell_ym_bin, dl_ym_bin =  self._bin(ell_theory_ym, dl_theory_ym, self.ell, ellmax_bin, bpwf, pixwin, Nellbins=Npoints, conv2cl=True)
 
         print("ell theory:", ell_yg_bin)
-        f = ell_yg_bin*(ell_yg_bin+1)/2/np.pi
         print("cl tot:", 1e-6*(dl_yg_bin+2*(alpha-1)*dl_ym_bin))
-        return 1e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)[1:]
+        
+        return 1e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)

@@ -6,7 +6,7 @@ likelihood:
     yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_2_dl.txt"
     gxk_data_file: "gglens_DES_healpy_1024_Maglim2_kappa4_dl.txt"
     cov_data_file: "cov/combined_cov_gk_gy_Maglim2_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
-    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax6001.npy"
+    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601.npy"
     bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_dl.npy"
     s_file: "const/alpha_lensmag_Maglim2.txt"
     pixwind_4096_file: "const/pixel_window_bin_nside4096.txt"
@@ -182,11 +182,13 @@ theory :
                  M0 equal M_min (HOD): 'no'
                  x_out_truncated_nfw_profile: 1.0 #for lensing
                  x_out_truncated_nfw_profile_satellite_galaxies: 1.07
-                 Delta_z_lens : -3.5e-2
-                 Delta_z_source : 0.0
+                 # Delta_z_lens : -3.5e-2
+                 # Delta_z_source : 0.0
                  csat_over_cdm:  1.0
                  f_cen_HOD: 1.0
-                 #IA
+                 Delta_z_lens : 0.0
+                 Delta_z_source : 0.0
+                 # IA
                  A_IA: 0.5
                  eta_IA: -1.0
                  C1_IA: 5e-14

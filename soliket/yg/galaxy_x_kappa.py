@@ -27,8 +27,8 @@ class GXK_Likelihood(GaussianLikelihood):
     cov_data_file: Optional[str]  = None
     s_file: Optional[str]  =  None
     #print(params)
-    bp_wind_file: Optional[str] = None # for binning
-    pixwind_file: Optional[str] = None #healpy pixel window fucntions
+    bp_wind_gk_file: Optional[str] = None # for binning
+    pixwind_1024_file: Optional[str] = None #healpy pixel window fucntions
     Nbins: Optional[str] = None
 
     # Load the templates
@@ -38,20 +38,22 @@ class GXK_Likelihood(GaussianLikelihood):
         self.datafile = self.gk_data_file
         self.covfile = self.cov_data_file
         self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
-        self.pw_bin  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_file))
-        self.bpwf = np.load(os.path.join(self.data_directory, self.bp_wind_file))[0]
+        self.pw_bin  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_1024_file))
+        self.bpwf = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
 
         D = np.loadtxt(os.path.join(self.data_directory, self.datafile))
         cov = np.loadtxt(os.path.join(self.data_directory, self.covfile))
 
         self.ell_full = D[0,]
-        self.ell = D[0,1:Npoints]
-        self.gk = D[1,1:Npoints]
-        #self.sigma = D[2,:Npoints]
+        self.ell = D[0,:Npoints]
+        self.gk = D[1,:Npoints]
+        self.sigma = D[2,:Npoints]
         #self.covmat =  cov[1:Npoints,1:Npoints]
-        self.covmat =  cov[:9,:9]
+        self.covmat =  cov[:Npoints,:Npoints]
         print("ell ola:", self.ell)
         print("gk ola:", self.gk)
+        print("sigma ola:", self.sigma**2)
+        print("cov :", np.diag(self.covmat))
 
 
         # now compute the iverse and det of covariance matrix
@@ -104,9 +106,9 @@ class GXK_Likelihood(GaussianLikelihood):
         pixwin = self.pw_bin
         Npoints = self.Nbins
         bpwf=self.bpwf[:,0,:]
-        print("Npoints:", Npoints)
-        print("s:",s)
-        #print("Healpix pixwin", pixwin)
+        # print("Npoints:", Npoints)
+        # print("s:",s)
+        # #print("Healpix pixwin", pixwin)
         #print("Namaster bpwf: ", bpwf)
         ellmax_bin = 2200
         ########
@@ -120,9 +122,9 @@ class GXK_Likelihood(GaussianLikelihood):
         #print('dl_gk_theory ', dl_gk_theory)
         ell_gk_binned, cl_gk_binned = self._bin(ell_theory_kg, dl_gk_theory, self.ell, ellmax_bin, bpwf, pixwin, Npoints, conv2cl=True)
         # print(cl_ell_theory)
-        print('cl gk theory: ', dl_1h_theory_kg)
-        print('cl gg: ', cl_gk_binned)
-        # print('ell gg: ', ell_gg_binned)
+        # print('cl gk theory: ', dl_1h_theory_kg)
+        # print('cl gg: ', cl_gk_binned)
+        # # print('ell gg: ', ell_gg_binned)
 
         # ########
         # Cl_kgxmu
@@ -146,8 +148,8 @@ class GXK_Likelihood(GaussianLikelihood):
 
         f = ell_km_binned*(ell_km_binned+1)/2/np.pi
         cl_tot = cl_gk_binned + 2*(s-1)*cl_km_binned - cl_IA_binned
-        print("ell bin: ", ell_km_binned[1:])
-        print("total cl bin: ", cl_tot[1:])
+        print("ell bin: ", ell_km_binned)
+        print("total cl bin: ", cl_tot)
         #print("total cl bin: ", (cl_tot*f)[1:])
 
-        return cl_tot[1:]
+        return cl_tot

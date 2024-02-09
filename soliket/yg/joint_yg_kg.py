@@ -57,10 +57,10 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         self.kg = D_kg[1,:Np_kg]
         self.sigma_kg = D_kg[2,:Np_kg]
         print("ell ola yg :", self.ell_yg)
-        # print("yg ola:", self.yg)
+        print("yg ola:", self.yg)
         # print("yg shape: ", self.yg.shape)
         print("ell ola kg :", self.ell_kg)
-        # print("kg ola:", self.kg)
+        print("kg ola:", self.kg)
         # print("kg shape: ", self.kg.shape)
         #
         print("cov shape",cov.shape)
@@ -125,7 +125,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         Np_yg = self.Nbins_yg
         Np_kg = self.Nbins_kg
         ellmax_bin_kg = 2200
-        ellmax_bin_yg = 6000
+        ellmax_bin_yg = 5600
 
         # ########
         # Cl_yxg
@@ -165,6 +165,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         #print('ell gk_theory ', ell_theory_kg)
         #print('dl_gk_theory ', dl_gk_theory)
         ell_gk_bin, cl_gk_bin = self._bin(ell_theory_kg, dl_gk_theory, self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
+        print('ell_gk_bin: ', ell_gk_bin)
         # print('cl gk theory: ', dl_1h_theory_kg)
         #print('cl kg: ', cl_gk_bin)
 
@@ -186,12 +187,12 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         ell_theory_IA = theory_IA['ell']
         dl_2h_theory_IA = theory_IA['2h']
         ell_IA_bin, cl_IA_bin = self._bin(ell_theory_km, dl_2h_theory_IA, self.ell_kg, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-        print("cl_IA_2h: ", cl_IA_bin)
+        # print("cl_IA_2h: ", cl_IA_bin)
 
         kg = cl_gk_bin + 2*(alpha-1)*cl_km_bin - cl_IA_bin
         yg = 1.e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)
-        # print("yg: ", yg)
-        # print("kg: ", kg)
+        print("yg: ", yg[:10])
+        print("kg: ", kg)
         #print("yg + kg shape",yg.shape+kg.shape)
 
         cl_joint = np.concatenate((kg, yg), axis=0) #remove the first bin ell=50

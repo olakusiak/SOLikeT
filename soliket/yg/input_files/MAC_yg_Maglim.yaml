@@ -1,14 +1,14 @@
-output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/yg_test_Maglim2_
+output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/yg_Maglim2_test
 
 likelihood:
   soliket.yg.y_x_galaxy.YXG_Likelihood:
-    data_directory: "/Users/aleksandra/software/SOLikeT/soliket/yg/data/"
-    yxg_data_file: "yg_ACT_DR6_healpy_4096ilc_SZ_deproj_cib_cibdBeta_1.15_24.00_yy_DES_Maglim_2.txt"
-    cov_yxg_data_file: "yg_cov_ACT_DR6_healpy_4096ilc_SZ_deproj_cib_cibdBeta_1.15_24.00_yy_DES_Maglim_2.txt"
-    bp_wind_file: "bpwf_namaster_yg_MaglimxACT_ellmax6001.npy"
-    s_file: "alpha_lensmag_Maglim2.txt"
-    pixwind_file: "pixel_window_bin_nside4096.txt"
-    Nbins: 31
+    data_directory: "/Users/aleksandra/software/data_for_SOLikeT/"
+    yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_2_dl.txt"
+    cov_data_file: "cov/combined_cov_gk_gy_Maglim2_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
+    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601.npy"
+    s_file: "const/alpha_lensmag_Maglim2.txt"
+    pixwind_4096_file: "const/pixel_window_bin_nside4096.txt"
+    Nbins: 21
 params:
     P0GNFW:
       prior:
@@ -27,20 +27,6 @@ params:
       ref: 5.4807
       proposal: 0.1
       latex: \beta_{GNFW}
-    # alphaGNFW: #intermendiate
-    #   prior:
-    #     min: 0.01
-    #     max: 10.0
-    #   ref: 1.062
-    #   proposal: 0.05
-    #   latex: \alpha_{GNFW}
-    # gammaGNFW: #inner slope
-    #   prior:
-    #     min: 0.1
-    #     max: 10.0
-    #   ref:  0.3292
-    #   proposal: 0.05
-    #   latex: \gamma_{GNFW}
     alpha_s_HOD:
       prior:
         min: 0.1
@@ -94,11 +80,7 @@ sampler:
     evaluate:
       override:
         P0GNFW: 0.2
-        #c500: 1.156
-        #alphaGNFW: 1.062
         betaGNFW:  5.4807
-        #gammaGNFW: 0.3292
-        #B: 1.53
         sigma_log10M_HOD:  0.30
         alpha_s_HOD: 1.85
         logM_min_HOD: 11.738466547352678
@@ -107,6 +89,8 @@ sampler:
 
 theory :
   classy_szfast.classy_sz.classy_sz:
+     use_class_sz_nocosmo_mode : 1
+     # use_class_sz_fast_mode : 1
      extra_args:
                  output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h'
                  galaxy_sample : 'custom'
@@ -176,10 +160,12 @@ theory :
                  M0 equal M_min (HOD): 'no'
                  x_out_truncated_nfw_profile: 1.0 #for lensing
                  x_out_truncated_nfw_profile_satellite_galaxies: 1.07
-                 Delta_z_lens : -3.5e-2
-                 Delta_z_source : 0.0
+                 # Delta_z_lens : -3.5e-2
+                 # Delta_z_source : 0.0
                  csat_over_cdm:  1.0
                  f_cen_HOD: 1.0
+                 Delta_z_lens : 0.0
+                 Delta_z_source : 0.0
 
                  # #### Pressure profile
                  pressure profile : 'Custom. GNFW'
