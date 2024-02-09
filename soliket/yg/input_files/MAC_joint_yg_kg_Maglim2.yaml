@@ -2,7 +2,7 @@ output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim
 
 likelihood:
   soliket.yg.joint_yg_kg.YXG_KXG_Likelihood:
-    data_directory: "/Users/aleksandra/software/SOLikeT/soliket/yg/data/"
+    data_directory: "/Users/aleksandra/software/data_for_SOLikeT/"
     yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_2_dl.txt"
     gxk_data_file: "gglens_DES_healpy_1024_Maglim2_kappa4_dl.txt"
     cov_data_file: "cov/combined_cov_gk_gy_Maglim2_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
@@ -103,15 +103,15 @@ sampler:
         betaGNFW:  5.4807
         #gammaGNFW: 0.3292
         #B: 1.53
-        # sigma_log10M_HOD:  0.30
-        # alpha_s_HOD: 1.85
+        sigma_log10M_HOD:  0.30
+        alpha_s_HOD: 1.85
         logM_min_HOD: 11.738466547352678
         logM1_prime: 13.248466547352677
 
 
 theory :
   classy_szfast.classy_sz.classy_sz:
-     use_class_sz_nocosmo_mode : 1
+     use_class_sz_no_cosmo_mode : 1
   # classy_szfast.classy_sz.classy_sz:
      extra_args:
                  output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h,gal_gallens_1h,gal_gallens_2h,gallens_lensmag_1h, gallens_lensmag_2h,IA_gal_2h'
@@ -147,7 +147,7 @@ theory :
                  ell_max: 8200.0
                  ell_min: 2.0
 
-                 z_min : 0.005 #1.0e-8 problems on stampede
+                 z_min : 1.0e-8 #1.0e-8 problems on stampede
                  z_max : 2.0
                  M_min : 1.0e10
                  M_max : 3.5e15
@@ -162,10 +162,10 @@ theory :
                  ### Planck 2018 (last column Table 2)
                  omega_b: 0.02242
                  omega_cdm: 0.11933
-                 sigma8:  0.8102
+                 # sigma8:  0.8102
                  h: 0.6766
                  tau_reio: 0.0561
-                 # ln10^{10}A_s: 3.047
+                 ln10^{10}A_s: 3.047
                  n_s: 0.9665
 
                  k_pivot: 0.05

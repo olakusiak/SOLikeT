@@ -66,14 +66,14 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         print("cov shape",cov.shape)
         Npoints = Np_kg + Np_yg
 
-        self.covmat =  cov[:Npoints,:Npoints]
+        self.covmat =  cov[: Np_kg,: Np_kg]
         self.inv_covmat = np.linalg.inv(self.covmat)
         self.det_covmat = np.linalg.det(self.covmat)
         #print(np.linalg.eig(self.covmat))
 
         ###Combine into 1 data vector
-        self.cl_joint = np.concatenate((self.kg, self.yg), axis=0)
-        self.ell_joint = np.concatenate((self.ell_kg, self.ell_yg), axis=0)
+        self.cl_joint = self.kg #np.concatenate((self.kg), axis=0)
+        self.ell_joint = self.ell_kg #np.concatenate((self.ell_kg), axis=0)
         super().initialize()
 
     # def get_requirements(self):
@@ -197,7 +197,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
 
         cl_joint = np.concatenate((kg, yg), axis=0) #remove the first bin ell=50
         #print("cl joint:", cl_joint)
-        return cl_joint
+        return kg #cl_joint
 
 
     # # def get_requirements(self):

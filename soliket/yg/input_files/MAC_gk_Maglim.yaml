@@ -3,7 +3,7 @@ output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/kg_test_Maglim2
 
 likelihood:
   soliket.yg.galaxy_x_kappa.GXK_Likelihood:
-    data_directory: "/Users/aleksandra/software/SOLikeT/soliket/yg/data/"
+    data_directory: "/Users/aleksandra/software/data_for_SOLikeT"
     gk_data_file: "gglens_DES_healpy_1024_Maglim2_kappa4_dl.txt"
     cov_data_file: "cov/combined_cov_gk_gy_Maglim2_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
     bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_dl.npy"
@@ -69,7 +69,7 @@ sampler:
         logM1_prime: 13.248466547352677
 theory :
   classy_szfast.classy_sz.classy_sz:
-     use_class_sz_nocosmo_mode : 1
+     use_class_sz_no_cosmo_mode : 1
      extra_args:
                  output: 'gal_gallens_1h,gal_gallens_2h,gallens_lensmag_1h, gallens_lensmag_2h,IA_gal_2h'
                  galaxy_sample : 'custom'
