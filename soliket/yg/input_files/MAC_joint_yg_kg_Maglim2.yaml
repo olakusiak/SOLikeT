@@ -1,4 +1,4 @@
-output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim2_test2_ev_2-2
+output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim2_test_ev_2-2
 
 likelihood:
   soliket.yg.joint_yg_kg.YXG_KXG_Likelihood:
@@ -6,8 +6,8 @@ likelihood:
     yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_2_dl.txt"
     gxk_data_file: "gglens_DES_healpy_1024_Maglim2_kappa4_dl.txt"
     cov_data_file: "cov/combined_cov_gk_gy_Maglim2_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
-    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601.npy"
-    bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_dl.npy"
+    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601_ellmin30_dl.npy"
+    bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_ellmin30_dl.npy"
     s_file: "const/alpha_lensmag_Maglim2.txt"
     pixwind_4096_file: "const/pixel_window_bin_nside4096.txt"
     pixwind_1024_file: "const/pixel_window_bin_nside1024.txt"
@@ -28,7 +28,7 @@ params:
       ref: 5.4807
       proposal: 0.1
       latex: \beta_{GNFW}
-    alpha_s_HOD:
+    alpha_s_HOD: # priors from DES
       prior:
         min: 0.1
         max: 2.5
@@ -42,7 +42,7 @@ params:
       ref: 0.3
       proposal: 0.03
       latex: \sigma_{HOD}
-    logM1_prime:
+    logM1_prime: # mass priors inflated
       prior:
         min: 11.35
         max: 14.
@@ -211,15 +211,13 @@ theory :
                  #betaGNFW:  5.4807
                  gammaGNFW: 0.3292
                  B: 1.53
-                 #x_out_truncated_nfw_profile_electrons: 1. # tbd
-                 #x_outSZ: 4. ## is this necesarry??
-                 # # truncate_wrt_rvir: 0 ??
-                 # pressure_profile_epsrel: 1e-3
-                 # pressure_profile_epsabs: 1e-40
-
-                 # n_m_pressure_profile : 100 # default: 100, decrease for faster
-                 # n_z_pressure_profile : 100 # default: 100, decrease for faster
-                 # #n_ell_pressure_profile : 100,
+                 #x_out_truncated_nfw_profile_electrons: 1. # not a valid param
+                 x_outSZ: 4.
+                 # pressure precision
+                 pressure_profile_epsrel: 1e-3
+                 pressure_profile_epsabs: 1e-40
+                 n_m_pressure_profile : 100 # default: 100, decrease for faster
+                 n_z_pressure_profile : 100 # default: 100, decrease for faster
 
 
 stop_at_error: True

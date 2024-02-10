@@ -5,7 +5,7 @@ likelihood:
     data_directory: "/Users/aleksandra/software/data_for_SOLikeT/"
     yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_2_dl.txt"
     cov_data_file: "cov/combined_cov_gk_gy_Maglim2_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
-    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601.npy"
+    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601_ellmin30_dl.npy"
     s_file: "const/alpha_lensmag_Maglim2.txt"
     pixwind_4096_file: "const/pixel_window_bin_nside4096.txt"
     Nbins: 21
