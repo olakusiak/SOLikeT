@@ -34,25 +34,25 @@ params:
         max: 2.5
       ref: 1.85
       proposal: 0.03
-      latex: \alpha_{HOD}
+      latex: \alpha_{s}
     sigma_log10M_HOD:
       prior:
         min: 0.01
         max: 1.20 #DES prior is 0.5, but that seems very low
       ref: 0.3
       proposal: 0.03
-      latex: \sigma_{HOD}
+      latex: \sigma_{log_{10} M_\mathrm{min}}
     logM1_prime: # mass priors inflated
       prior:
         min: 11.35
         max: 14.
       ref: 13.42
       proposal: 0.005
-      latex: \log(10^{10} M1_\mathrm{prime})
+      latex: \log(10^{10} M_1^\mathrm{\prime})
       drop: true
     M1_prime_HOD:
       value: 'lambda logM1_prime: 10**(logM1_prime)'
-      latex: M1_\mathrm{prime}
+      latex: M_1^\mathrm{\prime}
     logM_min_HOD:
       prior:
         min: 10.85
@@ -80,14 +80,23 @@ params:
       ref: 1.306
       proposal: 0.05
       latex: \sigma_{z}
-    dndz_shift_source_gal: # no prior for source gal
+    dndz_shift_source_gal: # for bin 4
       prior:
         dist: norm
         loc: 0.0
-        scale: 0.006
+        scale: 0.017
       ref: 0.0
-      proposal: 0.005
+      proposal: 0.017
       latex: \delta_{z_s}
+    shear_callibration_m:
+      prior:
+        dist: norm
+        loc: -0.037
+        scale: 0.008
+      ref: 0.0
+      proposal: 0.003
+      latex: m
+
 
 
 # sampler:
