@@ -46,7 +46,7 @@ class YXG_Likelihood(GaussianLikelihood):
         self.ell = D[0,:Npoints]
         self.yg = D[1,:Npoints]
         self.sigma_tot = D[2,:Npoints]
-        self.covmat =  cov[10:,10:] #cut 10 kg data points
+        self.covmat =  cov[9:,9:] #cut 10 kg data points
         print("ell ola:", self.ell)
         print("yg ola:", self.yg)
         print("sigma ola:", self.sigma_tot**2)
@@ -79,7 +79,7 @@ class YXG_Likelihood(GaussianLikelihood):
         #interpolate
         new_ell = np.arange(2, ellmax, 1)
         cl_theory_log = np.log(cl_theory)
-        f_int =  interp1d(ell_theory, cl_theory_log)
+        f_int =  interp1d(ell_theory, cl_theory_log, fill_value="extrapolate")
         inter_cl_log = np.asarray(f_int(new_ell))
         inter_cl= np.exp(inter_cl_log)
         if conv2cl==True: #go from dls to cls because the bpwf mutliplies by ell*(ell+1)/2pi
@@ -113,8 +113,9 @@ class YXG_Likelihood(GaussianLikelihood):
         cl_1h_theory_yg = theory_yg['1h']
         cl_2h_theory_yg = theory_yg['2h']
 
-        #print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
-        #print("cl_2h_theory_yg:", cl_2h_theory_yg[:10])
+        print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
+        print("ell_theory_yg:", ell_theory_yg[:10])
+        print("cl_2h_theory_yg:", cl_2h_theory_yg[:10])
         dl_theory_yg = np.asarray(list(cl_1h_theory_yg)) + np.asarray(list(cl_2h_theory_yg))
         ell_yg_bin, dl_yg_bin = self._bin(ell_theory_yg, dl_theory_yg, self.ell, ellmax_bin, bpwf, pixwin, Nellbins=Npoints, conv2cl=True)
         #print("yg bin: ", dl_yg_bin[:10])
@@ -133,5 +134,5 @@ class YXG_Likelihood(GaussianLikelihood):
 
         print("ell theory:", ell_yg_bin)
         print("cl tot:", 1e-6*(dl_yg_bin+2*(alpha-1)*dl_ym_bin))
-        
+
         return 1e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)
