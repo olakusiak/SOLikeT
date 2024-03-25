@@ -444,12 +444,12 @@ theory :
 
                  ####HOD PARAMS
 
-                 M0_HOD: 0
-                 M0 equal M_min (HOD): 'no'
-                 x_out_truncated_nfw_profile: 1.0 #for lensing
-                 x_out_truncated_nfw_profile_satellite_galaxies: 1.0
-                 csat_over_cdm:  0.76
-                 f_cen_HOD: 1.0
+                 # M0_HOD: 0
+                 # M0 equal M_min (HOD): 'no'
+                 # x_out_truncated_nfw_profile: 1.0 #for lensing
+                 # x_out_truncated_nfw_profile_satellite_galaxies: 1.0
+                 # csat_over_cdm:  0.76
+                 # f_cen_HOD: 1.0
 
                  # 'csat_over_cdm_3' : 1.19,
                  M0_HOD_ngal_0: 0. # not automatically equal to 0
