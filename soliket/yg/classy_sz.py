@@ -149,6 +149,34 @@ class classy_sz(classy):
         cls = {}
         cls = deepcopy(self._current_state["Cl_yxmu"])
         return cls
+    def get_Cl_galnxlens(self):
+        cls = {}
+        cls = deepcopy(self._current_state["Cl_galnxlens"])
+        return cls
+    def get_Cl_galnxgaln(self):
+        cls = {}
+        cls = deepcopy(self._current_state["Cl_galnxgaln"])
+        return cls
+    def get_Cl_galnxtsz(self):
+        cls = {}
+        cls = deepcopy(self._current_state["Cl_galnxtsz"])
+        return cls
+    def get_Cl_galnxgallens(self):
+        cls = {}
+        cls = deepcopy(self._current_state["Cl_galnxgallens"])
+        return cls
+    def get_Cl_lensmagnxtsz(self):
+        cls = {}
+        cls = deepcopy(self._current_state["Cl_lensmagnxtsz"])
+        return cls
+    def get_Cl_lensmagnxgallens(self):
+        cls = {}
+        cls = deepcopy(self._current_state["Cl_lensmagnxgallens"])
+        return cls
+    def get_Cl_galn_IA(self):
+        cls = {}
+        cls = deepcopy(self._current_state["Cl_galnxIA"])
+        return cls
 
     @classmethod
     def is_installed(cls, **kwargs):

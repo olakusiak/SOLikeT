@@ -1,109 +1,99 @@
-output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/yg_Maglim2_test
+output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim1_2-14_test_ev
 
 likelihood:
-  soliket.yg.y_x_galaxy.YXG_Likelihood:
+  soliket.yg.joint_yg_kg.YXG_KXG_Likelihood:
     data_directory: "/Users/aleksandra/software/data_for_SOLikeT/"
-    yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_2_dl.txt"
-    cov_data_file: "cov/combined_cov_gk_gy_Maglim2_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
+    yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_1_dl.txt"
+    gxk_data_file: "gglens_DES_healpy_1024_Maglim1_kappa4_dl.txt"
+    cov_data_file: "cov/combined_cov_gk_gy_Maglim1_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
     bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601_ellmin30_dl.npy"
-    s_file: "const/alpha_lensmag_Maglim2.txt"
+    bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_ellmin30_dl.npy"
+    s_file: "const/alpha_lensmag_Maglim1.txt"
     pixwind_4096_file: "const/pixel_window_bin_nside4096.txt"
-    Nbins: 25
+    pixwind_1024_file: "const/pixel_window_bin_nside1024.txt"
+    Nbins_yg: 21
+    Nbins_kg: 9
 params:
-    P0_B12:
+    P0GNFW:
       prior:
         min: 0.0001
-        max: 20.00
+        max: 12.00
       ref:  0.2 #calibrated to match the data
-      proposal: 0.1
-      latex: P0_{B12}
-    beta_B12: #outer slope
+      proposal: 0.02
+      latex: P0_{GNFW}
+    betaGNFW: #outer slope
       prior:
-        min: 2.01 # class_sz breaks for values below ~4, physical reason?
+        min: 4.01 # class_sz breaks for values below ~4, physical reason?
         max: 10.0
       ref: 5.4807
-      proposal: 0.1
-      latex: \beta_{B12}
+      proposal: 0.05
+      latex: \beta_{GNFW}
     alpha_s_HOD: # priors from DES
       prior:
         min: 0.1
         max: 2.5
-      ref: 1.85
-      proposal: 0.03
+      ref: 1.74
+      proposal: 0.04
       latex: \alpha_{s}
     sigma_log10M_HOD:
       prior:
         min: 0.01
         max: 1.20 #DES prior is 0.5, but that seems very low
-      ref: 0.3
+      ref: 0.29
       proposal: 0.03
       latex: \sigma_{log_{10} M_\mathrm{min}}
-    # logM1_prime: # mass priors inflated
-    #   prior:
-    #     min: 11.35
-    #     max: 14.
-    #   ref: 13.42
-    #   proposal: 0.005
-    #   latex: \log(10^{10} M_1^\mathrm{\prime})
-    #   drop: true
-    # M1_prime_HOD:
-    #   value: 'lambda logM1_prime: 10**(logM1_prime)'
-    #   latex: M_1^\mathrm{\prime}
-    # logM_min_HOD:
-    #   prior:
-    #     min: 10.85
-    #     max: 12.85
-    #   ref: 11.91
-    #   proposal: 0.005
-    #   latex: \log(10^{10} M_\mathrm{min})
-    #   drop: true
-    # M_min_HOD:
-    #   value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
-    #   latex: M_\mathrm{min}
-    M_min_HOD:
+    logM1_prime: # mass priors inflated
       prior:
-        min: 1e10
-        max: 1e15
-      ref: 1.1e11
+        min: 11.35
+        max: 14.
+      ref: 13.23
       proposal: 0.005
-      latex: \log(10^{10} M_\mathrm{min})
+      latex: \log(10^{10} M_1^\mathrm{\prime})
+      drop: true
     M1_prime_HOD:
+      value: 'lambda logM1_prime: 10**(logM1_prime)'
+      latex: M_1^\mathrm{\prime}
+    logM_min_HOD:
       prior:
-        min: 1e10
-        max: 1e15
-      ref: 1.1e11
+        min: 10.85
+        max: 12.85
+      ref: 11.588
       proposal: 0.005
       latex: \log(10^{10} M_\mathrm{min})
+      drop: true
+    M_min_HOD:
+      value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
+      latex: M_\mathrm{min}
     dndz_shift_gal: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
       prior:
         dist: norm
-        loc: -0.035
-        scale: 0.01
-      ref: -0.035
-      proposal: 0.005
+        loc: -0.009
+        scale: 0.007
+      ref: -0.009
+      proposal: 0.003
       latex: \delta_{z}
     dndz_stretch_gal:
       prior:
         dist: norm
-        loc: 1.306
-        scale: 0.093
-      ref: 1.306
-      proposal: 0.05
+        loc: 0.975
+        scale: 0.062
+      ref: 0.975
+      proposal: 0.03
       latex: \sigma_{z}
-    dndz_shift_source_gal: # for bin 4
+    dndz_shift_source_gal: #for bin 4
       prior:
         dist: norm
         loc: 0.0
         scale: 0.017
       ref: 0.0
-      proposal: 0.017
+      proposal: 0.008
       latex: \delta_{z_s}
-    shear_callibration_m:
+    shear_callibration_m: #for bin 4
       prior:
         dist: norm
         loc: -0.037
         scale: 0.008
-      ref: 0.0
+      ref: -0.037
       proposal: 0.003
       latex: m
     A_IA:
@@ -113,6 +103,7 @@ params:
       ref: 0.
       proposal: 0.05
       latex: A_\mathrm{IA}
+
 
 
 # sampler:
@@ -130,29 +121,27 @@ params:
 sampler:
     evaluate:
       override:
-        P0_B12: 18.1
-        beta_B12: 4.35
-        sigma_log10M_HOD:  0.30
-        alpha_s_HOD: 1.85
-        M_min_HOD: 547603918739.75287
-        M1_prime_HOD: 17720115461399.152
-        dndz_shift_gal: -0.035
-        dndz_stretch_gal: 1.306
+        P0GNFW: 0.2
+        betaGNFW:  3.4807
+        sigma_log10M_HOD:  0.29
+        alpha_s_HOD: 1.74
+        logM_min_HOD: 11.738466547352678
+        logM1_prime: 13.248466547352677
+        dndz_shift_gal: -0.009
+        dndz_stretch_gal: 0.975
         dndz_shift_source_gal: 0.0
         shear_callibration_m:  -0.037
         A_IA: 0.5
 
 
-
 theory :
   classy_szfast.classy_sz.classy_sz:
-     # use_class_sz_no_cosmo_mode : 1
-     # use_class_sz_fast_mode: 1
+     use_class_sz_no_cosmo_mode : 1
   # classy_szfast.classy_sz.classy_sz:
      extra_args:
                  output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h,gal_gallens_1h,gal_gallens_2h,gallens_lensmag_1h, gallens_lensmag_2h,IA_gal_2h'
                  galaxy_sample : 'custom'
-                 full_path_to_dndz_gal :  "/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_bin2.txt"
+                 full_path_to_dndz_gal :  "/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_bin1.txt"
                  full_path_to_source_dndz_gal: '/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_source_normalized_bin4.txt' # source galaxies
 
                  ### Precision
@@ -181,9 +170,9 @@ theory :
                  dlogell: 0.3
                  multipoles_sz: 'ell_mock'
                  ell_max: 8200.0
-                 ell_min: 4.0
+                 ell_min: 2.0
 
-                 z_min : 1.0e-8 #
+                 z_min : 1.0e-8 #1.0e-8 problems on stampede
                  z_max : 2.0
                  M_min : 1.0e10
                  M_max : 3.5e15
@@ -198,10 +187,10 @@ theory :
                  ### Planck 2018 (last column Table 2)
                  omega_b: 0.02242
                  omega_cdm: 0.11933
-                 sigma8:  0.8102
+                 # sigma8:  0.8102
                  h: 0.6766
                  tau_reio: 0.0561
-                 # ln10^{10}A_s: 3.047
+                 ln10^{10}A_s: 3.047
                  n_s: 0.9665
 
                  k_pivot: 0.05
@@ -210,15 +199,15 @@ theory :
                  m_ncdm: 0.06
 
                  ####HOD PARAMS
-                 # M_min_HOD: 547603918739.7538 #10**11.91 *0.6737
-                 # M1_prime_HOD:  17720115461399.184 #(10** 13.42) *0.6737
-                 # #sigma_log10M_HOD : 0.30
+                 #M_min_HOD: 547603918739.7538 #10**11.91 *0.6737
+                 #M1_prime_HOD:  17720115461399.184 #(10** 13.42) *0.6737
+                 #sigma_log10M_HOD : 0.30
                  #alpha_s_HOD : 1.85
                  M0_HOD: 0
                  M0 equal M_min (HOD): 'no'
                  x_out_truncated_nfw_profile: 1.0 #for lensing
                  x_out_truncated_nfw_profile_satellite_galaxies: 1.0
-                 csat_over_cdm:  1.07
+                 csat_over_cdm:  0.76
                  f_cen_HOD: 1.0
                 # Delta_z_lens : -3.5e-2
                 # Delta_z_source : 0.0
@@ -232,19 +221,20 @@ theory :
 
                  # IA
                  # A_IA: 0.5
-                 # eta_IA: 1.6
-                 # C1_IA: 5e-14
+                 eta_IA: 1.6
+                 C1_IA: 5e-14
 
                  # #### Pressure profile
-                 pressure profile : 'B12'
-                 alpha_B12: 1.
-                 #beta_B12:  4.35
-                 gamma_B12: -0.3
-                 xc_B12: 0.497
+                 pressure profile : 'Custom. GNFW'
+                 units for tSZ spectrum: 'dimensionless'
+                 c500: 1.156
+                 alphaGNFW: 1.062
+                 #betaGNFW:  5.4807
+                 gammaGNFW: 0.3292
+                 B: 1.53
                  #x_out_truncated_nfw_profile_electrons: 1. # not a valid param
                  x_outSZ: 4.
                  # pressure precision
-         # pressure precision
                  pressure_profile_epsrel: 1e-3
                  pressure_profile_epsabs: 1e-40
                  n_m_pressure_profile : 100 # default: 100, decrease for faster
@@ -252,5 +242,5 @@ theory :
 
 
 stop_at_error: True
-debug: True
+debug: False
 timing: True

@@ -1,0 +1,496 @@
+output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_all_Maglim_PB12_mass_3-24
+
+likelihood:
+  soliket.yg.joint_all_bins_yg_kg.YXG_KXG_ALLBINS_Likelihood:
+    data_directory: "/Users/aleksandra/software/data_for_SOLikeT/"
+    yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_"
+    gxk_data_file: "gglens_DES_healpy_1024_Maglim"
+    cov_data_file: "cov/combined_cov_gk_gy_Maglim1_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
+    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601_ellmin30_dl.npy"
+    bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_ellmin30_dl.npy"
+    pixwind_4096_file: "const/pixel_window_bin_nside4096.txt"
+    pixwind_1024_file: "const/pixel_window_bin_nside1024.txt"
+    Nbins_yg: 21
+    Nbins_kg: 9
+params:
+    P0_B12:
+      prior:
+        min: 0.0001
+        max: 20.00
+      ref:  0.2 #calibrated to match the data
+      proposal: 0.02
+      latex: P0_{B12}
+    alpha_m_P0_B12: #0.154;
+      prior:
+        min: -5.0
+        max: 5.0
+      ref: 0.154
+      proposal: 0.1
+      latex: \alpha_m^{P0_{B12}}
+    alpha_z_P0_B12: # = -0.758;
+      prior:
+        min: -7.0
+        max: 7.0
+      ref: -0.758
+      proposal: 0.1
+      latex: \alpha_z^{P0_{B12}}
+    beta_B12: #outer slope
+      prior:
+        min: 1.00
+        max: 10.0
+      ref: 5.4807
+      proposal: 0.05
+      latex: \beta_{B12}
+    alpha_m_beta_B12: #0.154;
+      prior:
+        min: -7.0
+        max: 7.0
+      ref:  0.41
+      proposal: 0.1
+      latex: \alpha_m^{\ebta_{B12}}
+    alpha_s_HOD_ngal_1: # priors from DES
+      prior:
+        min: 0.1
+        max: 4.0
+      ref: 1.85
+      proposal: 0.04
+      latex: \alpha_{s}
+    sigma_log10M_HOD_ngal_1:
+      prior:
+        min: 0.01
+        max: 1.20 #DES prior is 0.5, but that seems very low
+      ref: 0.3
+      proposal: 0.03
+      latex: \sigma_{log_{10} M_\mathrm{min}}
+    logM1_prime_ngal_1: # mass priors inflated
+      prior:
+        min: 11.35
+        max: 14.5
+      ref: 13.42
+      proposal: 0.005
+      latex: \log(10^{10} M_1^\mathrm{\prime})
+      drop: true
+    M1_prime_HOD_ngal_1:
+      value: 'lambda logM1_prime_ngal_1: 10**(logM1_prime_ngal_1)'
+      latex: M_1^\mathrm{\prime}
+    logM_min_HOD_ngal_1:
+      prior:
+        min: 10.85
+        max: 12.85
+      ref: 11.91
+      proposal: 0.005
+      latex: \log(10^{10} M_\mathrm{min})
+      drop: true
+    M_min_HOD:
+      value: 'lambda logM_min_HOD_ngal_1: 10**(logM_min_HOD_ngal_1)'
+      latex: M_\mathrm{min}
+    # dndz_shift_gal_ngal_1: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+    #   prior:
+    #     dist: norm
+    #     loc: -0.005
+    #     scale: 0.006
+    #   ref: -0.005
+    #   proposal: 0.003
+    #   latex: \delta_{z}
+    # dndz_stretch_gal_ngal_1:
+    #   prior:
+    #     dist: norm
+    #     loc: 0.870
+    #     scale: 0.054
+    #   ref: 0.870
+    #   proposal: 0.03
+    #   latex: \sigma_{z}
+    # dndz_shift_source_gal_ngal_1: #for bin 4
+    #   prior:
+    #     dist: norm
+    #     loc: 0.0
+    #     scale: 0.017
+    #   ref: 0.0
+    #   proposal: 0.008
+    #   latex: \delta_{z_s}
+    # shear_callibration_m_ngal_1: #for bin 4
+    #   prior:
+    #     dist: norm
+    #     loc: -0.037
+    #     scale: 0.008
+    #   ref: -0.037
+    #   proposal: 0.003
+    #   latex: m
+    # A_IA_ngal_1:
+    #   prior:
+    #     min: -5.
+    #     max: 5.
+    #   ref: 0.
+    #   proposal: 0.05
+    #   latex: A_\mathrm{IA}
+    alpha_s_HOD_ngal_2: # priors from DES
+      prior:
+        min: 0.1
+        max: 3.5
+      ref: 1.85
+      proposal: 0.04
+      latex: \alpha_{s}
+    sigma_log10M_HOD_ngal_2:
+      prior:
+        min: 0.01
+        max: 1.20 #DES prior is 0.5, but that seems very low
+      ref: 0.3
+      proposal: 0.03
+      latex: \sigma_{log_{10} M_\mathrm{min}}
+    logM1_prime_ngal_2: # mass priors inflated
+      prior:
+        min: 11.35
+        max: 14.5
+      ref: 13.42
+      proposal: 0.005
+      latex: \log(10^{10} M_1^\mathrm{\prime})
+      drop: true
+    M1_prime_HOD:
+      value: 'lambda logM1_prime_ngal_2: 10**(logM1_prime_ngal_2)'
+      latex: M_1^\mathrm{\prime}
+    logM_min_HOD_ngal_2:
+      prior:
+        min: 10.85
+        max: 12.85
+      ref: 11.91
+      proposal: 0.005
+      latex: \log(10^{10} M_\mathrm{min})
+      drop: true
+    M_min_HOD_ngal_2:
+      value: 'lambda logM_min_HOD_ngal_2: 10**(logM_min_HOD_ngal_2)'
+      latex: M_\mathrm{min}
+    # dndz_shift_gal_ngal_2: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+    #   prior:
+    #     dist: norm
+    #     loc: -0.035
+    #     scale: 0.01
+    #   ref: -0.035
+    #   proposal: 0.005
+    #   latex: \delta_{z}
+    # dndz_stretch_gal_ngal_2:
+    #   prior:
+    #     dist: norm
+    #     loc: 1.306
+    #     scale: 0.093
+    #   ref: 1.306
+    #   proposal: 0.05
+    #   latex: \sigma_{z}
+    # dndz_shift_source_gal_ngal_2: # for bin 4
+    #   prior:
+    #     dist: norm
+    #     loc: 0.0
+    #     scale: 0.017
+    #   ref: 0.0
+    #   proposal: 0.008
+    #   latex: \delta_{z_s}
+    # shear_callibration_m_ngal_2:
+    #   prior:
+    #     dist: norm
+    #     loc: -0.037
+    #     scale: 0.008
+    #   ref: -0.037
+    #   proposal: 0.003
+    #   latex: m
+    # A_IA_ngal_2:
+    #   prior:
+    #     min: -5.
+    #     max: 5.
+    #   ref: 0.
+    #   proposal: 0.05
+    #   latex: A_\mathrm{IA}
+    alpha_s_HOD_ngal_3: #### Maglim 3
+      prior:
+        min: 0.1
+        max: 4.0
+      ref: 1.85
+      proposal: 0.04
+      latex: \alpha_{s}
+    sigma_log10M_HOD_ngal_3:
+      prior:
+        min: 0.01
+        max: 1.20 #DES prior is 0.5, but that seems very low
+      ref: 0.3
+      proposal: 0.03
+      latex: \sigma_{log_{10} M_\mathrm{min}}
+    logM1_prime_ngal_3: # mass priors inflated
+      prior:
+        min: 11.35
+        max: 14.5
+      ref: 13.42
+      proposal: 0.005
+      latex: \log(10^{10} M_1^\mathrm{\prime})
+      drop: true
+    M1_prime_HOD_ngal_3:
+      value: 'lambda logM1_prime_ngal_3: 10**(logM1_prime_ngal_3)'
+      latex: M_1^\mathrm{\prime}
+    logM_min_HOD_ngal_3:
+      prior:
+        min: 10.85
+        max: 12.85
+      ref: 11.91
+      proposal: 0.005
+      latex: \log(10^{10} M_\mathrm{min})
+      drop: true
+    M_min_HOD_ngal_3:
+      value: 'lambda logM_min_HOD_ngal_3: 10**(logM_min_HOD_ngal_3)'
+      latex: M_\mathrm{min}
+    # dndz_shift_gal_ngal_3: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+    #   prior:
+    #     dist: norm
+    #     loc: -0.005
+    #     scale: 0.006
+    #   ref: -0.005
+    #   proposal: 0.003
+    #   latex: \delta_{z}
+    # dndz_stretch_gal_ngal_3:
+    #   prior:
+    #     dist: norm
+    #     loc: 0.870
+    #     scale: 0.054
+    #   ref: 0.870
+    #   proposal: 0.03
+    #   latex: \sigma_{z}
+    # dndz_shift_source_gal_ngal_3: #for kappa bin 4
+    #   prior:
+    #     dist: norm
+    #     loc: 0.0
+    #     scale: 0.017
+    #   ref: 0.0
+    #   proposal: 0.008
+    #   latex: \delta_{z_s}
+    # shear_callibration_m_ngal_3: #for bin 4
+    #   prior:
+    #     dist: norm
+    #     loc: -0.037
+    #     scale: 0.008
+    #   ref: -0.037
+    #   proposal: 0.003
+    #   latex: m
+    # A_IA_ngal_3:
+    #   prior:
+    #     min: -5.
+    #     max: 5.
+    #   ref: 0.
+    #   proposal: 0.05
+    #   latex: A_\mathrm{IA}
+    alpha_s_HOD_ngal_4: # priors from DES
+      prior:
+        min: 0.1
+        max: 3.5
+      ref: 1.85
+      proposal: 0.04
+      latex: \alpha_{s}
+    sigma_log10M_HOD_ngal_4:
+      prior:
+        min: 0.01
+        max: 1.20 #DES prior is 0.5, but that seems very low
+      ref: 0.3
+      proposal: 0.03
+      latex: \sigma_{log_{10} M_\mathrm{min}}
+    logM1_prime_ngal_4: # mass priors inflated
+      prior:
+        min: 11.35
+        max: 14.5
+      ref: 13.42
+      proposal: 0.005
+      latex: \log(10^{10} M_1^\mathrm{\prime})
+      drop: true
+    M1_prime_HOD_ngal_4:
+      value: 'lambda logM1_prime_ngal_4: 10**(logM1_prime_ngal_4)'
+      latex: M_1^\mathrm{\prime}
+    logM_min_HOD_ngal_4:
+      prior:
+        min: 10.85
+        max: 12.85
+      ref: 11.91
+      proposal: 0.005
+      latex: \log(10^{10} M_\mathrm{min})
+      drop: true
+    M_min_HOD_ngal_4:
+      value: 'lambda logM_min_HOD_ngal_4: 10**(logM_min_HOD_ngal_4)'
+      latex: M_\mathrm{min}
+    # dndz_shift_gal_ngal_4: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+    #   prior:
+    #     dist: norm
+    #     loc: -0.007
+    #     scale: 0.006
+    #   ref: -0.007
+    #   proposal: 0.003
+    #   latex: \delta_{z}
+    # dndz_stretch_gal_ngal_4:
+    #   prior:
+    #     dist: norm
+    #     loc: 0.918
+    #     scale: 0.051
+    #   ref: 0.918
+    #   proposal: 0.03
+    #   latex: \sigma_{z}
+    # dndz_shift_source_gal_ngal_4: #for bin 4
+    #   prior:
+    #     dist: norm
+    #     loc: 0.0
+    #     scale: 0.017
+    #   ref: 0.0
+    #   proposal: 0.008
+    #   latex: \delta_{z_s}
+    # shear_callibration_m_ngal_4: #for bin 4
+    #   prior:
+    #     dist: norm
+    #     loc: -0.037
+    #     scale: 0.008
+    #   ref: -0.037
+    #   proposal: 0.003
+    #   latex: m
+    # A_IA_ngal_4:
+    #   prior:
+    #     min: -5.
+    #     max: 5.
+    #   ref: 0.
+    #   proposal: 0.05
+    #   latex: A_\mathrm{IA}
+
+
+# sampler:
+#     mcmc:
+#       covmat: auto
+#       #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+#       Rminus1_stop: 0.01
+#       learn_proposal: True
+#       learn_proposal_Rminus1_max: 100.0
+#       learn_proposal_Rminus1_max_early: 300.0
+#       #drag: true
+#       #output_every: 10s
+#       proposal_scale: 2.4
+#       max_tries: 5000
+sampler:
+    evaluate:
+      override:
+        P0_B12: 0.2
+        beta_B12:  5.4807
+        sigma_log10M_HOD_ngal_1:  0.29
+        alpha_s_HOD_ngal_1: 1.74
+        logM_min_HOD_ngal_1: 11.738466547352678
+        logM1_prime_ngal_1: 13.248466547352677
+        # dndz_shift_gal: -0.009
+        # dndz_stretch_gal: 0.975
+        # dndz_shift_source_gal: 0.0
+        # shear_callibration_m:  -0.037
+        # A_IA: 0.5
+
+
+theory :
+  classy_szfast.classy_sz.classy_sz:
+     use_class_sz_no_cosmo_mode : 1
+  # classy_szfast.classy_sz.classy_sz:
+     extra_args:
+                 output: 'galn_tsz_1h, galn_tsz_2h, lensmagn_tsz_1h, lensmagn_tsz_2h, galn_gallens_1h, galn_gallens_2h, lensmagn_gallens_1h, lensmagn_gallens_2h, galn_IA_2h'
+                 galaxy_samples_list_num : 4 # the number of galaxy samples
+                 galaxy_samples_list : '1,2,3,4' # the id string of each sample, can be any integer
+                 full_path_and_prefix_to_dndz_ngal : '/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_bin'
+
+                 #full_path_to_dndz_gal :  "/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_bin1.txt"
+                 full_path_to_source_dndz_gal: '/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_source_normalized_bin4.txt' # source galaxies
+
+                 ### Precision
+                 redshift_epsabs : 1.0e-40
+                 redshift_epsrel : 0.0005
+                 mass_epsabs : 1.0e-40
+                 mass_epsrel : 0.0005
+                 ndim_masses : 150
+                 ndim_redshifts : 150
+                 class_sz_verbose : 0
+                 nonlinear_verbose : 0
+
+                 P_k_max_h/Mpc : 100.0
+                 k_min_for_pk_class_sz : 0.0001
+                 k_max_for_pk_class_sz : 70.0
+                 k_per_decade_class_sz : 20.0
+
+                 dlogell: 0.3
+                 multipoles_sz: 'ell_mock'
+                 ell_max: 8200.0
+                 ell_min: 5.0
+
+                 z_min : 1.0e-8 #1.0e-8 problems on stampede
+                 z_max : 2.0
+                 M_min : 1.0e10
+                 M_max : 3.5e15
+
+                 hm_consistency : 1
+                 delta for galaxies : "200c"
+                 delta for matter density: "200c"
+                 mass function: 'T08M200c'
+                 concentration parameter: 'D08' #tbd
+
+                 ### Cosmology
+                 ### Planck 2018 (last column Table 2)
+                 omega_b: 0.02242
+                 omega_cdm: 0.11933
+                 # sigma8:  0.8102
+                 h: 0.6766
+                 tau_reio: 0.0561
+                 ln10^{10}A_s: 3.047
+                 n_s: 0.9665
+
+                 k_pivot: 0.05
+                 N_ncdm: 1 # neutrinos??
+                 N_ur: 2.0328
+                 m_ncdm: 0.06
+
+                 ####HOD PARAMS
+
+                 M0_HOD: 0
+                 M0 equal M_min (HOD): 'no'
+                 x_out_truncated_nfw_profile: 1.0 #for lensing
+                 x_out_truncated_nfw_profile_satellite_galaxies: 1.0
+                 csat_over_cdm:  0.76
+                 f_cen_HOD: 1.0
+
+                 # 'csat_over_cdm_3' : 1.19,
+                 M0_HOD_ngal_1: 0. # not automatically equal to 0
+                 M0_HOD_ngal_2: 0.
+                 M0_HOD_ngal_3: 0.
+                 M0_HOD_ngal_4: 0.
+                 #x_out_truncated_nfw_profile_satellite_galaxies_ngal_3:  1.0
+                 #f_cen_HOD_ngal_3: 1.0
+
+
+                # Delta_z_lens : -3.5e-2
+                # Delta_z_source : 0.0
+                 Delta_z_lens : 0.0 #obsolete args
+                 Delta_z_source : 0.0
+                 #photo-z
+                 # dndz_shift_gal: 0.0
+                 # dndz_shift_source_gal: 0.0
+                 # dndz_stretch_gal: 1.0
+                 dndz_stretch_source_gal: 1.0
+
+                 # IA
+                 # A_IA: 0.5
+                 eta_IA: 1.6
+                 C1_IA: 5e-14
+                 # #### Pressure profile
+                 pressure profile : 'B12'
+                 units for tSZ spectrum: 'dimensionless'
+                 alpha_B12: 1.
+                 #beta_B12:  4.35
+                 gamma_B12: -0.3
+                 xc_B12: 0.497
+                 x_outSZ: 4.
+                 # pressure precision
+                 pressure_profile_epsrel: 1e-3
+                 pressure_profile_epsabs: 1e-40
+                 n_m_pressure_profile : 100 # default: 100, decrease for faster
+                 n_z_pressure_profile : 100 # default: 100, decrease for faster
+
+                 ## fast params
+                 use_fft_for_profiles_transform : 1
+                 N_samp_fftw : 1024
+                 l_min_samp_fftw: 1e-12
+                 l_max_samp_fftw: 1e12
+                 x_min_gas_pressure_fftw : 1e-4
+                 x_max_gas_pressure_fftw : 1e3
+
+stop_at_error: True
+debug: False
+timing: True

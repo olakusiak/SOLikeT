@@ -56,8 +56,8 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         self.ell_kg_full = D_kg[0,:Np_kg]
         self.kg = D_kg[1,:Np_kg]
         self.sigma_kg = D_kg[2,:Np_kg]
-        # print("ell ola yg :", self.ell_yg)
-        # print("yg ola:", self.yg)
+        print("ell ola yg :", self.ell_yg)
+        print("yg ola:", self.yg)
         # # print("yg shape: ", self.yg.shape)
         # print("ell ola kg :", self.ell_kg)
         # print("kg ola:", self.kg)
@@ -99,7 +99,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
     #     # print("ellmax",ellmax)
     #     new_ell = np.arange(2, ellmax, 1)
     #     cl_theory_log = np.log(cl_theory)
-    #     f_int =  interp1d(ell_theory, cl_theory_log)
+    #     f_int =  interp1d(ell_theory, cl_theory_log, fill_value="extrapolate")
     #     inter_cl_log = np.asarray(f_int(new_ell))
     #     inter_cl= np.exp(inter_cl_log)
     #     if conv2cl==True: #go from dls to cls because the bpwf mutliplies by ell*(ell+1)/2pi
@@ -124,7 +124,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         # print("ellmax",ellmax)
         new_ell = np.arange(2, ellmax, 1)
         # cl_theory_log = np.log(cl_theory)
-        f_int =  interp1d(ell_theory, cl_theory)
+        f_int =  interp1d(ell_theory, cl_theory, fill_value="extrapolate")
         inter_cl = np.asarray(f_int(new_ell))
         # inter_cl= np.exp(inter_cl_log)
         if conv2cl==True: #go from dls to cls because the bpwf mutliplies by ell*(ell+1)/2pi
@@ -158,13 +158,13 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         ell_theory_yg = theory_yg['ell']
         cl_1h_theory_yg = theory_yg['1h']
         cl_2h_theory_yg = theory_yg['2h']
-        #print("ell_theory_yg",ell_theory_yg)
-        #print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
+        print("ell_theory_yg",ell_theory_yg)
+        print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
         #print("cl_2h_theory_yg:", cl_2h_theory_yg[:10])
         dl_theory_yg = np.asarray(cl_1h_theory_yg) + np.asarray(cl_2h_theory_yg)
         ell_yg_bin, dl_yg_bin = self._bin(ell_theory_yg, dl_theory_yg, self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
         # print("ell_yg_bin: ", ell_yg_bin)
-        print("yg bin: ", dl_yg_bin[:10])
+        # print("yg bin: ", dl_yg_bin[:10])
 
         # ########
         # Cl_yxmu
@@ -191,7 +191,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         ell_gk_bin, cl_gk_bin = self._bin(ell_theory_kg, (dl_gk_theory), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
         # print('ell_gk_bin: ', ell_gk_bin)
         # print('cl gk theory: ', dl_1h_theory_kg)
-        print('cl kg: ', cl_gk_bin)
+        # print('cl kg: ', cl_gk_bin)
 
         # ########
         # Cl_kgxmu
@@ -202,7 +202,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         dl_2h_theory_km = theory_km['2h']
         dl_km_theory = np.asarray(dl_1h_theory_km) + np.asarray(dl_2h_theory_km)
         ell_km_bin, cl_km_bin = self._bin(ell_theory_km, dl_km_theory, self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-        print('cl gm: ', cl_km_bin)
+        # print('cl gm: ', cl_km_bin)
 
         #########
         # Cl_IAxg
@@ -210,10 +210,10 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         theory_IA = self.theory.get_Cl_IAxg()
         ell_theory_IA = theory_IA['ell']
         dl_2h_theory_IA = np.asarray(theory_IA['2h'])
-        ell_IA_bin, cl_IA_bin = self._bin(ell_theory_km, abs(dl_2h_theory_IA), self.ell_kg, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
+        ell_IA_bin, cl_IA_bin = self._bin(ell_theory_km, dl_2h_theory_IA, self.ell_kg, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
         print("cl_IA_2h: ", cl_IA_bin)
 
-        kg = cl_gk_bin + 2*(alpha-1)*cl_km_bin - cl_IA_bin
+        kg = cl_gk_bin + 2*(alpha-1)*cl_km_bin + cl_IA_bin
         yg = 1.e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)
         print("yg: ", yg[:10])
         print("kg: ", kg)
