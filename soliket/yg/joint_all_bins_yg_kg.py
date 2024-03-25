@@ -26,7 +26,6 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
     yxg_data_file: Optional[str] = None
     gxk_data_file: Optional[str] = None
     cov_data_file: Optional[str] = None
-    s_file: Optional[str] = None #s for lens mag
     bp_wind_yg_file: Optional[str] = None
     bp_wind_gk_file: Optional[str] = None
     pixwind_4096_file: Optional[str] = None
@@ -36,7 +35,6 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
     # Load the data
     def initialize(self):
         self.covfile = self.cov_data_file
-        self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
         self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
         self.bpwf_kg = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
         self.pw_bin_yg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
@@ -49,7 +47,7 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
         Cl_yg_all, Cl_kg_all = [], []
         Sig_yg_all, Sig_kg_all = [], []
         for i in range(1, Nbins+1):
-            print("Maglim", i)
+            # print("Maglim", i)
             D_yg = np.loadtxt(self.data_directory + self.yxg_data_file + str(i) +"_dl.txt")
             D_kg = np.loadtxt(self.data_directory + self.gxk_data_file + str(int(i)) + "_kappa4_dl.txt")
             self.ell_yg = D_yg[0,:Np_yg]
@@ -77,7 +75,7 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
         self.inv_covmat = np.linalg.inv(self.covmat)
         self.det_covmat = np.linalg.det(self.covmat)
         #print(np.linalg.eig(self.covmat))
-        print("cov:", (self.covmat).shape)
+        # print("cov:", (self.covmat).shape)
 
         ###Combine into 1 data vector
         self.cl_joint = np.concatenate((np.concatenate((Cl_yg_all)),np.concatenate((Cl_kg_all))), axis=0)
@@ -147,7 +145,7 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
         # print(theory_kg)
 
         for i in range(len(theory_yg)):
-            Nb=str(i+1)
+            Nb=str(i)
             ell_theory_yg, cl_1h_theory_yg, cl_2h_theory_yg = theory_yg[Nb]['ell'], theory_yg[Nb]['1h'], theory_yg[Nb]['2h']
             ell_theory_kg, cl_1h_theory_kg, cl_2h_theory_kg = theory_kg[Nb]['ell'], theory_kg[Nb]['1h'], theory_kg[Nb]['2h']
             ell_theory_ym, cl_1h_theory_ym, cl_2h_theory_ym = theory_ym[Nb]['ell'], theory_ym[Nb]['1h'], theory_ym[Nb]['2h']
@@ -173,5 +171,5 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
             kg_all.append(kg)
 
         cl_joint = np.concatenate((np.concatenate(yg_all), np.concatenate(kg_all)), axis=0) #remove the first bin ell=50
-        print("cl joint:", cl_joint)
+        # print("cl joint:", cl_joint)
         return cl_joint
