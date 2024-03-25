@@ -20,13 +20,6 @@ params:
       ref:  0.2 #calibrated to match the data
       proposal: 0.02
       latex: P0_{B12}
-    alpha_m_P0_B12: #0.154;
-      prior:
-        min: -5.0
-        max: 5.0
-      ref: 0.154
-      proposal: 0.1
-      latex: \alpha_m^{P0_{B12}}
     alpha_z_P0_B12: # = -0.758;
       prior:
         min: -7.0
@@ -41,50 +34,50 @@ params:
       ref: 5.4807
       proposal: 0.05
       latex: \beta_{B12}
-    alpha_m_beta_B12: #0.154;
+    alpha_z_beta_B12: #0.415;
       prior:
         min: -7.0
         max: 7.0
-      ref:  0.41
+      ref:  0.415
       proposal: 0.1
-      latex: \alpha_m^{\ebta_{B12}}
-    alpha_s_HOD_ngal_0: # priors from DES
+      latex: \alpha_z^{\ebta_{B12}}
+    alpha_s_HOD_ngal0: # priors from DES
       prior:
         min: 0.1
         max: 4.0
-      ref: 1.85
+      ref: 1.74
       proposal: 0.04
       latex: \alpha_{s}
-    sigma_log10M_HOD_ngal_0:
+    sigma_log10M_HOD_ngal0:
       prior:
         min: 0.01
         max: 1.20 #DES prior is 0.5, but that seems very low
-      ref: 0.3
+      ref: 0.29
       proposal: 0.03
       latex: \sigma_{log_{10} M_\mathrm{min}}
-    logM1_prime_ngal_0: # mass priors inflated
+    logM1_prime_ngal0: # mass priors inflated
       prior:
         min: 11.35
         max: 14.5
-      ref: 13.42
+      ref: 13.41
       proposal: 0.005
       latex: \log(10^{10} M_1^\mathrm{\prime})
       drop: true
-    M1_prime_HOD_ngal_0:
-      value: 'lambda logM1_prime_ngal_0: 10**(logM1_prime_ngal_0)'
+    M1_prime_HOD_ngal0:
+      value: 'lambda logM1_prime_ngal0: 10**(logM1_prime_ngal0)'
       latex: M_1^\mathrm{\prime}
-    logM_min_HOD_ngal_0:
+    logM_min_HOD_ngal0:
       prior:
         min: 10.85
         max: 12.85
-      ref: 11.91
+      ref: 11.76
       proposal: 0.005
       latex: \log(10^{10} M_\mathrm{min})
       drop: true
-    M_min_HOD_ngal_0:
-      value: 'lambda logM_min_HOD_ngal_0: 10**(logM_min_HOD_ngal_0)'
+    M_min_HOD_ngal0:
+      value: 'lambda logM_min_HOD_ngal0: 10**(logM_min_HOD_ngal0)'
       latex: M_\mathrm{min}
-    # dndz_shift_gal_ngal_0: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+    # dndz_shift_gal_ngal0: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
     #   prior:
     #     dist: norm
     #     loc: -0.005
@@ -92,7 +85,7 @@ params:
     #   ref: -0.005
     #   proposal: 0.003
     #   latex: \delta_{z}
-    # dndz_stretch_gal_ngal_0:
+    # dndz_stretch_gal_ngal0:
     #   prior:
     #     dist: norm
     #     loc: 0.870
@@ -100,7 +93,7 @@ params:
     #   ref: 0.870
     #   proposal: 0.03
     #   latex: \sigma_{z}
-    # dndz_shift_source_gal_ngal_0: #for bin 4
+    # dndz_shift_source_gal_ngal0: #for bin 4
     #   prior:
     #     dist: norm
     #     loc: 0.0
@@ -108,7 +101,7 @@ params:
     #   ref: 0.0
     #   proposal: 0.008
     #   latex: \delta_{z_s}
-    # shear_callibration_m_ngal_0: #for bin 4
+    # shear_callibration_m_ngal0: #for bin 4
     #   prior:
     #     dist: norm
     #     loc: -0.037
@@ -116,28 +109,28 @@ params:
     #   ref: -0.037
     #   proposal: 0.003
     #   latex: m
-    # A_IA_ngal_0:
+    # A_IA_ngal0:
     #   prior:
     #     min: -5.
     #     max: 5.
     #   ref: 0.
     #   proposal: 0.05
     #   latex: A_\mathrm{IA}
-    alpha_s_HOD_ngal_1: # priors from DES
+    alpha_s_HOD_ngal1: # priors from DES
       prior:
         min: 0.1
         max: 3.5
       ref: 1.85
       proposal: 0.04
       latex: \alpha_{s}
-    sigma_log10M_HOD_ngal_1:
+    sigma_log10M_HOD_ngal1:
       prior:
         min: 0.01
         max: 1.20 #DES prior is 0.5, but that seems very low
       ref: 0.3
       proposal: 0.03
       latex: \sigma_{log_{10} M_\mathrm{min}}
-    logM1_prime_ngal_1: # mass priors inflated
+    logM1_prime_ngal1: # mass priors inflated
       prior:
         min: 11.35
         max: 14.5
@@ -145,10 +138,10 @@ params:
       proposal: 0.005
       latex: \log(10^{10} M_1^\mathrm{\prime})
       drop: true
-    M1_prime_HOD_ngal_1:
-      value: 'lambda logM1_prime_ngal_1: 10**(logM1_prime_ngal_1)'
+    M1_prime_HOD_ngal1:
+      value: 'lambda logM1_prime_ngal1: 10**(logM1_prime_ngal1)'
       latex: M_1^\mathrm{\prime}
-    logM_min_HOD_ngal_1:
+    logM_min_HOD_ngal1:
       prior:
         min: 10.85
         max: 12.85
@@ -156,10 +149,10 @@ params:
       proposal: 0.005
       latex: \log(10^{10} M_\mathrm{min})
       drop: true
-    M_min_HOD_ngal_1:
-      value: 'lambda logM_min_HOD_ngal_1: 10**(logM_min_HOD_ngal_1)'
+    M_min_HOD_ngal1:
+      value: 'lambda logM_min_HOD_ngal1: 10**(logM_min_HOD_ngal1)'
       latex: M_\mathrm{min}
-    # dndz_shift_gal_ngal_1: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+    # dndz_shift_gal_ngal1: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
     #   prior:
     #     dist: norm
     #     loc: -0.035
@@ -167,7 +160,7 @@ params:
     #   ref: -0.035
     #   proposal: 0.005
     #   latex: \delta_{z}
-    # dndz_stretch_gal_ngal_1:
+    # dndz_stretch_gal_ngal1:
     #   prior:
     #     dist: norm
     #     loc: 1.306
@@ -175,7 +168,7 @@ params:
     #   ref: 1.306
     #   proposal: 0.05
     #   latex: \sigma_{z}
-    # dndz_shift_source_gal_ngal_1: # for bin 4
+    # dndz_shift_source_gal_ngal1: # for bin 4
     #   prior:
     #     dist: norm
     #     loc: 0.0
@@ -183,7 +176,7 @@ params:
     #   ref: 0.0
     #   proposal: 0.008
     #   latex: \delta_{z_s}
-    # shear_callibration_m_ngal_1:
+    # shear_callibration_m_ngal1:
     #   prior:
     #     dist: norm
     #     loc: -0.037
@@ -191,50 +184,50 @@ params:
     #   ref: -0.037
     #   proposal: 0.003
     #   latex: m
-    # A_IA_ngal_1:
+    # A_IA_ngal1:
     #   prior:
     #     min: -5.
     #     max: 5.
     #   ref: 0.
     #   proposal: 0.05
     #   latex: A_\mathrm{IA}
-    alpha_s_HOD_ngal_2: #### Maglim 3
+    alpha_s_HOD_ngal2: #### Maglim 3
       prior:
         min: 0.1
         max: 4.0
-      ref: 1.85
+      ref: 1.24
       proposal: 0.04
       latex: \alpha_{s}
-    sigma_log10M_HOD_ngal_2:
+    sigma_log10M_HOD_ngal2:
       prior:
         min: 0.01
         max: 1.20 #DES prior is 0.5, but that seems very low
-      ref: 0.3
+      ref: 0.21
       proposal: 0.03
       latex: \sigma_{log_{10} M_\mathrm{min}}
-    logM1_prime_ngal_2: # mass priors inflated
+    logM1_prime_ngal2: # mass priors inflated
       prior:
         min: 11.35
         max: 14.5
-      ref: 13.42
+      ref: 12.84
       proposal: 0.005
       latex: \log(10^{10} M_1^\mathrm{\prime})
       drop: true
-    M1_prime_HOD_ngal_2:
-      value: 'lambda logM1_prime_ngal_2: 10**(logM1_prime_ngal_2)'
+    M1_prime_HOD_ngal2:
+      value: 'lambda logM1_prime_ngal2: 10**(logM1_prime_ngal2)'
       latex: M_1^\mathrm{\prime}
-    logM_min_HOD_ngal_2:
+    logM_min_HOD_ngal2:
       prior:
         min: 10.85
         max: 12.85
-      ref: 11.91
+      ref: 11.88
       proposal: 0.005
       latex: \log(10^{10} M_\mathrm{min})
       drop: true
-    M_min_HOD_ngal_2:
-      value: 'lambda logM_min_HOD_ngal_2: 10**(logM_min_HOD_ngal_2)'
+    M_min_HOD_ngal2:
+      value: 'lambda logM_min_HOD_ngal2: 10**(logM_min_HOD_ngal2)'
       latex: M_\mathrm{min}
-    # dndz_shift_gal_ngal_2: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+    # dndz_shift_gal_ngal2: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
     #   prior:
     #     dist: norm
     #     loc: -0.005
@@ -242,7 +235,7 @@ params:
     #   ref: -0.005
     #   proposal: 0.003
     #   latex: \delta_{z}
-    # dndz_stretch_gal_ngal_2:
+    # dndz_stretch_gal_ngal2:
     #   prior:
     #     dist: norm
     #     loc: 0.870
@@ -250,7 +243,7 @@ params:
     #   ref: 0.870
     #   proposal: 0.03
     #   latex: \sigma_{z}
-    # dndz_shift_source_gal_ngal_2: #for kappa bin 4
+    # dndz_shift_source_gal_ngal2: #for kappa bin 4
     #   prior:
     #     dist: norm
     #     loc: 0.0
@@ -258,7 +251,7 @@ params:
     #   ref: 0.0
     #   proposal: 0.008
     #   latex: \delta_{z_s}
-    # shear_callibration_m_ngal_2: #for bin 4
+    # shear_callibration_m_ngal2: #for bin 4
     #   prior:
     #     dist: norm
     #     loc: -0.037
@@ -266,50 +259,58 @@ params:
     #   ref: -0.037
     #   proposal: 0.003
     #   latex: m
-    # A_IA_ngal_2:
+    # A_IA_ngal2:
     #   prior:
     #     min: -5.
     #     max: 5.
     #   ref: 0.
     #   proposal: 0.05
     #   latex: A_\mathrm{IA}
-    alpha_s_HOD_ngal_3: # priors from DES
+    alpha_s_HOD_ngal3: # priors from DES
       prior:
         min: 0.1
         max: 3.5
-      ref: 1.85
+      ref: 2.29
       proposal: 0.04
       latex: \alpha_{s}
-    sigma_log10M_HOD_ngal_3:
+    sigma_log10M_HOD_ngal3:
       prior:
         min: 0.01
         max: 1.20 #DES prior is 0.5, but that seems very low
-      ref: 0.3
+      ref: 0.31
       proposal: 0.03
       latex: \sigma_{log_{10} M_\mathrm{min}}
-    logM1_prime_ngal_3: # mass priors inflated
+    logM1_prime_ngal3: # mass priors inflated
       prior:
         min: 11.35
         max: 14.5
-      ref: 13.42
+      ref: 13.44
       proposal: 0.005
       latex: \log(10^{10} M_1^\mathrm{\prime})
       drop: true
-    M1_prime_HOD_ngal_3:
-      value: 'lambda logM1_prime_ngal_3: 10**(logM1_prime_ngal_3)'
+    M1_prime_HOD_ngal3:
+      value: 'lambda logM1_prime_ngal3: 10**(logM1_prime_ngal3)'
       latex: M_1^\mathrm{\prime}
-    logM_min_HOD_ngal_3:
+    logM_min_HOD_ngal3:
       prior:
         min: 10.85
         max: 12.85
-      ref: 11.91
+      ref: 11.82
       proposal: 0.005
       latex: \log(10^{10} M_\mathrm{min})
       drop: true
-    M_min_HOD_ngal_3:
-      value: 'lambda logM_min_HOD_ngal_3: 10**(logM_min_HOD_ngal_3)'
+    M_min_HOD_ngal3:
+      value: 'lambda logM_min_HOD_ngal3: 10**(logM_min_HOD_ngal3)'
       latex: M_\mathrm{min}
-    # dndz_shift_gal_ngal_4: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+    # M0_HOD_ngal0:  # not automatically equal to 0
+    #   prior:
+    #     min: 1e10
+    #     max: 1.2e13 #DES prior is 0.5, but that seems very low
+    #   ref: 1.2e10
+    #   proposal: 0.03
+    #   latex: M_{0}
+
+    # dndz_shift_gal_ngal4: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
     #   prior:
     #     dist: norm
     #     loc: -0.007
@@ -317,7 +318,7 @@ params:
     #   ref: -0.007
     #   proposal: 0.003
     #   latex: \delta_{z}
-    # dndz_stretch_gal_ngal_4:
+    # dndz_stretch_gal_ngal4:
     #   prior:
     #     dist: norm
     #     loc: 0.918
@@ -325,7 +326,7 @@ params:
     #   ref: 0.918
     #   proposal: 0.03
     #   latex: \sigma_{z}
-    # dndz_shift_source_gal_ngal_4: #for bin 4
+    # dndz_shift_source_gal_ngal4: #for bin 4
     #   prior:
     #     dist: norm
     #     loc: 0.0
@@ -333,7 +334,7 @@ params:
     #   ref: 0.0
     #   proposal: 0.008
     #   latex: \delta_{z_s}
-    # shear_callibration_m_ngal_4: #for bin 4
+    # shear_callibration_m_ngal4: #for bin 4
     #   prior:
     #     dist: norm
     #     loc: -0.037
@@ -341,7 +342,7 @@ params:
     #   ref: -0.037
     #   proposal: 0.003
     #   latex: m
-    # A_IA_ngal_4:
+    # A_IA_ngal4:
     #   prior:
     #     min: -5.
     #     max: 5.
@@ -367,21 +368,25 @@ sampler:
       override:
         P0_B12: 0.2
         beta_B12:  5.4807
-        # sigma_log10M_HOD_ngal_0:  0.29
-        # alpha_s_HOD_ngal_0: 1.74
-        # logM_min_HOD_ngal_0: 11.738466547352678
-        # logM1_prime_ngal_0: 13.248466547352677
-        # logM_min_HOD_ngal_1: 11.938466547352678
-        # logM1_prime_ngal_1: 13.248466547352677
-        # logM_min_HOD_ngal_2: 11.038466547352678
-        # logM1_prime_ngal_2: 12.248466547352677
-        # logM_min_HOD_ngal_3: 12.738466547352678
-        # logM1_prime_ngal_3: 13.048466547352677
+        # sigma_log10M_HOD_ngal0:  0.29
+        # alpha_s_HOD_ngal0: 1.74
+        logM_min_HOD_ngal0: 11.038466547352678
+        # logM1_prime_ngal0: 13.248466547352677
+        logM_min_HOD_ngal1: 10.938466547352678
+        # logM1_prime_ngal1: 13.248466547352677
+        logM_min_HOD_ngal2: 11.038466547352678
+        # logM1_prime_ngal2: 12.248466547352677
+        logM_min_HOD_ngal3: 11.738466547352678
+        # logM1_prime_ngal3: 13.048466547352677
         # dndz_shift_gal: -0.009
         # dndz_stretch_gal: 0.975
         # dndz_shift_source_gal: 0.0
         # shear_callibration_m:  -0.037
         # A_IA: 0.5
+        alpha_s_HOD_ngal1 : 0.2
+        alpha_s_HOD_ngal2 : 0.9
+        alpha_s_HOD_ngal3 : 0.9
+        alpha_s_HOD_ngal0 : 1.7
 
 
 theory :
@@ -443,21 +448,20 @@ theory :
                  m_ncdm: 0.06
 
                  ####HOD PARAMS
-
-                 M0_HOD: 0
-                 M0 equal M_min (HOD): 'no'
-                 x_out_truncated_nfw_profile: 1.0 #for lensing
-                 x_out_truncated_nfw_profile_satellite_galaxies: 1.0
-                 csat_over_cdm:  0.76
-                 f_cen_HOD: 1.0
+                 # M0_HOD: 0
+                 # M0 equal M_min (HOD): 'no'
+                 # x_out_truncated_nfw_profile: 1.0 #for lensing
+                 # x_out_truncated_nfw_profile_satellite_galaxies: 1.0
+                 # csat_over_cdm:  0.76
+                 # f_cen_HOD: 1.0
 
                  # 'csat_over_cdm_3' : 1.19,
-                 M0_HOD_ngal_0: 0. # not automatically equal to 0
-                 M0_HOD_ngal_1: 0.
-                 M0_HOD_ngal_2: 0.
-                 M0_HOD_ngal_3: 0.
-                 #x_out_truncated_nfw_profile_satellite_galaxies_ngal_2:  1.0
-                 #f_cen_HOD_ngal_2: 1.
+                 M0_HOD_ngal0: 0. # not automatically equal to 0
+                 M0_HOD_ngal1: 0.
+                 M0_HOD_ngal2: 0.
+                 M0_HOD_ngal3: 0.
+                 #x_out_truncated_nfw_profile_satellite_galaxies_ngal2:  1.0
+                 #f_cen_HOD_ngal2: 1.
 
 
                 # Delta_z_lens : -3.5e-2
