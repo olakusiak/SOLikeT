@@ -129,6 +129,10 @@ class classy_sz(classy):
         cls = {}
         cls = deepcopy(self._current_state["Cl_kxg"])
         return cls
+    def get_Cl_kgxg(self):
+        cls = {}
+        cls = deepcopy(self._current_state["Cl_kgxg"])
+        return cls
     def get_Cl_gxg(self):
         cls = {}
         cls = deepcopy(self._current_state["Cl_gxg"])

@@ -171,5 +171,5 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
             kg_all.append(kg)
 
         cl_joint = np.concatenate((np.concatenate(yg_all), np.concatenate(kg_all)), axis=0) #remove the first bin ell=50
-        print("cl joint:", cl_joint[:10])
+        #print("cl joint:", cl_joint[:10])
         return cl_joint
