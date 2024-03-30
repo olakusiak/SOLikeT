@@ -11,7 +11,7 @@ def multivariate_normal_logpdf(theory, data, cov, inv_cov, log_det):
     const = np.log(2 * np.pi) * (-len(data) / 2) + log_det * (-1 / 2)
     delta = data - theory
     #print(const,delta,np.dot(delta, inv_cov.dot(delta)))
-    # print('chi2: ', np.dot(delta, inv_cov.dot(delta)))
+    print('chi2: ', np.dot(delta, inv_cov.dot(delta)))
     return -0.5 * np.dot(delta, inv_cov.dot(delta)) + const
 
 

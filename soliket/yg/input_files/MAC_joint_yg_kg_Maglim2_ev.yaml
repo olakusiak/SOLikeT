@@ -106,18 +106,18 @@ params:
 
 
 
-# sampler:
-#     mcmc:
-#       covmat: auto
-#       #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
-#       Rminus1_stop: 0.01
-#       learn_proposal: True
-#       learn_proposal_Rminus1_max: 100.0
-#       learn_proposal_Rminus1_max_early: 300.0
-#       #drag: true
-#       #output_every: 10s
-#       proposal_scale: 2.4
-#       max_tries: 5000
+sampler:
+    mcmc:
+      covmat: auto
+      #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+      Rminus1_stop: 0.01
+      learn_proposal: True
+      learn_proposal_Rminus1_max: 100.0
+      learn_proposal_Rminus1_max_early: 300.0
+      #drag: true
+      #output_every: 10s
+      proposal_scale: 2.4
+      max_tries: 5000
 
 
 theory :

@@ -351,48 +351,48 @@ params:
     #   latex: A_\mathrm{IA}
 
 
-# sampler:
-#     mcmc:
-#       covmat: auto
-#       #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
-#       Rminus1_stop: 0.01
-#       learn_proposal: True
-#       learn_proposal_Rminus1_max: 100.0
-#       learn_proposal_Rminus1_max_early: 300.0
-#       #drag: true
-#       #output_every: 10s
-#       proposal_scale: 2.4
-#       max_tries: 5000
 sampler:
-    evaluate:
-      override:
-        P0_B12: 0.2
-        beta_B12:  5.4807
-        # sigma_log10M_HOD_ngal0:  0.29
-        # alpha_s_HOD_ngal0: 1.74
-        logM_min_HOD_ngal0: 11.038466547352678
-        # logM1_prime_ngal0: 13.248466547352677
-        logM_min_HOD_ngal1: 10.938466547352678
-        # logM1_prime_ngal1: 13.248466547352677
-        logM_min_HOD_ngal2: 11.038466547352678
-        # logM1_prime_ngal2: 12.248466547352677
-        logM_min_HOD_ngal3: 11.738466547352678
-        # logM1_prime_ngal3: 13.048466547352677
-        # dndz_shift_gal: -0.009
-        # dndz_stretch_gal: 0.975
-        # dndz_shift_source_gal: 0.0
-        # shear_callibration_m:  -0.037
-        # A_IA: 0.5
-        alpha_s_HOD_ngal1 : 0.2
-        alpha_s_HOD_ngal2 : 0.9
-        alpha_s_HOD_ngal3 : 0.9
-        alpha_s_HOD_ngal0 : 1.7
+    mcmc:
+      covmat: auto
+      #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+      Rminus1_stop: 0.01
+      learn_proposal: True
+      learn_proposal_Rminus1_max: 100.0
+      learn_proposal_Rminus1_max_early: 300.0
+      #drag: true
+      #output_every: 10s
+      proposal_scale: 2.4
+      max_tries: 5000
+# sampler:
+#     evaluate:
+#       override:
+#         P0_B12: 0.2
+#         beta_B12:  5.4807
+#         # sigma_log10M_HOD_ngal0:  0.29
+#         # alpha_s_HOD_ngal0: 1.74
+#         logM_min_HOD_ngal0: 11.038466547352678
+#         # logM1_prime_ngal0: 13.248466547352677
+#         logM_min_HOD_ngal1: 11.938466547352678
+#         # logM1_prime_ngal1: 13.248466547352677
+#         logM_min_HOD_ngal2: 12.038466547352678
+#         # logM1_prime_ngal2: 12.248466547352677
+#         logM_min_HOD_ngal3: 10.938466547352678
+#         # logM1_prime_ngal3: 13.048466547352677
+#         # dndz_shift_gal: -0.009
+#         # dndz_stretch_gal: 0.975
+#         # dndz_shift_source_gal: 0.0
+#         # shear_callibration_m:  -0.037
+#         # A_IA: 0.5
+#         alpha_s_HOD_ngal1 : 0.9
+#         alpha_s_HOD_ngal2 : 0.9
+#         alpha_s_HOD_ngal3 : 0.9
+#         alpha_s_HOD_ngal0 : 0.9
 
 
 theory :
   classy_szfast.classy_sz.classy_sz:
+     use_class_sz_fast_mode: 1
      use_class_sz_no_cosmo_mode : 1
-  # classy_szfast.classy_sz.classy_sz:
      extra_args:
                  output: 'galn_tsz_1h, galn_tsz_2h, lensmagn_tsz_1h, lensmagn_tsz_2h, galn_gallens_1h, galn_gallens_2h, lensmagn_gallens_1h, lensmagn_gallens_2h, galn_IA_2h'
                  galaxy_samples_list_num : 4 # the number of galaxy samples
@@ -460,7 +460,7 @@ theory :
                  M0_HOD_ngal1: 0.
                  M0_HOD_ngal2: 0.
                  M0_HOD_ngal3: 0.
-                 #x_out_truncated_nfw_profile_satellite_galaxies_ngal2:  1.0
+                 x_out_truncated_nfw_profile_satellite_galaxies_ngal2:  4.0
                  #f_cen_HOD_ngal2: 1.
 
 
