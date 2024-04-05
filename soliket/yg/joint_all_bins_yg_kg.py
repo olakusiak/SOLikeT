@@ -34,7 +34,7 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
     Nbins_kg: Optional[str] = None
     # Load the data
     def initialize(self):
-        self.covfile = self.cov_data_file
+        self.covmat = np.loadtxt(os.path.join(self.data_directory, self.cov_data_file))
         self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
         self.bpwf_kg = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
         self.pw_bin_yg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
@@ -69,17 +69,17 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
         #cov = np.loadtxt(os.path.join(self.data_directory, self.covfile))
         # print("cov shape",cov.shape)
         Npoints = Np_kg + Np_yg
-        Sig_all = np.concatenate((np.concatenate((Cl_yg_all)),np.concatenate((Cl_kg_all))), axis=0)
-        self.covmat = np.diag(Sig_all**2)
+        # Sig_all = np.concatenate((np.concatenate((Cl_yg_all)),np.concatenate((Cl_kg_all))), axis=0)
+        # self.covmat = np.diag(Sig_all**2)
         # self.covmat =  cov[:Npoints,:Npoints]
         self.inv_covmat = np.linalg.inv(self.covmat)
         self.det_covmat = np.linalg.det(self.covmat)
         #print(np.linalg.eig(self.covmat))
-        # print("cov:", (self.covmat).shape)
-
+        print("cov:", (self.covmat).shape)
+        print("Npoints = ", Npoints*4)
         ###Combine into 1 data vector
-        self.cl_joint = np.concatenate((np.concatenate((Cl_yg_all)),np.concatenate((Cl_kg_all))), axis=0)
-        self.ell_joint = np.concatenate((self.ell_yg, self.ell_yg,self.ell_yg, self.ell_yg, self.ell_kg, self.ell_kg, self.ell_kg, self.ell_kg,), axis=0)
+        self.cl_joint = np.concatenate((np.concatenate((Cl_kg_all)),np.concatenate((Cl_yg_all))), axis=0)
+        self.ell_joint = np.concatenate((self.ell_kg, self.ell_kg,self.ell_kg, self.ell_kg, self.ell_yg, self.ell_yg, self.ell_yg, self.ell_yg,), axis=0)
         # print("self.ell_joint:", self.ell_joint)
         # print("self.cl_joint:", self.cl_joint)
         super().initialize()
@@ -170,6 +170,6 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
             yg_all.append(yg)
             kg_all.append(kg)
 
-        cl_joint = np.concatenate((np.concatenate(yg_all), np.concatenate(kg_all)), axis=0) #remove the first bin ell=50
+        cl_joint = np.concatenate((np.concatenate(kg_all), np.concatenate(yg_all)), axis=0) #remove the first bin ell=50
         #print("cl joint:", cl_joint[:10])
         return cl_joint
