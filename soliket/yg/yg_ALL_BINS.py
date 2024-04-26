@@ -92,8 +92,10 @@ class YXG_ALLBINS_Likelihood(GaussianLikelihood):
         # ellmax=int(np.round(ell_data[len(ell_data)-1]))
         # print("ellmax",ellmax)
         new_ell = np.arange(2, ellmax, 1)
-        f_int =  interp1d(ell_theory, cl_theory, fill_value="extrapolate")
-        inter_cl = np.asarray(f_int(new_ell))
+        cl_theory_log = np.log(cl_theory)
+        f_int =  interp1d(ell_theory, cl_theory_log, fill_value="extrapolate")
+        inter_cl_log = np.asarray(f_int(new_ell))
+        inter_cl= np.exp(inter_cl_log)
         if conv2cl==True: #go from dls to cls because the bpwf mutliplies by ell*(ell+1)/2pi
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
 
@@ -107,6 +109,7 @@ class YXG_ALLBINS_Likelihood(GaussianLikelihood):
             cl_binned[i] = np.sum(wi[2:len(inter_cl)+2]*inter_cl)
         #print("clbinned:", cl_binned)
         return ell_data, cl_binned
+
 
     def _get_theory(self, **params_values):
         alpha_lens_mag_list=[1.21, 1.15, 1.88, 1.97]

@@ -1,46 +1,14 @@
-output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_all_Maglim_PB12_mass_4-24_test
+output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_kg_Maglim_PB12_mass_4-24_test
 
 likelihood:
-  soliket.yg.joint_yg_kg_ALL_BINS.YXG_KXG_ALLBINS_Likelihood:
+  soliket.yg.kg_ALL_BINS.KXG_ALLBINS_Likelihood:
     data_directory: "/Users/aleksandra/software/data_for_SOLikeT/"
-    yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_"
     gxk_data_file: "gglens_DES_healpy_1024_Maglim"
     cov_data_file: "cov/combined_cov_gk_gy_Maglim_allBins_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
-    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601_ellmin30_dl.npy"
     bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_ellmin30_dl.npy"
-    pixwind_4096_file: "const/pixel_window_bin_nside4096.txt"
     pixwind_1024_file: "const/pixel_window_bin_nside1024.txt"
-    Nbins_yg: 21
     Nbins_kg: 9
 params:
-    P0_B12:
-      prior:
-        min: 0.0001
-        max: 20.00
-      ref:  1. #calibrated to match the data
-      proposal: 0.0
-      latex: P0_{B12}
-    alpha_z_P0_B12: # = -0.758;
-      prior:
-        min: -7.0
-        max: 7.0
-      ref: -0.758
-      proposal: 0.07
-      latex: \alpha_z^{P0_{B12}}
-    beta_B12: #outer slope
-      prior:
-        min: 1.00
-        max: 10.0
-      ref: 2.35
-      proposal: 0.05
-      latex: \beta_{B12}
-    alpha_z_beta_B12: #0.415;
-      prior:
-        min: -7.0
-        max: 7.0
-      ref:  0.415
-      proposal: 0.05
-      latex: \alpha_z^{\ebta_{B12}}
     alpha_s_HOD_ngal_0: # priors from DES
       prior:
         min: 0.1
@@ -249,13 +217,6 @@ params:
       ref: 0.918
       proposal: 0.03
       latex: \sigma_{z}
-    # A_IA: #for kappa bin 4
-    #   prior:
-    #     min: -5.
-    #     max: 5.
-    #   ref: 0.
-    #   proposal: 0.05
-    #   latex: A_\mathrm{IA}
     amplid_IA: #for kappa bin 4
       prior:
         min: -5.
@@ -280,61 +241,58 @@ params:
       proposal: 0.003
       latex: m
 
-sampler:
-    mcmc:
-      covmat: auto
-      #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
-      Rminus1_stop: 0.01
-      learn_proposal: True
-      learn_proposal_Rminus1_max: 100.0
-      learn_proposal_Rminus1_max_early: 300.0
-      #drag: true
-      #output_every: 10s
-      proposal_scale: 2.4
-      max_tries: 5000
+
 # sampler:
-#     evaluate:
-#       override:
-#         P0_B12: 1.
-#         beta_B12: 2.35
-#         alpha_z_P0_B12: -0.758
-#         alpha_z_beta_B12: 0.415
-#         #Bin 1
-#         sigma_log10M_HOD_ngal_0:  0.29
-#         alpha_s_HOD_ngal_0: 1.74
-#         logM_min_HOD_ngal_0: 11.76
-#         logM1_prime_ngal_0: 13.41
-#         dndz_shift_ngal_0: -0.009
-#         dndz_stretch_ngal_0: 0.975
-#
-#         #Bin 2
-#         sigma_log10M_HOD_ngal_1:  0.30
-#         alpha_s_HOD_ngal_1: 1.85
-#         logM_min_HOD_ngal_1: 11.91
-#         logM1_prime_ngal_1: 13.42
-#         dndz_shift_ngal_1: -0.035
-#         dndz_stretch_ngal_1: 1.306
-#         #Bin 3
-#         sigma_log10M_HOD_ngal_2:  0.21
-#         alpha_s_HOD_ngal_2: 1.24
-#         logM_min_HOD_ngal_2: 11.88
-#         logM1_prime_ngal_2: 12.84
-#         dndz_shift_ngal_2: -0.005
-#         dndz_stretch_ngal_2: 0.870
-#         #Bin 4
-#         sigma_log10M_HOD_ngal_3:  0.31
-#         alpha_s_HOD_ngal_3: 2.29
-#         logM_min_HOD_ngal_3: 11.82
-#         logM1_prime_ngal_3: 13.44
-#         dndz_shift_ngal_3: 0.00
-#         dndz_stretch_ngal_3: 0.918
-#         dndz_shift_source_gal: 0.008
-#         m_shear_calibration: -0.037
-#         amplid_IA: 0.5
-#
-#
+#     mcmc:
+#       covmat: auto
+#       #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+#       Rminus1_stop: 0.01
+#       learn_proposal: True
+#       learn_proposal_Rminus1_max: 100.0
+#       learn_proposal_Rminus1_max_early: 300.0
+#       #drag: true
+#       #output_every: 10s
+#       proposal_scale: 2.4
+#       max_tries: 5000
+sampler:
+    evaluate:
+      override:
+        P0_B12: 1.
+        beta_B12: 2.35
+        alpha_z_P0_B12: -0.758
+        alpha_z_beta_B12: 0.415
+        #Bin 1
+        sigma_log10M_HOD_ngal_0:  0.29
+        alpha_s_HOD_ngal_0: 1.74
+        logM_min_HOD_ngal_0: 11.76
+        logM1_prime_ngal_0: 13.41
+        dndz_shift_ngal_0: -0.009
+        dndz_stretch_ngal_0: 0.975
 
-
+        #Bin 2
+        sigma_log10M_HOD_ngal_1:  0.30
+        alpha_s_HOD_ngal_1: 1.85
+        logM_min_HOD_ngal_1: 11.91
+        logM1_prime_ngal_1: 13.42
+        dndz_shift_ngal_1: -0.035
+        dndz_stretch_ngal_1: 1.306
+        #Bin 3
+        sigma_log10M_HOD_ngal_2:  0.21
+        alpha_s_HOD_ngal_2: 1.24
+        logM_min_HOD_ngal_2: 11.88
+        logM1_prime_ngal_2: 12.84
+        dndz_shift_ngal_2: -0.005
+        dndz_stretch_ngal_2: 0.870
+        #Bin 4
+        sigma_log10M_HOD_ngal_3:  0.31
+        alpha_s_HOD_ngal_3: 2.29
+        logM_min_HOD_ngal_3: 11.82
+        logM1_prime_ngal_3: 13.44
+        dndz_shift_ngal_3: 0.00
+        dndz_stretch_ngal_3: 0.918
+        dndz_shift_source_gal: 0.008
+        # shear_callibration_m:  -0.037
+        A_IA: 0.5
 
 
 theory :
@@ -342,7 +300,7 @@ theory :
      use_class_sz_fast_mode: 1
      use_class_sz_no_cosmo_mode : 1
      extra_args:
-                 output: 'galn_tsz_1h, galn_tsz_2h, lensmagn_tsz_1h, lensmagn_tsz_2h, galn_gallens_1h, galn_gallens_2h, lensmagn_gallens_1h, lensmagn_gallens_2h, galn_IA_2h'
+                 output: 'galn_gallens_1h, galn_gallens_2h, lensmagn_gallens_1h, lensmagn_gallens_2h, galn_IA_2h'
                  galaxy_samples_list_num : 4 # the number of galaxy samples
                  galaxy_samples_list : '0,1,2,3' # the id string of each sample, can be any integer
                  full_path_and_prefix_to_dndz_ngal : '/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_forjoint_bin'
@@ -392,7 +350,7 @@ theory :
                  ####HOD PARAMS
                  # M0_HOD: 0
                  # M0 equal M_min (HOD): 'no'
-                 # x_out_truncated_nfw_profile: 1.0 #for lensing
+                 x_out_truncated_nfw_profile: 1.0 #for lensing
                  # x_out_truncated_nfw_profile_satellite_galaxies: 1.0
                  # csat_over_cdm:  0.76
                  # f_cen_HOD: 1.0
@@ -421,39 +379,11 @@ theory :
                  # dndz_shift_source_gal: 0.0
                  # dndz_stretch_gal: 1.0
                  # dndz_stretch_source_gal: 1.0
-                 photo_z_params_ngal_0: 1.
-                 photo_z_params_ngal_1: 1.
-                 photo_z_params_ngal_2: 1.
-                 photo_z_params_ngal_3: 1.
                  #IA
-                 A_IA: 1.0 # IA amplidute sampled in cobaya!
+                 # A_IA: 0.5
                  eta_IA: 1.6
                  C1_IA: 5e-14
 
-
-                 # #### Pressure profile
-                 pressure profile : 'B12'
-                 units for tSZ spectrum: 'dimensionless'
-                 alpha_B12: 1.
-                 #beta_B12:  4.35
-                 gamma_B12: -0.3
-                 xc_B12: 0.497
-                 x_outSZ: 4.
-
-
-                 ## fast params
-                 use_fft_for_profiles_transform : 1
-                 N_samp_fftw : 1024
-                 # l_min_samp_fftw: 1e-12
-                 # l_max_samp_fftw: 1e12
-                 x_min_gas_pressure_fftw : 1e-5
-                 x_max_gas_pressure_fftw : 1e5
-                 n_z_pressure_profile: 80
-                 n_m_pressure_profile: 80
-                 n_l_pressure_profile: 80
-
-                 l_min_gas_pressure_profile:  1.e-2
-                 l_max_gas_pressure_profile:  5.e4
 
 stop_at_error: True
 debug: False
