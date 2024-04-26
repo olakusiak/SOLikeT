@@ -134,5 +134,9 @@ class YXG_Likelihood(GaussianLikelihood):
 
         print("ell theory:", ell_yg_bin)
         print("cl tot:", 1e-6*(dl_yg_bin+2*(alpha-1)*dl_ym_bin))
+        cl_tot = 1e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)
+        if np.isnan(cl_tot).any()==True:
+            print("Nans in the theory prediction!")
+            exit()
 
-        return 1e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)
+        return cl_tot

@@ -1,4 +1,4 @@
-output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim2_debug
+output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim2_P0_z_betaB12_z_4-25
 
 likelihood:
   soliket.yg.joint_yg_kg.YXG_KXG_Likelihood:
@@ -17,17 +17,31 @@ params:
     P0_B12:
       prior:
         min: 0.0001
-        max: 40.00
-      ref:  1.0 #calibrated to match the data
-      proposal: 0.02
+        max: 20.00
+      ref:  1. #calibrated to match the data
+      proposal: 0.0
       latex: P0_{B12}
+    alpha_z_P0_B12: # = -0.758;
+      prior:
+        min: -7.0
+        max: 7.0
+      ref: -0.758
+      proposal: 0.07
+      latex: \alpha_z^{P0_{B12}}
     beta_B12: #outer slope
       prior:
-        min: 2.00
+        min: 1.00
         max: 10.0
-      ref: 4.35
+      ref: 2.35
       proposal: 0.05
       latex: \beta_{B12}
+    alpha_z_beta_B12: #0.415;
+      prior:
+        min: -7.0
+        max: 7.0
+      ref:  0.415
+      proposal: 0.05
+      latex: \alpha_z^{\beta_{B12}}
     alpha_s_HOD: # priors from DES
       prior:
         min: 0.1
@@ -80,7 +94,14 @@ params:
       ref: 1.306
       proposal: 0.05
       latex: \sigma_{z}
-    dndz_shift_source_gal: # for bin 4
+    amplid_IA: #for kappa bin 4
+      prior:
+        min: -5.
+        max: 5.
+      ref: 0.
+      proposal: 0.05
+      latex: A_\mathrm{IA}
+    dndz_shift_source_gal: #for kappa bin 4
       prior:
         dist: norm
         loc: 0.0
@@ -88,7 +109,7 @@ params:
       ref: 0.0
       proposal: 0.008
       latex: \delta_{z_s}
-    shear_callibration_m:
+    m_shear_calibration: #for kappa bin 4, E. 16 in https://arxiv.org/pdf/2105.13549
       prior:
         dist: norm
         loc: -0.037
@@ -96,13 +117,6 @@ params:
       ref: -0.037
       proposal: 0.003
       latex: m
-    A_IA:
-      prior:
-        min: -5.
-        max: 5.
-      ref: 0.
-      proposal: 0.05
-      latex: A_\mathrm{IA}
 
 
 
@@ -136,8 +150,8 @@ sampler:
 
 theory :
   classy_szfast.classy_sz.classy_sz:
-     # use_class_sz_no_cosmo_mode : 1
-  # classy_szfast.classy_sz.classy_sz:
+     use_class_sz_fast_mode: 1
+     use_class_sz_no_cosmo_mode : 1
      extra_args:
                  output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h,gal_gallens_1h,gal_gallens_2h,gallens_lensmag_1h, gallens_lensmag_2h,IA_gal_2h'
                  galaxy_sample : 'custom'
@@ -146,31 +160,18 @@ theory :
 
                  ### Precision
                  redshift_epsabs : 1.0e-40
-                 redshift_epsrel : 0.0005
+                 redshift_epsrel : 1.e-3
                  mass_epsabs : 1.0e-40
-                 mass_epsrel : 0.0005
-                 ndim_masses : 150
-                 ndim_redshifts : 150
+                 mass_epsrel : 1.e-3
+                 ndim_masses : 80
+                 ndim_redshifts : 80
                  class_sz_verbose : 0
                  nonlinear_verbose : 0
-
-                 P_k_max_h/Mpc : 100.0
-                 k_min_for_pk_class_sz : 0.0001
-                 k_max_for_pk_class_sz : 70.0
-                 k_per_decade_class_sz : 20.0
-
-                 ## fast params
-                 use_fft_for_profiles_transform : 1
-                 N_samp_fftw : 1024
-                 l_min_samp_fftw: 1e-12
-                 l_max_samp_fftw: 1e12
-                 x_min_gas_pressure_fftw : 1e-4
-                 x_max_gas_pressure_fftw : 1e3
 
                  dlogell: 0.3
                  multipoles_sz: 'ell_mock'
                  ell_max: 8200.0
-                 ell_min: 5.0
+                 ell_min: 4.0
 
                  z_min : 1.0e-8 #1.0e-8 problems on stampede
                  z_max : 2.0
@@ -194,27 +195,27 @@ theory :
                  n_s: 0.9665
 
                  k_pivot: 0.05
-                 N_ncdm: 1 # neutrinos??
+                 N_ncdm: 1
                  N_ur: 2.0328
                  m_ncdm: 0.06
 
                  ####HOD PARAMS
-                 M0_HOD: 0
-                 M0 equal M_min (HOD): 'no'
                  x_out_truncated_nfw_profile: 1.0 #for lensing
-                 x_out_truncated_nfw_profile_satellite_galaxies: 1.0
-                 csat_over_cdm:  1.07
-                 f_cen_HOD: 1.0
-                # Delta_z_lens : -3.5e-2
-                # Delta_z_source : 0.0
+                 csat_over_cdm: 1.07
+                 M0_HOD: 0. # not automatically equal to 0
+                 x_out_truncated_nfw_profile_satellite_galaxies:  1.0
+                 f_cen_HOD: 1.
+
+
+                 #photo-z
                  Delta_z_lens : 0.0 #obsolete args
                  Delta_z_source : 0.0
-                 #photo-z
-                 dndz_stretch_source_gal: 1.0
-
-                 # IA
+                 photo_z_params: 1.
+                 #IA
+                 A_IA: 1.0 # IA amplidute sampled in cobaya!
                  eta_IA: 1.6
                  C1_IA: 5e-14
+
 
                  # #### Pressure profile
                  pressure profile : 'B12'
@@ -224,13 +225,21 @@ theory :
                  gamma_B12: -0.3
                  xc_B12: 0.497
                  x_outSZ: 4.
-                 # pressure precision
-                 pressure_profile_epsrel: 1e-3
-                 pressure_profile_epsabs: 1e-40
-                 n_m_pressure_profile : 100 # default: 100, decrease for faster
-                 n_z_pressure_profile : 100 # default: 100, decrease for faster
 
 
+                 ## fast params
+                 use_fft_for_profiles_transform : 1
+                 N_samp_fftw : 1024
+                 # l_min_samp_fftw: 1e-12
+                 # l_max_samp_fftw: 1e12
+                 x_min_gas_pressure_fftw : 1e-5
+                 x_max_gas_pressure_fftw : 1e5
+                 n_z_pressure_profile: 80
+                 n_m_pressure_profile: 80
+                 n_l_pressure_profile: 80
+
+                 l_min_gas_pressure_profile:  1.e-2
+                 l_max_gas_pressure_profile:  5.e4
 
 stop_at_error: True
 debug: False

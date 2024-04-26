@@ -22,6 +22,7 @@ from scipy.interpolate import interp1d
 
 
 class GXK_Likelihood(GaussianLikelihood):
+    params = {"m_shear_calibration": 0., "amplid_IA": 1.0}
     data_directory: Optional[str] = None
     gk_data_file: Optional[str] = None
     cov_data_file: Optional[str]  = None
@@ -102,6 +103,8 @@ class GXK_Likelihood(GaussianLikelihood):
         return ell_data, cl_binned
 
     def _get_theory(self, **params_values):
+        m = params_values_dict['m_shear_calibration']
+        A_IA = params_values_dict['amplid_IA']
         s=self.s
         pixwin = self.pw_bin
         Npoints = self.Nbins
@@ -147,9 +150,12 @@ class GXK_Likelihood(GaussianLikelihood):
         #print("cl_IA_2h: ", cl_IA_binned)
 
         f = ell_km_binned*(ell_km_binned+1)/2/np.pi
-        cl_tot = cl_gk_binned + 2*(s-1)*cl_km_binned - cl_IA_binned
+        cl_tot = (1+m)*(cl_gk_binned + 2*(s-1)*cl_km_binned + A_IA*cl_IA_binned)
         print("ell bin: ", ell_km_binned)
         print("total cl bin: ", cl_tot)
         #print("total cl bin: ", (cl_tot*f)[1:])
+        if np.isnan(cl_tot).any()==True:
+            print("Nans in the theory prediction!")
+            exit()
 
         return cl_tot

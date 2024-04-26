@@ -1,4 +1,4 @@
-output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_Maglim_PB12_mass_4-24_test
+output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/yg_all_Maglim_P0_z_betaB12_z_4-25_test
 
 likelihood:
   soliket.yg.yg_ALL_BINS.YXG_ALLBINS_Likelihood:
@@ -323,7 +323,6 @@ sampler:
         # shear_callibration_m:  -0.037
         A_IA: 0.5
 
-
 theory :
   classy_szfast.classy_sz.classy_sz:
      use_class_sz_fast_mode: 1
@@ -377,12 +376,7 @@ theory :
                  m_ncdm: 0.06
 
                  ####HOD PARAMS
-                 # M0_HOD: 0
-                 # M0 equal M_min (HOD): 'no'
-                 # x_out_truncated_nfw_profile: 1.0 #for lensing
-                 # x_out_truncated_nfw_profile_satellite_galaxies: 1.0
-                 # csat_over_cdm:  0.76
-                 # f_cen_HOD: 1.0
+                 x_out_truncated_nfw_profile: 1.0 #for lensing
 
                  # 'csat_over_cdm_3' : 1.19,
                  M0_HOD_ngal_0: 0. # not automatically equal to 0
@@ -398,20 +392,17 @@ theory :
                  f_cen_HOD_ngal_2: 1.
                  f_cen_HOD_ngal_3: 1.
 
-
-                 #Delta_z_lens : -3.5e-2
-                 #Delta_z_source : 0.0
-                 # Delta_z_lens : 0.0 #obsolete args
-                 # Delta_z_source : 0.0
                  #photo-z
-                 # dndz_shift_gal: 0.0
-                 # dndz_shift_source_gal: 0.0
-                 # dndz_stretch_gal: 1.0
-                 # dndz_stretch_source_gal: 1.0
-                 # IA
-                 # A_IA: 0.5
-                 # eta_IA: 1.6
-                 # C1_IA: 5e-14
+                 Delta_z_lens : 0.0 #obsolete args
+                 Delta_z_source : 0.0
+                 photo_z_params_ngal_0: 1.
+                 photo_z_params_ngal_1: 1.
+                 photo_z_params_ngal_2: 1.
+                 photo_z_params_ngal_3: 1.
+                 #IA
+                 A_IA: 1.0 # IA amplidute sampled in cobaya!
+                 eta_IA: 1.6
+                 C1_IA: 5e-14
 
 
                  # #### Pressure profile

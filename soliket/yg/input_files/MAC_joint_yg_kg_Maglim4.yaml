@@ -1,4 +1,4 @@
-output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim4_2-1
+output: /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_yg_kg_Maglim4_P0_z_betaB12_z_4-25
 
 likelihood:
   soliket.yg.joint_yg_kg.YXG_KXG_Likelihood:
@@ -14,56 +14,70 @@ likelihood:
     Nbins_yg: 21
     Nbins_kg: 9
 params:
-    P0GNFW:
+    P0_B12:
       prior:
         min: 0.0001
-        max: 12.00
-      ref:  0.2 #calibrated to match the data
-      proposal: 0.1
-      latex: P0_{GNFW}
-    betaGNFW: #outer slope
+        max: 20.00
+      ref:  1. #calibrated to match the data
+      proposal: 0.0
+      latex: P0_{B12}
+    alpha_z_P0_B12: # = -0.758;
       prior:
-        min: 4.01 # class_sz breaks for values below ~4, physical reason?
+        min: -7.0
+        max: 7.0
+      ref: -0.758
+      proposal: 0.07
+      latex: \alpha_z^{P0_{B12}}
+    beta_B12: #outer slope
+      prior:
+        min: 1.00
         max: 10.0
-      ref: 5.4807
-      proposal: 0.1
-      latex: \beta_{GNFW}
+      ref: 2.35
+      proposal: 0.05
+      latex: \beta_{B12}
+    alpha_z_beta_B12: #0.415;
+      prior:
+        min: -7.0
+        max: 7.0
+      ref:  0.415
+      proposal: 0.05
+      latex: \alpha_z^{\beta_{B12}}
     alpha_s_HOD: # priors from DES
       prior:
         min: 0.1
-        max: 2.5
-      ref: 1.85
-      proposal: 0.03
-      latex: \alpha_{s}
+        max: 3.5
+      ref: 2.29
+      proposal: 0.04
+      latex: \alpha_{s}^\mathrm{4}
     sigma_log10M_HOD:
       prior:
         min: 0.01
-        max: 1.20 #DES prior is 0.5, but that seems very low
-      ref: 0.3
+        max: 2.00 #DES prior is 0.5, but that seems very low
+      ref: 0.31
       proposal: 0.03
-      latex: \sigma_{log_{10} M_\mathrm{min}}
+      latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{4}}
     logM1_prime: # mass priors inflated
       prior:
         min: 11.35
-        max: 14.
-      ref: 13.42
+        max: 14.5
+      ref: 13.44
       proposal: 0.005
-      latex: \log(10^{10} M_1^\mathrm{\prime})
+      latex: \log(10^{10} M_1^\mathrm{\prime}^\mathrm{4})
       drop: true
     M1_prime_HOD:
       value: 'lambda logM1_prime: 10**(logM1_prime)'
-      latex: M_1^\mathrm{\prime}
+      latex: M_1^\mathrm{\prime}^\mathrm{4}
     logM_min_HOD:
       prior:
         min: 10.85
         max: 12.85
-      ref: 11.91
+      ref: 11.82
       proposal: 0.005
-      latex: \log(10^{10} M_\mathrm{min})
+      latex: \log(10^{10} M_\mathrm{min}^\mathrm{4})
       drop: true
     M_min_HOD:
       value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
-      latex: M_\mathrm{min}
+      latex: M_\mathrm{min}^\mathrm{4}
     dndz_shift_gal: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
       prior:
         dist: norm
@@ -80,15 +94,22 @@ params:
       ref: 0.918
       proposal: 0.03
       latex: \sigma_{z}
-    dndz_shift_source_gal: # for bin 4
+    amplid_IA: #for kappa bin 4
+      prior:
+        min: -5.
+        max: 5.
+      ref: 0.
+      proposal: 0.05
+      latex: A_\mathrm{IA}
+    dndz_shift_source_gal: #for kappa bin 4
       prior:
         dist: norm
         loc: 0.0
         scale: 0.017
       ref: 0.0
-      proposal: 0.08
+      proposal: 0.008
       latex: \delta_{z_s}
-    shear_callibration_m:
+    m_shear_calibration: #for kappa bin 4, E. 16 in https://arxiv.org/pdf/2105.13549
       prior:
         dist: norm
         loc: -0.037
@@ -124,8 +145,8 @@ sampler:
 
 theory :
   classy_szfast.classy_sz.classy_sz:
+     use_class_sz_fast_mode: 1
      use_class_sz_no_cosmo_mode : 1
-  # classy_szfast.classy_sz.classy_sz:
      extra_args:
                  output: 'tSZ_gal_1h,tSZ_gal_2h,tSZ_lensmag_1h,tSZ_lensmag_2h,gal_gallens_1h,gal_gallens_2h,gallens_lensmag_1h, gallens_lensmag_2h,IA_gal_2h'
                  galaxy_sample : 'custom'
@@ -134,31 +155,18 @@ theory :
 
                  ### Precision
                  redshift_epsabs : 1.0e-40
-                 redshift_epsrel : 0.0005
+                 redshift_epsrel : 1.e-3
                  mass_epsabs : 1.0e-40
-                 mass_epsrel : 0.0005
-                 ndim_masses : 150
-                 ndim_redshifts : 150
+                 mass_epsrel : 1.e-3
+                 ndim_masses : 80
+                 ndim_redshifts : 80
                  class_sz_verbose : 0
                  nonlinear_verbose : 0
-
-                 P_k_max_h/Mpc : 100.0
-                 k_min_for_pk_class_sz : 0.0001
-                 k_max_for_pk_class_sz : 70.0
-                 k_per_decade_class_sz : 20.0
-
-                 ## fast params
-                 use_fft_for_profiles_transform : 1
-                 N_samp_fftw : 1024
-                 l_min_samp_fftw: 1e-12
-                 l_max_samp_fftw: 1e12
-                 x_min_gas_pressure_fftw : 1e-4
-                 x_max_gas_pressure_fftw : 1e3
 
                  dlogell: 0.3
                  multipoles_sz: 'ell_mock'
                  ell_max: 8200.0
-                 ell_min: 2.0
+                 ell_min: 4.0
 
                  z_min : 1.0e-8 #1.0e-8 problems on stampede
                  z_max : 2.0
@@ -182,52 +190,51 @@ theory :
                  n_s: 0.9665
 
                  k_pivot: 0.05
-                 N_ncdm: 1 # neutrinos??
+                 N_ncdm: 1
                  N_ur: 2.0328
                  m_ncdm: 0.06
 
                  ####HOD PARAMS
-                 #M_min_HOD: 547603918739.7538 #10**11.91 *0.6737
-                 #M1_prime_HOD:  17720115461399.184 #(10** 13.42) *0.6737
-                 #sigma_log10M_HOD : 0.30
-                 #alpha_s_HOD : 1.85
-                 M0_HOD: 0
-                 M0 equal M_min (HOD): 'no'
                  x_out_truncated_nfw_profile: 1.0 #for lensing
-                 x_out_truncated_nfw_profile_satellite_galaxies: 1.0
-                 csat_over_cdm:  1.19
-                 f_cen_HOD: 1.0
-                # Delta_z_lens : -3.5e-2
-                # Delta_z_source : 0.0
+                 csat_over_cdm: 1.19
+                 M0_HOD: 0. # not automatically equal to 0
+                 x_out_truncated_nfw_profile_satellite_galaxies:  1.0
+                 f_cen_HOD: 1.
+
+
+                 #photo-z
                  Delta_z_lens : 0.0 #obsolete args
                  Delta_z_source : 0.0
-                 #photo-z
-                 # dndz_shift_gal: 0.0
-                 # dndz_shift_source_gal: 0.0
-                 # dndz_stretch_gal: 1.0
-                 dndz_stretch_source_gal: 1.0
-
-                 # IA
-                 A_IA: 0.5
-                 eta_IA: -1.0
+                 photo_z_params: 1.
+                 #IA
+                 A_IA: 1.0 # IA amplidute sampled in cobaya!
+                 eta_IA: 1.6
                  C1_IA: 5e-14
 
-                 # #### Pressure profile
-                 pressure profile : 'Custom. GNFW'
-                 units for tSZ spectrum: 'dimensionless'
-                 c500: 1.156
-                 alphaGNFW: 1.062
-                 #betaGNFW:  5.4807
-                 gammaGNFW: 0.3292
-                 B: 1.53
-                 #x_out_truncated_nfw_profile_electrons: 1. # not a valid param
-                 x_outSZ: 4.
-                 # pressure precision
-                 pressure_profile_epsrel: 1e-3
-                 pressure_profile_epsabs: 1e-40
-                 n_m_pressure_profile : 100 # default: 100, decrease for faster
-                 n_z_pressure_profile : 100 # default: 100, decrease for faster
 
+                 # #### Pressure profile
+                 pressure profile : 'B12'
+                 units for tSZ spectrum: 'dimensionless'
+                 alpha_B12: 1.
+                 #beta_B12:  4.35
+                 gamma_B12: -0.3
+                 xc_B12: 0.497
+                 x_outSZ: 4.
+
+
+                 ## fast params
+                 use_fft_for_profiles_transform : 1
+                 N_samp_fftw : 1024
+                 # l_min_samp_fftw: 1e-12
+                 # l_max_samp_fftw: 1e12
+                 x_min_gas_pressure_fftw : 1e-5
+                 x_max_gas_pressure_fftw : 1e5
+                 n_z_pressure_profile: 80
+                 n_m_pressure_profile: 80
+                 n_l_pressure_profile: 80
+
+                 l_min_gas_pressure_profile:  1.e-2
+                 l_max_gas_pressure_profile:  5.e4
 
 stop_at_error: True
 debug: False
