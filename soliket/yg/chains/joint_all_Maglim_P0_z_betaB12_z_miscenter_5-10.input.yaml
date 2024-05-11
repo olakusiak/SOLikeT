@@ -1,0 +1,470 @@
+theory:
+  classy_szfast.classy_sz.classy_sz:
+    use_class_sz_fast_mode: 1
+    use_class_sz_no_cosmo_mode: 1
+    extra_args:
+      output: galn_tsz_1h, galn_tsz_2h, lensmagn_tsz_1h, lensmagn_tsz_2h, galn_gallens_1h,
+        galn_gallens_2h, lensmagn_gallens_1h, lensmagn_gallens_2h, galn_IA_2h
+      galaxy_samples_list_num: 8
+      galaxy_samples_list: 0,1,2,3,4,5,6,7
+      full_path_and_prefix_to_dndz_ngal: /Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_forjoint_bin
+      full_path_to_source_dndz_gal: /Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_source_normalized_bin4.txt
+      redshift_epsabs: 1.0e-40
+      redshift_epsrel: 0.001
+      mass_epsabs: 1.0e-40
+      mass_epsrel: 0.001
+      ndim_masses: 80
+      ndim_redshifts: 80
+      class_sz_verbose: 0
+      nonlinear_verbose: 0
+      dlogell: 0.3
+      multipoles_sz: ell_mock
+      ell_max: 8200.0
+      ell_min: 4.0
+      z_min: 1.0e-08
+      z_max: 2.0
+      M_min: 10000000000.0
+      M_max: 3500000000000000.0
+      hm_consistency: 1
+      delta for galaxies: 200c
+      delta for matter density: 200c
+      mass function: T08M200c
+      concentration parameter: D08
+      omega_b: 0.02242
+      omega_cdm: 0.11933
+      h: 0.6766
+      tau_reio: 0.0561
+      ln10^{10}A_s: 3.047
+      n_s: 0.9665
+      k_pivot: 0.05
+      N_ncdm: 1
+      N_ur: 2.0328
+      m_ncdm: 0.06
+      x_out_truncated_nfw_profile: 1.0
+      M0_HOD_ngal_0: 0.0
+      M0_HOD_ngal_1: 0.0
+      M0_HOD_ngal_2: 0.0
+      M0_HOD_ngal_3: 0.0
+      M0_HOD_ngal_4: 0.0
+      M0_HOD_ngal_5: 0.0
+      M0_HOD_ngal_6: 0.0
+      M0_HOD_ngal_7: 0.0
+      x_out_truncated_nfw_profile_satellite_galaxies_ngal_0: 1.0
+      x_out_truncated_nfw_profile_satellite_galaxies_ngal_1: 1.0
+      x_out_truncated_nfw_profile_satellite_galaxies_ngal_2: 1.0
+      x_out_truncated_nfw_profile_satellite_galaxies_ngal_3: 1.0
+      x_out_truncated_nfw_profile_satellite_galaxies_ngal_4: 1.0
+      x_out_truncated_nfw_profile_satellite_galaxies_ngal_5: 1.0
+      x_out_truncated_nfw_profile_satellite_galaxies_ngal_6: 1.0
+      x_out_truncated_nfw_profile_satellite_galaxies_ngal_7: 1.0
+      f_cen_HOD_ngal_0: 1.0
+      f_cen_HOD_ngal_1: 1.0
+      f_cen_HOD_ngal_2: 1.0
+      f_cen_HOD_ngal_3: 1.0
+      f_cen_HOD_ngal_4: 1.0
+      f_cen_HOD_ngal_5: 1.0
+      f_cen_HOD_ngal_6: 1.0
+      f_cen_HOD_ngal_7: 1.0
+      photo_z_params_ngal_0: 1.0
+      photo_z_params_ngal_1: 1.0
+      photo_z_params_ngal_2: 1.0
+      photo_z_params_ngal_3: 1.0
+      photo_z_params_ngal_4: 1.0
+      photo_z_params_ngal_5: 1.0
+      photo_z_params_ngal_6: 1.0
+      photo_z_params_ngal_7: 1.0
+      centrals_only_ngal_0: 0.0
+      centrals_only_ngal_1: 0.0
+      centrals_only_ngal_2: 0.0
+      centrals_only_ngal_3: 0.0
+      centrals_only_ngal_4: 1.0
+      centrals_only_ngal_5: 1.0
+      centrals_only_ngal_6: 1.0
+      centrals_only_ngal_7: 1.0
+      A_IA: 1.0
+      eta_IA: 1.6
+      C1_IA: 5.0e-14
+      use_pknl_in_2hterms_IA_only: 1
+      pressure profile: B12
+      units for tSZ spectrum: dimensionless
+      alpha_B12: 1.0
+      gamma_B12: -0.3
+      xc_B12: 0.497
+      x_outSZ: 4.0
+      use_fft_for_profiles_transform: 1
+      N_samp_fftw: 1024
+      x_min_gas_pressure_fftw: 1.0e-05
+      x_max_gas_pressure_fftw: 100000.0
+      n_z_pressure_profile: 80
+      n_m_pressure_profile: 80
+      n_l_pressure_profile: 80
+      l_min_gas_pressure_profile: 0.01
+      l_max_gas_pressure_profile: 50000.0
+likelihood:
+  soliket.yg.joint_yg_kg_ALL_BINS_miscenter.YXG_KXG_ALLBINS_MISCENTER_Likelihood:
+    data_directory: /Users/aleksandra/software/data_for_SOLikeT/
+    yxg_data_file: yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_
+    gxk_data_file: gglens_DES_healpy_1024_Maglim
+    cov_data_file: cov/combined_cov_gk_gy_Maglim_allBins_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt
+    bp_wind_yg_file: const/bpwf_namaster_yg_MaglimxACT_ellmax5601_ellmin30_dl.npy
+    bp_wind_gk_file: const/bpwf_namaster_ggkappa_Maglim_ellmax2201_ellmin30_dl.npy
+    pixwind_4096_file: const/pixel_window_bin_nside4096.txt
+    pixwind_1024_file: const/pixel_window_bin_nside1024.txt
+    Nbins_yg: 21
+    Nbins_kg: 9
+params:
+  P0_B12:
+    prior:
+      min: 0.0001
+      max: 20.0
+    ref: 2.26478
+    proposal: 0.05
+    latex: P0_{B12}
+  alpha_z_P0_B12:
+    prior:
+      min: -7.0
+      max: 7.0
+    ref: -2.38552
+    proposal: 0.07
+    latex: \alpha_z^{P0_{B12}}
+  beta_B12:
+    prior:
+      min: 1.0
+      max: 10.0
+    ref: 3.71346
+    proposal: 0.05
+    latex: \beta_{B12}
+  alpha_z_beta_B12:
+    prior:
+      min: -7.0
+      max: 7.0
+    ref: -0.823936
+    proposal: 0.05
+    latex: \alpha_z^{\beta_{B12}}
+  alpha_s_HOD_ngal_0:
+    prior:
+      min: 0.1
+      max: 4.0
+    ref: 1.83078
+    proposal: 0.04
+    latex: \alpha_{s}^\mathrm{1}
+  sigma_log10M_HOD_ngal_0:
+    prior:
+      min: 0.01
+      max: 2.0
+    ref: 0.568047
+    proposal: 0.03
+    latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{1}}
+  logM1_prime_ngal_0:
+    prior:
+      min: 11.35
+      max: 14.5
+    ref: 13.4059
+    proposal: 0.005
+    latex: \log(10^{10} M_1^\mathrm{\prime}^\mathrm{1})
+    drop: true
+  M1_prime_HOD_ngal_0:
+    value: 'lambda logM1_prime_ngal_0: 10**(logM1_prime_ngal_0)'
+    latex: M_1^\mathrm{\prime}^\mathrm{1}
+  logM_min_HOD_ngal_0:
+    prior:
+      min: 10.85
+      max: 12.85
+    ref: 11.8273
+    proposal: 0.005
+    latex: \log(10^{10} M_\mathrm{min}^\mathrm{1})
+    drop: true
+  M_min_HOD_ngal_0:
+    value: 'lambda logM_min_HOD_ngal_0: 10**(logM_min_HOD_ngal_0)'
+    latex: M_\mathrm{min}^\mathrm{1}
+  dndz_shift_ngal_0:
+    prior:
+      dist: norm
+      loc: -0.009
+      scale: 0.007
+    ref: -0.00682182
+    proposal: 0.003
+    latex: \delta_{z}
+  dndz_stretch_ngal_0:
+    prior:
+      dist: norm
+      loc: 0.975
+      scale: 0.062
+    ref: 1.01016
+    proposal: 0.02
+    latex: \sigma_{z}
+  alpha_s_HOD_ngal_1:
+    prior:
+      min: 0.1
+      max: 3.5
+    ref: 1.69208
+    proposal: 0.04
+    latex: \alpha_{s}^\mathrm{2}
+  sigma_log10M_HOD_ngal_1:
+    prior:
+      min: 0.01
+      max: 2.0
+    ref: 0.0254691
+    proposal: 0.03
+    latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{2}}
+  logM1_prime_ngal_1:
+    prior:
+      min: 11.35
+      max: 14.5
+    ref: 13.3966
+    proposal: 0.005
+    latex: \log(10^{10} M_1^\mathrm{\prime}^\mathrm{2})
+    drop: true
+  M1_prime_HOD_ngal_1:
+    value: 'lambda logM1_prime_ngal_1: 10**(logM1_prime_ngal_1)'
+    latex: M_1^\mathrm{\prime}^\mathrm{2}
+  logM_min_HOD_ngal_1:
+    prior:
+      min: 10.85
+      max: 12.85
+    ref: 11.899
+    proposal: 0.005
+    latex: \log(10^{10} M_\mathrm{min}^\mathrm{2})
+    drop: true
+  M_min_HOD_ngal_1:
+    value: 'lambda logM_min_HOD_ngal_1: 10**(logM_min_HOD_ngal_1)'
+    latex: M_\mathrm{min}^\mathrm{2}
+  dndz_shift_ngal_1:
+    prior:
+      dist: norm
+      loc: -0.035
+      scale: 0.01
+    ref: -0.037421
+    proposal: 0.005
+    latex: \delta_{z}
+  dndz_stretch_ngal_1:
+    prior:
+      dist: norm
+      loc: 1.306
+      scale: 0.093
+    ref: 1.21166
+    proposal: 0.05
+    latex: \sigma_{z}
+  alpha_s_HOD_ngal_2:
+    prior:
+      min: 0.1
+      max: 4.0
+    ref: 1.22773
+    proposal: 0.04
+    latex: \alpha_{s}^\mathrm{3}
+  sigma_log10M_HOD_ngal_2:
+    prior:
+      min: 0.01
+      max: 2.0
+    ref: 0.0909244
+    proposal: 0.03
+    latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{3}}
+  logM1_prime_ngal_2:
+    prior:
+      min: 11.35
+      max: 14.5
+    ref: 12.8215
+    proposal: 0.005
+    latex: \log(10^{10} M_1^\mathrm{\prime}^\mathrm{3})
+    drop: true
+  M1_prime_HOD_ngal_2:
+    value: 'lambda logM1_prime_ngal_2: 10**(logM1_prime_ngal_2)'
+    latex: M_1^\mathrm{\prime}^\mathrm{3}
+  logM_min_HOD_ngal_2:
+    prior:
+      min: 10.85
+      max: 12.85
+    ref: 11.8892
+    proposal: 0.005
+    latex: \log(10^{10} M_\mathrm{min}^\mathrm{3})
+    drop: true
+  M_min_HOD_ngal_2:
+    value: 'lambda logM_min_HOD_ngal_2: 10**(logM_min_HOD_ngal_2)'
+    latex: M_\mathrm{min}^\mathrm{3}
+  dndz_shift_ngal_2:
+    prior:
+      dist: norm
+      loc: -0.005
+      scale: 0.006
+    ref: -0.00613465
+    proposal: 0.003
+    latex: \delta_{z}
+  dndz_stretch_ngal_2:
+    prior:
+      dist: norm
+      loc: 0.87
+      scale: 0.054
+    ref: 0.87736
+    proposal: 0.03
+    latex: \sigma_{z}
+  alpha_s_HOD_ngal_3:
+    prior:
+      min: 0.1
+      max: 3.5
+    ref: 2.02558
+    proposal: 0.04
+    latex: \alpha_{s}^\mathrm{4}
+  sigma_log10M_HOD_ngal_3:
+    prior:
+      min: 0.01
+      max: 2.0
+    ref: 0.216542
+    proposal: 0.03
+    latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{4}}
+  logM1_prime_ngal_3:
+    prior:
+      min: 11.35
+      max: 14.5
+    ref: 13.5236
+    proposal: 0.005
+    latex: \log(10^{10} M_1^\mathrm{\prime}^\mathrm{4})
+    drop: true
+  M1_prime_HOD_ngal_3:
+    value: 'lambda logM1_prime_ngal_3: 10**(logM1_prime_ngal_3)'
+    latex: M_1^\mathrm{\prime}^\mathrm{4}
+  logM_min_HOD_ngal_3:
+    prior:
+      min: 10.85
+      max: 12.85
+    ref: 11.7543
+    proposal: 0.005
+    latex: \log(10^{10} M_\mathrm{min}^\mathrm{4})
+    drop: true
+  M_min_HOD_ngal_3:
+    value: 'lambda logM_min_HOD_ngal_3: 10**(logM_min_HOD_ngal_3)'
+    latex: M_\mathrm{min}^\mathrm{4}
+  dndz_shift_ngal_3:
+    prior:
+      dist: norm
+      loc: -0.007
+      scale: 0.006
+    ref: -0.00649464
+    proposal: 0.003
+    latex: \delta_{z}
+  dndz_stretch_ngal_3:
+    prior:
+      dist: norm
+      loc: 0.918
+      scale: 0.051
+    ref: 0.847394
+    proposal: 0.03
+    latex: \sigma_{z}
+  alpha_s_HOD_ngal_4:
+    value: 'lambda alpha_s_HOD_ngal_0: alpha_s_HOD_ngal_0'
+    latex: \alpha_{s}^\mathrm{5}
+  alpha_s_HOD_ngal_5:
+    value: 'lambda alpha_s_HOD_ngal_1: alpha_s_HOD_ngal_1'
+    latex: \alpha_{s}^\mathrm{6}
+  alpha_s_HOD_ngal_6:
+    value: 'lambda alpha_s_HOD_ngal_2: alpha_s_HOD_ngal_2'
+    latex: \alpha_{s}^\mathrm{7}
+  alpha_s_HOD_ngal_7:
+    value: 'lambda alpha_s_HOD_ngal_3: alpha_s_HOD_ngal_3'
+    latex: \alpha_{s}^\mathrm{8}
+  sigma_log10M_HOD_ngal_4:
+    value: 'lambda sigma_log10M_HOD_ngal_0: sigma_log10M_HOD_ngal_0'
+    latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{5}}
+  sigma_log10M_HOD_ngal_5:
+    value: 'lambda sigma_log10M_HOD_ngal_1: sigma_log10M_HOD_ngal_1'
+    latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{6}}
+  sigma_log10M_HOD_ngal_6:
+    value: 'lambda sigma_log10M_HOD_ngal_2: sigma_log10M_HOD_ngal_2'
+    latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{7}}
+  sigma_log10M_HOD_ngal_7:
+    value: 'lambda sigma_log10M_HOD_ngal_3: sigma_log10M_HOD_ngal_3'
+    latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{8}}
+  M_min_HOD_ngal_4:
+    value: 'lambda logM_min_HOD_ngal_0: 10**(logM_min_HOD_ngal_0)'
+    latex: M_\mathrm{min}^\mathrm{5}
+  M_min_HOD_ngal_5:
+    value: 'lambda logM_min_HOD_ngal_1: 10**(logM_min_HOD_ngal_1)'
+    latex: M_\mathrm{min}^\mathrm{6}
+  M_min_HOD_ngal_6:
+    value: 'lambda logM_min_HOD_ngal_2: 10**(logM_min_HOD_ngal_2)'
+    latex: M_\mathrm{min}^\mathrm{7}
+  M_min_HOD_ngal_7:
+    value: 'lambda logM_min_HOD_ngal_3: 10**(logM_min_HOD_ngal_3)'
+    latex: M_\mathrm{min}^\mathrm{8}
+  M1_prime_HOD_ngal_4:
+    value: 'lambda logM1_prime_ngal_0: 10**(logM1_prime_ngal_0)'
+    latex: M_1^\mathrm{\prime}^\mathrm{5}
+  M1_prime_HOD_ngal_5:
+    value: 'lambda logM1_prime_ngal_1: 10**(logM1_prime_ngal_1)'
+    latex: M_1^\mathrm{\prime}^\mathrm{6}
+  M1_prime_HOD_ngal_6:
+    value: 'lambda logM1_prime_ngal_2: 10**(logM1_prime_ngal_2)'
+    latex: M_1^\mathrm{\prime}^\mathrm{7}
+  M1_prime_HOD_ngal_7:
+    value: 'lambda logM1_prime_ngal_3: 10**(logM1_prime_ngal_3)'
+    latex: M_1^\mathrm{\prime}^\mathrm{8}
+  dndz_shift_ngal_4:
+    value: 'lambda dndz_shift_ngal_0: dndz_shift_ngal_0'
+    latex: \delta_{z_5}
+  dndz_stretch_ngal_4:
+    value: 'lambda dndz_stretch_ngal_0: dndz_stretch_ngal_0'
+    latex: \sigma_{z_5}
+  dndz_shift_ngal_5:
+    value: 'lambda dndz_shift_ngal_1: dndz_shift_ngal_1'
+    latex: \delta_{z_6}
+  dndz_stretch_ngal_5:
+    value: 'lambda dndz_stretch_ngal_1: dndz_stretch_ngal_1'
+    latex: \sigma_{z_6}
+  dndz_shift_ngal_6:
+    value: 'lambda dndz_shift_ngal_2: dndz_shift_ngal_2'
+    latex: \delta_{z_7}
+  dndz_stretch_ngal_6:
+    value: 'lambda dndz_stretch_ngal_2: dndz_stretch_ngal_2'
+    latex: \sigma_{z_7}
+  dndz_shift_ngal_7:
+    value: 'lambda dndz_shift_ngal_3: dndz_shift_ngal_3'
+    latex: \delta_{z_8}
+  dndz_stretch_ngal_7:
+    value: 'lambda dndz_stretch_ngal_3: dndz_stretch_ngal_3'
+    latex: \sigma_{z_8}
+  amplid_IA:
+    prior:
+      min: -5.0
+      max: 5.0
+    ref: 0.0
+    proposal: 0.93849923
+    latex: A_\mathrm{IA}
+  dndz_shift_source_gal:
+    prior:
+      dist: norm
+      loc: 0.0
+      scale: 0.017
+    ref: 0.0
+    proposal: 0.0023389853
+    latex: \delta_{z_s}
+  m_shear_calibration:
+    prior:
+      dist: norm
+      loc: -0.037
+      scale: 0.008
+    ref: -0.037
+    proposal: 0.003
+    latex: m
+  lnCmis:
+    prior:
+      dist: norm
+      loc: -1.1
+      scale: 0.2
+    ref: -1.1
+    proposal: 0.1
+    latex: \ln(c_{mis})
+    drop: true
+  cmis:
+    value: 'lambda lnCmis: 10**(lnCmis)'
+    latex: c_{mis}
+sampler:
+  mcmc:
+    covmat: auto
+    Rminus1_stop: 0.01
+    learn_proposal: true
+    learn_proposal_Rminus1_max: 100.0
+    learn_proposal_Rminus1_max_early: 300.0
+    proposal_scale: 2.4
+    max_tries: 5000
+output: joint_all_Maglim_P0_z_betaB12_z_miscenter_5-10
+stop_at_error: true
+timing: true

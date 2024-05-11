@@ -224,9 +224,10 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         ellmax_bin_kg = 2200
         ellmax_bin_yg = 5600
         fmis = 1.0
-        Rvir = 1.0
+        Rvir_list = [0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725,0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725]
         cmis = params_values_dict['cmis']
-        sigmaR_val = cmis * Rvir
+
+        # print("cmis", cmis)
 
         yg_all, kg_all = [], []
         yg_1h_all, yg_2h_all, ym_all, yg_1h_all_miscenter = [], [], [], []
@@ -261,6 +262,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
 
             ### Miscenter
             #First bin, then miscenter (do it for all 8 bins)
+            sigmaR_val = cmis * Rvir_list[i]
             ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
             ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
             ell_kg_bin, dl_kg_bin_1h_mis = self._bin(ell_theory_kg, cl_1h_theory_kg , self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
