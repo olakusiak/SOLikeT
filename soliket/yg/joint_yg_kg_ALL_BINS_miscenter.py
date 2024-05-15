@@ -27,7 +27,7 @@ from scipy.integrate import simps
 class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
     data_directory: Optional[str] = None
     y_map: Optional[str] = None
-    params = {"m_shear_calibration": 0., "amplid_IA": 1.0, 'cmis': 0}
+    params = {"m_shear_calibration": 0., "amplid_IA": 1.0, 'cmis0': 0, 'cmis1': 0, 'cmis2': 0,'cmis3': 0}
     yxg_data_file: Optional[str] = None
     gxk_data_file: Optional[str] = None
     cov_data_file: Optional[str] = None
@@ -115,7 +115,6 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         inter_cl= np.exp(inter_cl_log)
         if conv2cl==True: #go from dls to cls because the bpwf mutliplies by ell*(ell+1)/2pi
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
-
         #multiply by the pixel window function (from healpix for given nside)
         inter_cl = inter_cl*(pix_win[2:ellmax])**2
         #bin according to the bpwf
@@ -225,7 +224,6 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         ellmax_bin_yg = 5600
         fmis = 1.0
         Rvir_list = [0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725,0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725]
-        cmis = params_values_dict['cmis']
 
         # print("cmis", cmis)
 
@@ -262,6 +260,10 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
 
             ### Miscenter
             #First bin, then miscenter (do it for all 8 bins)
+            if i<4:
+                cmis = params_values_dict['cmis'+str(i)]
+            if i>4:
+                cmis = params_values_dict['cmis'+str(i-4)]
             sigmaR_val = cmis * Rvir_list[i]
             ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
             ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
