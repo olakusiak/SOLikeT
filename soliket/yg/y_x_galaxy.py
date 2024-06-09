@@ -108,7 +108,7 @@ class YXG_Likelihood(GaussianLikelihood):
         # ########
         # Cl_yxg
         ########
-        theory_yg = self.theory.get_Cl_yxg()
+        theory_yg = self.provider.get_Cl_yxg()
         ell_theory_yg = theory_yg['ell']
         cl_1h_theory_yg = theory_yg['1h']
         cl_2h_theory_yg = theory_yg['2h']
@@ -123,7 +123,7 @@ class YXG_Likelihood(GaussianLikelihood):
         # ########
         # Cl_yxmu
         ########
-        theory_ym = self.theory.get_Cl_yxmu()
+        theory_ym = self.provider.get_Cl_yxmu()
         ell_theory_ym = theory_ym['ell']
         cl_1h_theory_ym = theory_ym['1h']
         cl_2h_theory_ym = theory_ym['2h']

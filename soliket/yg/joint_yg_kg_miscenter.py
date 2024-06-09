@@ -232,11 +232,11 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
         yg_1h_all, yg_2h_all, ym_all, yg_1h_all_miscenter = [], [], [], []
         kg_1h_all, kg_2h_all, km_all, IA_all,  kg_1h_all_miscenter = [], [], [], [], []
 
-        theory_yg = self.theory.get_Cl_galnxtsz()
-        theory_kg = self.theory.get_Cl_galnxgallens()
-        theory_ym = self.theory.get_Cl_lensmagnxtsz()
-        theory_km = self.theory.get_Cl_lensmagnxgallens()
-        theory_gIA = self.theory.get_Cl_galnxIA()
+        theory_yg = self.provider.get_Cl_galnxtsz()
+        theory_kg = self.provider.get_Cl_galnxgallens()
+        theory_ym = self.provider.get_Cl_lensmagnxtsz()
+        theory_km = self.provider.get_Cl_lensmagnxgallens()
+        theory_gIA = self.provider.get_Cl_galnxIA()
         for i in range(2):
             Nb=str(i)
             ell_theory_yg, cl_1h_theory_yg, cl_2h_theory_yg = theory_yg[Nb]['ell'], theory_yg[Nb]['1h'], theory_yg[Nb]['2h']

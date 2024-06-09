@@ -137,11 +137,11 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
         ellmax_bin_yg = 5600
 
         yg_all, kg_all = [], []
-        theory_yg = self.theory.get_Cl_galnxtsz()
-        theory_kg = self.theory.get_Cl_galnxgallens()
-        theory_ym = self.theory.get_Cl_lensmagnxtsz()
-        theory_km = self.theory.get_Cl_lensmagnxgallens()
-        theory_gIA = self.theory.get_Cl_galnxIA()
+        theory_yg = self.provider.get_Cl_galnxtsz()
+        theory_kg = self.provider.get_Cl_galnxgallens()
+        theory_ym = self.provider.get_Cl_lensmagnxtsz()
+        theory_km = self.provider.get_Cl_lensmagnxgallens()
+        theory_gIA = self.provider.get_Cl_galnxIA()
         # print(theory_kg)
 
         for i in range(len(theory_yg)):

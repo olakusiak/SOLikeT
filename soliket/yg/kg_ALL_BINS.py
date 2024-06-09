@@ -117,9 +117,9 @@ class KXG_ALLBINS_Likelihood(GaussianLikelihood):
 
 
         kg_all = []
-        theory_kg = self.theory.get_Cl_galnxgallens()
-        theory_km = self.theory.get_Cl_lensmagnxgallens()
-        theory_gIA = self.theory.get_Cl_galnxIA()
+        theory_kg = self.provider.get_Cl_galnxgallens()
+        theory_km = self.provider.get_Cl_lensmagnxgallens()
+        theory_gIA = self.provider.get_Cl_galnxIA()
         # print(theory_kg)
 
         for i in range(len(theory_kg)):

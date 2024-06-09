@@ -213,8 +213,8 @@ class YXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         print("cmis:", cmis)
 
         yg_all, yg_1h_all, yg_2h_all, ym_all, yg_1h_all_miscenter = [], [], [], [], []
-        theory_yg = self.theory.get_Cl_galnxtsz()
-        theory_ym = self.theory.get_Cl_lensmagnxtsz()
+        theory_yg = self.provider.get_Cl_galnxtsz()
+        theory_ym = self.provider.get_Cl_lensmagnxtsz()
 
         for i in range(len(theory_yg)):
             Nb=str(i)

@@ -140,7 +140,7 @@ class joint_KXG_GXG_PS_Likelihood(GaussianLikelihood):
         ########
         # Cl_gxg
         ########
-        theory = self.theory.get_Cl_gxg()
+        theory = self.provider.get_Cl_gxg()
         cl_ell_theory = theory['ell']
         dl_1h_theory = theory['1h']
         dl_2h_theory = theory['2h']
@@ -154,7 +154,7 @@ class joint_KXG_GXG_PS_Likelihood(GaussianLikelihood):
         ########
         # Cl_gxmu
         ########
-        theory_gm = self.theory.get_Cl_gxmu()
+        theory_gm = self.provider.get_Cl_gxmu()
         cl_ell_theory_gm = theory_gm['ell']
 
         dl_1h_theory_gm = theory_gm['1h']
@@ -168,7 +168,7 @@ class joint_KXG_GXG_PS_Likelihood(GaussianLikelihood):
         ########
         # Cl_muxmu
         ########
-        theory_mm = self.theory.get_Cl_muxmu()
+        theory_mm = self.provider.get_Cl_muxmu()
         cl_ell_theory_mm = theory_mm['ell']
         dl_1h_theory_mm = theory_mm['1h']
         dl_2h_theory_mm = theory_mm['2h']
@@ -182,7 +182,7 @@ class joint_KXG_GXG_PS_Likelihood(GaussianLikelihood):
         ########
         # Cl_kxg
         ########
-        theory_kg = self.theory.get_Cl_kxg()
+        theory_kg = self.provider.get_Cl_kxg()
         ell_theory_kg = theory_kg['ell']
         dl_1h_theory_kg = theory_kg['1h']
         #print(dl_1h_theory)
@@ -195,7 +195,7 @@ class joint_KXG_GXG_PS_Likelihood(GaussianLikelihood):
         ##########
         # Cl_kxmu
         ##########
-        theory_km = self.theory.get_Cl_kxmu()
+        theory_km = self.provider.get_Cl_kxmu()
         cl_ell_theory_km = theory_km['ell']
         dl_1h_theory_km = theory_km['1h']
         dl_2h_theory_km = theory_km['2h']

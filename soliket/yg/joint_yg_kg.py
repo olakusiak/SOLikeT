@@ -134,7 +134,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         # ########
         # Cl_yxg
         ########
-        theory_yg = self.theory.get_Cl_yxg()
+        theory_yg = self.provider.get_Cl_yxg()
         ell_theory_yg = theory_yg['ell']
         cl_1h_theory_yg = theory_yg['1h']
         cl_2h_theory_yg = theory_yg['2h']
@@ -149,7 +149,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         # ########
         # Cl_yxmu
         ########
-        theory_ym = self.theory.get_Cl_yxmu()
+        theory_ym = self.provider.get_Cl_yxmu()
         ell_theory_ym = theory_ym['ell']
         cl_1h_theory_ym = theory_ym['1h']
         cl_2h_theory_ym = theory_ym['2h']
@@ -161,7 +161,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         ########
         # Cl_kgxg
         ########
-        theory_kg = self.theory.get_Cl_kgxg()
+        theory_kg = self.provider.get_Cl_kgxg()
         ell_theory_kg = theory_kg['ell']
         dl_1h_theory_kg = theory_kg['1h']
         dl_2h_theory_kg = theory_kg['2h']
@@ -176,7 +176,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         # ########
         # Cl_kgxmu
         ########
-        theory_km = self.theory.get_Cl_kgxmu()
+        theory_km = self.provider.get_Cl_kgxmu()
         ell_theory_km = theory_km['ell']
         dl_1h_theory_km = theory_km['1h']
         dl_2h_theory_km = theory_km['2h']
@@ -187,7 +187,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         #########
         # Cl_IAxg
         ########
-        theory_IA = self.theory.get_Cl_IAxg()
+        theory_IA = self.provider.get_Cl_IAxg()
         ell_theory_IA = theory_IA['ell']
         dl_2h_theory_IA = np.asarray(theory_IA['2h'])
         ell_IA_bin, cl_IA_bin = self._bin(ell_theory_km, dl_2h_theory_IA, self.ell_kg, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
@@ -195,8 +195,8 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
 
         kg = (1+m)*(cl_gk_bin + 2*(alpha-1)*cl_km_bin + A_IA*cl_IA_bin)
         yg = 1.e-6*(dl_yg_bin + 2*(alpha-1)*dl_ym_bin)
-        # print("yg: ", yg[:10])
-        # print("kg: ", kg)
+        print("yg: ", yg[:10])
+        print("kg: ", kg)
         # #print("yg + kg shape",yg.shape+kg.shape)
 
         cl_joint = np.concatenate((kg[:self.Nbins_kg], yg[:self.Nbins_yg]), axis=0) #remove the first bin ell=50

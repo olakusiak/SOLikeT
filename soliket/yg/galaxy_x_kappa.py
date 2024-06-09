@@ -117,7 +117,7 @@ class GXK_Likelihood(GaussianLikelihood):
         ########
         # Cl_kgxg
         ########
-        theory_kg = self.theory.get_Cl_kgxg()
+        theory_kg = self.provider.get_Cl_kgxg()
         ell_theory_kg = theory_kg['ell']
         dl_1h_theory_kg = theory_kg['1h']
         dl_2h_theory_kg = theory_kg['2h']
@@ -132,7 +132,7 @@ class GXK_Likelihood(GaussianLikelihood):
         # ########
         # Cl_kgxmu
         ########
-        theory_km = self.theory.get_Cl_kgxmu()
+        theory_km = self.provider.get_Cl_kgxmu()
         ell_theory_km = theory_km['ell']
         dl_1h_theory_km = theory_km['1h']
         dl_2h_theory_km = theory_km['2h']
@@ -143,7 +143,7 @@ class GXK_Likelihood(GaussianLikelihood):
         # ########
         # Cl_IAxg
         ########
-        theory_IA = self.theory.get_Cl_IAxg()
+        theory_IA = self.provider.get_Cl_IAxg()
         ell_theory_IA = theory_IA['ell']
         dl_2h_theory_IA = theory_IA['2h']
         ell_IA_binned, cl_IA_binned = self._bin(ell_theory_km, dl_2h_theory_IA, self.ell, ellmax_bin,  bpwf, pixwin, Npoints, conv2cl=True)
