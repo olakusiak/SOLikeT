@@ -17,6 +17,7 @@ from .yg.yg_ALL_BINS import YXG_ALLBINS_Likelihood
 from .yg.kg_ALL_BINS import KXG_ALLBINS_Likelihood
 from .yg.yg_ALL_BINS_miscenter import YXG_ALLBINS_MISCENTER_Likelihood
 from .yg.joint_yg_kg_ALL_BINS_miscenter import YXG_KXG_ALLBINS_MISCENTER_Likelihood
+from .yg.joint_yg_kg_miscenter import YXG_KXG_MISCENTER_Likelihood
 try:
     from .clusters import ClusterLikelihood  # noqa: F401
 except ImportError:

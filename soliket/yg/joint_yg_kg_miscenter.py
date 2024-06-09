@@ -24,13 +24,13 @@ import astropy.units as u
 from scipy.special import jv
 from scipy.integrate import simps
 
-class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
+class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
+    params = {"m_shear_calibration": 0., "amplid_IA": 1.0, 'cmis': 0,}
     data_directory: Optional[str] = None
-    y_map: Optional[str] = None
-    params = {"m_shear_calibration": 0., "amplid_IA": 1.0, 'cmis0': 0, 'cmis1': 0, 'cmis2': 0,'cmis3': 0}
     yxg_data_file: Optional[str] = None
     gxk_data_file: Optional[str] = None
     cov_data_file: Optional[str] = None
+    s_file: Optional[str] = None #s for lens mag
     bp_wind_yg_file: Optional[str] = None
     bp_wind_gk_file: Optional[str] = None
     pixwind_4096_file: Optional[str] = None
@@ -39,51 +39,46 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
     Nbins_kg: Optional[str] = None
     # Load the data
     def initialize(self):
-        self.covmat = np.loadtxt(os.path.join(self.data_directory, self.cov_data_file))
+        self.covfile = self.cov_data_file
+        self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
         self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
         self.bpwf_kg = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
         self.pw_bin_yg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
         self.pw_bin_kg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_1024_file))
         Np_yg = self.Nbins_yg
         Np_kg = self.Nbins_kg
+
+        D_yg = np.loadtxt(os.path.join(self.data_directory, self.yxg_data_file))
+        D_kg = np.loadtxt(os.path.join(self.data_directory, self.gxk_data_file))
+        cov = np.loadtxt(os.path.join(self.data_directory, self.covfile))
+
+        self.ell_yg = D_yg[0,:Np_yg]
+        self.ell_yg_full = D_yg[0,:Np_yg]
+        self.yg = D_yg[1,:Np_yg]
+        self.sigma_yg = D_yg[2,:Np_yg]
+
+        self.ell_kg = D_kg[0,:Np_kg]
+        self.ell_kg_full = D_kg[0,:Np_kg]
+        self.kg = D_kg[1,:Np_kg]
+        self.sigma_kg = D_kg[2,:Np_kg]
+        # print("ell ola yg :", self.ell_yg)
+        print("yg ola:", self.yg)
+        # # print("yg shape: ", self.yg.shape)
+        # print("ell ola kg :", self.ell_kg)
+        print("kg ola:", self.kg)
+        # # print("kg shape: ", self.kg.shape)
+        # #
+        # print("cov shape",cov.shape)
         Npoints = Np_kg + Np_yg
-        Nbins = 4
 
-        Cl_yg_all, Cl_kg_all = [], []
-        Sig_yg_all, Sig_kg_all = [], []
-        for i in range(1, Nbins+1):
-            # print("Maglim", i)
-            D_yg = np.loadtxt(self.data_directory + self.yxg_data_file + str(i) +"_dl.txt")
-            D_kg = np.loadtxt(self.data_directory + self.gxk_data_file + str(int(i)) + "_kappa4_dl.txt")
-            self.ell_yg = D_yg[0,:Np_yg]
-            self.ell_yg_full = D_yg[0,:Np_yg]
-            self.yg = D_yg[1,:Np_yg]
-            self.sigma_yg = D_yg[2,:Np_yg]
-
-            self.ell_kg = D_kg[0,:Np_kg]
-            self.ell_kg_full = D_kg[0,:Np_kg]
-            self.kg = D_kg[1,:Np_kg]
-            self.sigma_kg = D_kg[2,:Np_kg]
-            Cl_yg_all.append(D_yg[1,:Np_yg])
-            Cl_kg_all.append(D_kg[1,:Np_kg])
-            Sig_yg_all.append(D_yg[2,:Np_yg])
-            Sig_kg_all.append(D_kg[2,:Np_kg])
-
-
-        # Sig_all = np.concatenate((np.concatenate((Cl_yg_all)),np.concatenate((Cl_kg_all))), axis=0)
-        # self.covmat = np.diag(Sig_all**2)
-        # self.covmat =  cov[:Npoints,:Npoints]
+        self.covmat =  cov[:Npoints,:Npoints]
         self.inv_covmat = np.linalg.inv(self.covmat)
         self.det_covmat = np.linalg.det(self.covmat)
         #print(np.linalg.eig(self.covmat))
-        #print("cov:", (self.covmat).shape)
-        #print("Npoints = ", Npoints*4)
-
-        # Combine all data into one data vector
-        self.cl_joint = np.concatenate((np.concatenate((Cl_kg_all)),np.concatenate((Cl_yg_all))), axis=0)
-        self.ell_joint = np.concatenate((self.ell_kg, self.ell_kg,self.ell_kg, self.ell_kg, self.ell_yg, self.ell_yg, self.ell_yg, self.ell_yg,), axis=0)
-        print("self.ell_joint:", self.ell_joint)
-        print("self.cl_joint:", self.cl_joint)
+        # print("cov:", np.diag(self.covmat))
+        ###Combine into 1 data vector
+        self.cl_joint = np.concatenate((self.kg, self.yg), axis=0)
+        self.ell_joint = np.concatenate((self.ell_kg, self.ell_yg), axis=0)
         super().initialize()
 
     # def get_requirements(self):
@@ -115,6 +110,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         inter_cl= np.exp(inter_cl_log)
         if conv2cl==True: #go from dls to cls because the bpwf mutliplies by ell*(ell+1)/2pi
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
+
         #multiply by the pixel window function (from healpix for given nside)
         inter_cl = inter_cl*(pix_win[2:ellmax])**2
         #bin according to the bpwf
@@ -125,6 +121,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
             cl_binned[i] = np.sum(wi[2:len(inter_cl)+2]*inter_cl)
         #print("clbinned:", cl_binned)
         return ell_data, cl_binned
+    
     def _miscenter(self, Cl_orig, l_array, fmis, sigmaR_val, zbin_mean):
         # sigmaR_val = cmis * Rvir, #np.mean(self.PS_prepDV.r_vir_mat) ???????
 
@@ -209,9 +206,11 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
     def _cl2dl(self, l):
         return l*(l+1)/2/np.pi
 
+
+    # def _get_theory(self, **params_values_dict):
+    #     alpha=self.s
     def _get_theory(self, **params_values_dict):
-        alpha_lens_mag_list=[1.21, 1.15, 1.88, 1.97]
-        zbin_mean_list =[0.30066,0.45669, 0.62072, 0.76885, 0.30066,0.45669, 0.62072, 0.76885]
+        alpha=self.s
         m = params_values_dict['m_shear_calibration']
         A_IA = params_values_dict['amplid_IA']
         bpwf_yg = self.bpwf_yg[:,0,:]
@@ -223,9 +222,11 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         ellmax_bin_kg = 2200
         ellmax_bin_yg = 5600
         fmis = 1.0
-        Rvir_list = [0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725,0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725]
-
-        # print("cmis", cmis)
+        cmis = params_values_dict['cmis']
+        #Rvir_list = [0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725,0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725]
+        #zbin_mean_list =[0.30066,0.45669, 0.62072, 0.76885, 0.30066,0.45669, 0.62072, 0.76885]
+        Rvir_list = [0.5815186630703284, 0.5815186630703284]
+        zbin_mean_list = [0.30066, 0.30066]
 
         yg_all, kg_all = [], []
         yg_1h_all, yg_2h_all, ym_all, yg_1h_all_miscenter = [], [], [], []
@@ -236,7 +237,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         theory_ym = self.theory.get_Cl_lensmagnxtsz()
         theory_km = self.theory.get_Cl_lensmagnxgallens()
         theory_gIA = self.theory.get_Cl_galnxIA()
-        for i in range(len(theory_yg)):
+        for i in range(2):
             Nb=str(i)
             ell_theory_yg, cl_1h_theory_yg, cl_2h_theory_yg = theory_yg[Nb]['ell'], theory_yg[Nb]['1h'], theory_yg[Nb]['2h']
             ell_theory_kg, cl_1h_theory_kg, cl_2h_theory_kg = theory_kg[Nb]['ell'], theory_kg[Nb]['1h'], theory_kg[Nb]['2h']
@@ -246,7 +247,6 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
             # print("ell_theory_yg",ell_theory_yg)
             # print("cl_1h_theory_kg:", cl_1h_theory_kg[:10])
             # print("cl_2h_theory_kg:", cl_2h_theory_kg[:10])
-            print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
             # # dl_theory_yg = np.asarray(cl_1h_theory_yg) + np.asarray(cl_2h_theory_yg)
             ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
             ell_yg_bin, dl_yg_bin_2h = self._bin(ell_theory_yg, np.asarray(cl_2h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
@@ -261,11 +261,6 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
 
             ### Miscenter
             #First bin, then miscenter (do it for all 8 bins)
-            if i<4:
-                cmis = params_values_dict['cmis'+str(i)]
-            if i>4:
-                cmis = params_values_dict['cmis'+str(i-4)]
-            print(cmis)
             sigmaR_val = cmis * Rvir_list[i]
             ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
             ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
@@ -275,29 +270,29 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
             yg_1h_all.append(dl_yg_bin_1h), yg_2h_all.append(dl_yg_bin_2h), ym_all.append(dl_ym_bin),
             kg_1h_all.append(dl_kg_bin_1h), kg_2h_all.append(dl_kg_bin_2h), km_all.append(dl_km_bin), IA_all.append(dl_gIA_bin)
             yg_1h_all_miscenter.append(dl_yg_bin_1h_miscenter*self._cl2dl(ell_miscenter)),  kg_1h_all_miscenter.append(dl_kg_bin_1h_miscenter*self._cl2dl(ell_miscenter_kg))
-        # print(yg_1h_all)
-        # print(yg_2h_all)
-        for i in range(4):
-            # print("diff = ", (yg_1h_all[i] - yg_1h_all[i+4])/yg_1h_all[i])
-            # print("diff kg = ", (kg_1h_all[i] - kg_1h_all[i+4])/kg_1h_all[i])
-            yg_1h_cen_mis = yg_1h_all_miscenter[i+4]
-            kg_1h_cen_mis = kg_1h_all_miscenter[i+4]
-            # print("diff mis:", (yg_1h_all[i] - yg_1h_cen_mis) /yg_1h_all[i])
-            # print("1h cent : ", yg_1h_all[i+4])
-            # print("1h yg cent mis: ", yg_1h_cen_mis)
-            # print("1h kg cent mis: ", kg_1h_cen_mis)
-            yg_1h_sat = yg_1h_all[i] - yg_1h_all[i+4]
-            kg_1h_sat = kg_1h_all[i] - kg_1h_all[i+4]
-            alpha = alpha_lens_mag_list[i]
-            yg = 1.e-6*( yg_1h_cen_mis+yg_1h_sat +yg_2h_all[i]+ 2*(alpha-1)*ym_all[i] )
-            kg = (1+m)*(kg_1h_cen_mis+kg_1h_sat +kg_2h_all[i] + 2*(alpha-1)*km_all[i] + A_IA*IA_all[i]) # shear calibration m
-            yg_all.append(yg)
-            kg_all.append(kg)
+
+        print(yg_1h_all)
+        print(yg_2h_all)
+        print("diff = ", (yg_1h_all[0] - yg_1h_all[1])/yg_1h_all[0])
+        print("diff kg = ", (kg_1h_all[0] - kg_1h_all[1])/kg_1h_all[0])
+        yg_1h_cen_mis = yg_1h_all_miscenter[1]
+        kg_1h_cen_mis = kg_1h_all_miscenter[1]
+        # print("diff mis:", (yg_1h_all[i] - yg_1h_cen_mis) /yg_1h_all[i])
+        # print("1h cent : ", yg_1h_all[i+4])
+        print("1h yg cent mis: ", yg_1h_cen_mis)
+        print("lens mag:", 2*(alpha-1)*ym_all[0])
+        # print("1h kg cent mis: ", kg_1h_cen_mis)
+        yg_1h_sat = yg_1h_all[0] - yg_1h_all[1]
+        kg_1h_sat = kg_1h_all[0] - kg_1h_all[1]
+        yg = 1.e-6*( yg_1h_cen_mis+yg_1h_sat +yg_2h_all[0]+ 2*(alpha-1)*ym_all[0] )
+        kg = (1+m)*(kg_1h_cen_mis+kg_1h_sat +kg_2h_all[0] + 2*(alpha-1)*km_all[0] + A_IA*IA_all[0]) # shear calibration m
+        yg_all.append(yg)
+        kg_all.append(kg)
         # print("kg: ", kg_all)
         # print("yg: ", yg_all)
 
         cl_joint = np.concatenate((np.concatenate(kg_all), np.concatenate(yg_all)), axis=0)
-        print("cl joint:", cl_joint)
+        # print("cl joint:", cl_joint)
 
         if np.isnan(cl_joint).any()==True:
             print("Nans in the theory prediction!")
