@@ -31,6 +31,7 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
     gxk_data_file: Optional[str] = None
     cov_data_file: Optional[str] = None
     s_file: Optional[str] = None #s for lens mag
+    miscenter_file: Optional[str] = None
     bp_wind_yg_file: Optional[str] = None
     bp_wind_gk_file: Optional[str] = None
     pixwind_4096_file: Optional[str] = None
@@ -41,6 +42,7 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
     def initialize(self):
         self.covfile = self.cov_data_file
         self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
+        self.R, self.z = np.loadtxt(os.path.join(self.data_directory, self.miscenter_file))
         self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
         self.bpwf_kg = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
         self.pw_bin_yg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
@@ -225,9 +227,9 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
         cmis = params_values_dict['cmis']
         #Rvir_list = [0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725,0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725]
         #zbin_mean_list =[0.30066,0.45669, 0.62072, 0.76885, 0.30066,0.45669, 0.62072, 0.76885]
-        Rvir_list = [0.5815186630703284, 0.5815186630703284]
-        zbin_mean_list = [0.30066, 0.30066]
-
+        Rvir = self.R
+        zbin_mean = self.z
+        print(Rvir, zbin_mean)
         yg_all, kg_all = [], []
         yg_1h_all, yg_2h_all, ym_all, yg_1h_all_miscenter = [], [], [], []
         kg_1h_all, kg_2h_all, km_all, IA_all,  kg_1h_all_miscenter = [], [], [], [], []
@@ -261,11 +263,11 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
 
             ### Miscenter
             #First bin, then miscenter (do it for all 8 bins)
-            sigmaR_val = cmis * Rvir_list[i]
+            sigmaR_val = cmis * Rvir
             ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
+            ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean,)
             ell_kg_bin, dl_kg_bin_1h_mis = self._bin(ell_theory_kg, cl_1h_theory_kg , self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_miscenter_kg, dl_kg_bin_1h_miscenter = self._miscenter(dl_kg_bin_1h_mis/self._cl2dl(ell_kg_bin), ell_kg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
+            ell_miscenter_kg, dl_kg_bin_1h_miscenter = self._miscenter(dl_kg_bin_1h_mis/self._cl2dl(ell_kg_bin), ell_kg_bin, fmis, sigmaR_val, zbin_mean,)
             ## Append
             yg_1h_all.append(dl_yg_bin_1h), yg_2h_all.append(dl_yg_bin_2h), ym_all.append(dl_ym_bin),
             kg_1h_all.append(dl_kg_bin_1h), kg_2h_all.append(dl_kg_bin_2h), km_all.append(dl_km_bin), IA_all.append(dl_gIA_bin)
