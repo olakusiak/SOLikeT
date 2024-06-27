@@ -64,16 +64,17 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
         self.kg = D_kg[1,:Np_kg]
         self.sigma_kg = D_kg[2,:Np_kg]
         # print("ell ola yg :", self.ell_yg)
-        print("yg ola:", self.yg)
-        # # print("yg shape: ", self.yg.shape)
+        # print("yg ola:", self.yg)
+        print("yg shape: ", self.yg.shape)
         # print("ell ola kg :", self.ell_kg)
-        print("kg ola:", self.kg)
-        # # print("kg shape: ", self.kg.shape)
+        # print("kg ola:", self.kg)
+        print("kg shape: ", self.kg.shape)
         # #
-        # print("cov shape",cov.shape)
+        print("cov shape",cov.shape)
         Npoints = Np_kg + Np_yg
 
         self.covmat =  cov[:Npoints,:Npoints]
+        print(self.covmat.shape)
         self.inv_covmat = np.linalg.inv(self.covmat)
         self.det_covmat = np.linalg.det(self.covmat)
         #print(np.linalg.eig(self.covmat))
@@ -128,7 +129,7 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
         # sigmaR_val = cmis * Rvir, #np.mean(self.PS_prepDV.r_vir_mat) ???????
 
         nl = len(l_array)
-        l_array_full = np.linspace(np.min(l_array), np.max(l_array), 12000)
+        l_array_full = np.linspace(np.min(l_array), np.max(l_array), 50000)
         nl_full = len(l_array_full)
 
         Cl_yg_interp = interp1d(np.log(l_array), Cl_orig)
@@ -246,8 +247,9 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
             ell_theory_ym, cl_1h_theory_ym, cl_2h_theory_ym = theory_ym[Nb]['ell'], theory_ym[Nb]['1h'], theory_ym[Nb]['2h']
             ell_theory_km, cl_1h_theory_km, cl_2h_theory_km = theory_km[Nb]['ell'], theory_km[Nb]['1h'], theory_km[Nb]['2h']
             ell_theory_gIA,  cl_2h_theory_gIA = theory_gIA[Nb]['ell'],  theory_gIA[Nb]['2h']
-            # print("ell_theory_yg",ell_theory_yg)
-            # print("cl_1h_theory_kg:", cl_1h_theory_kg[:10])
+            print("ell_theory_yg",ell_theory_yg)
+            print("cl_1h_theory_kg:", cl_1h_theory_kg[:10])
+            print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
             # print("cl_2h_theory_kg:", cl_2h_theory_kg[:10])
             # # dl_theory_yg = np.asarray(cl_1h_theory_yg) + np.asarray(cl_2h_theory_yg)
             ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
@@ -257,33 +259,34 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
             ell_ym_bin, dl_ym_bin = self._bin(ell_theory_ym, np.asarray(cl_1h_theory_ym) + np.asarray(cl_2h_theory_ym), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
             ell_km_bin, dl_km_bin = self._bin(ell_theory_km, np.asarray(cl_1h_theory_km) + np.asarray(cl_2h_theory_km), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
             ell_gIA_bin, dl_gIA_bin = self._bin(ell_theory_gIA, np.asarray(cl_2h_theory_gIA), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            # print("dl_kg_bin:", dl_kg_bin)
+            print("dl_yg_bin:", dl_yg_bin_1h+dl_yg_bin_2h)
+            print("dl_kg_bin:", dl_kg_bin_1h+dl_kg_bin_2h)
             # print("dl_km_bin:", dl_km_bin)
             # print("dl_gIA_bin:", dl_gIA_bin
 
             ### Miscenter
             #First bin, then miscenter (do it for all 8 bins)
             sigmaR_val = cmis * Rvir
-            ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean,)
-            ell_kg_bin, dl_kg_bin_1h_mis = self._bin(ell_theory_kg, cl_1h_theory_kg , self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_miscenter_kg, dl_kg_bin_1h_miscenter = self._miscenter(dl_kg_bin_1h_mis/self._cl2dl(ell_kg_bin), ell_kg_bin, fmis, sigmaR_val, zbin_mean,)
+            #ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
+            ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean)
+            #ell_kg_bin, dl_kg_bin_1h_mis = self._bin(ell_theory_kg, cl_1h_theory_kg , self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
+            ell_miscenter_kg, dl_kg_bin_1h_miscenter = self._miscenter(dl_kg_bin_1h/self._cl2dl(ell_kg_bin), ell_kg_bin, fmis, sigmaR_val, zbin_mean)
             ## Append
             yg_1h_all.append(dl_yg_bin_1h), yg_2h_all.append(dl_yg_bin_2h), ym_all.append(dl_ym_bin),
             kg_1h_all.append(dl_kg_bin_1h), kg_2h_all.append(dl_kg_bin_2h), km_all.append(dl_km_bin), IA_all.append(dl_gIA_bin)
             yg_1h_all_miscenter.append(dl_yg_bin_1h_miscenter*self._cl2dl(ell_miscenter)),  kg_1h_all_miscenter.append(dl_kg_bin_1h_miscenter*self._cl2dl(ell_miscenter_kg))
 
-        print(yg_1h_all)
-        print(yg_2h_all)
+        # print(yg_1h_all)
+        # print(yg_2h_all)
         print("diff = ", (yg_1h_all[0] - yg_1h_all[1])/yg_1h_all[0])
         print("diff kg = ", (kg_1h_all[0] - kg_1h_all[1])/kg_1h_all[0])
         yg_1h_cen_mis = yg_1h_all_miscenter[1]
         kg_1h_cen_mis = kg_1h_all_miscenter[1]
         # print("diff mis:", (yg_1h_all[i] - yg_1h_cen_mis) /yg_1h_all[i])
         # print("1h cent : ", yg_1h_all[i+4])
-        print("1h yg cent mis: ", yg_1h_cen_mis)
-        print("lens mag:", 2*(alpha-1)*ym_all[0])
-        # print("1h kg cent mis: ", kg_1h_cen_mis)
+        print("1h yg cent mis: ", 1.e-6*yg_1h_cen_mis)
+        # print("lens mag:", 2*(alpha-1)*ym_all[0])
+        print("1h kg cent mis: ", kg_1h_cen_mis)
         yg_1h_sat = yg_1h_all[0] - yg_1h_all[1]
         kg_1h_sat = kg_1h_all[0] - kg_1h_all[1]
         yg = 1.e-6*( yg_1h_cen_mis+yg_1h_sat +yg_2h_all[0]+ 2*(alpha-1)*ym_all[0] )
@@ -294,7 +297,7 @@ class YXG_KXG_MISCENTER_Likelihood(GaussianLikelihood):
         # print("yg: ", yg_all)
 
         cl_joint = np.concatenate((np.concatenate(kg_all), np.concatenate(yg_all)), axis=0)
-        # print("cl joint:", cl_joint)
+        print("cl joint:", cl_joint)
 
         if np.isnan(cl_joint).any()==True:
             print("Nans in the theory prediction!")

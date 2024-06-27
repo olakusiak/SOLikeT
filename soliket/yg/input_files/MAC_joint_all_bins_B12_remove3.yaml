@@ -1,0 +1,493 @@
+output:  /Users/aleksandra/software/SOLikeT/soliket/yg/chains/joint_all_Maglim_B12_removeBin3_6-25
+
+
+likelihood:
+  soliket.yg.joint_yg_kg_ALL_BINS_remove1.YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood:
+    data_directory: "/Users/aleksandra/software/data_for_SOLikeT/"
+    yxg_data_file: "yg_ACT_DR6_healpy_4096_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_DES_Maglim_"
+    gxk_data_file: "gglens_DES_healpy_1024_Maglim"
+    cov_data_file: "cov/combined_cov_gk_gy_Maglim_allBins_kappa4_ilc_SZ_deproj_cib_dBeta_1.77_10.14_yy_dl.txt"
+    bp_wind_yg_file: "const/bpwf_namaster_yg_MaglimxACT_ellmax5601_ellmin30_dl.npy"
+    bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2201_ellmin30_dl.npy"
+    pixwind_4096_file: "const/pixel_window_bin_nside4096.txt"
+    pixwind_1024_file: "const/pixel_window_bin_nside1024.txt"
+    Nbins_yg: 21
+    Nbins_kg: 9
+    remove_bin: 3
+params:
+    P0_B12:
+      prior:
+        min: 0.0001
+        max: 20.00
+      ref:  1. #calibrated to match the data
+      proposal: 0.05
+      latex: P0_{B12}
+    alpha_z_P0_B12: # = -0.758;
+      prior:
+        min: -7.0
+        max: 7.0
+      ref: -0.758
+      proposal: 0.07
+      latex: \alpha_z^{P0_{B12}}
+    beta_B12: #outer slope
+      prior:
+        min: 1.00
+        max: 10.0
+      ref: 2.35
+      proposal: 0.05
+      latex: \beta_{B12}
+    alpha_z_beta_B12: #0.415;
+      prior:
+        min: -7.0
+        max: 7.0
+      ref:  0.415
+      proposal: 0.05
+      latex: \alpha_z^{\beta_{B12}}
+   
+    alpha_s_HOD_ngal_0: #Maglim 1 
+      prior:
+        min: 0.1
+        max: 4
+      ref: 1.74
+      proposal: 0.04
+      latex: \alpha_{s}^\mathrm{2}
+    sigma_log10M_HOD_ngal_0:
+      prior:
+        min: 0.01
+        max: 2.00 #DES prior is 0.5, but that seems very low
+      ref: 0.29
+      proposal: 0.03
+      latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{2}}
+    logM1_prime_ngal_0: # mass priors inflated
+      prior:
+        min: 11.35
+        max: 14.5
+      ref: 13.41
+      proposal: 0.005
+      latex: \log(10^{10} M_1^\mathrm{\prime}^\mathrm{2})
+      drop: true
+    M1_prime_HOD_ngal_0:
+      value: 'lambda logM1_prime_ngal_0: 10**(logM1_prime_ngal_0)'
+      latex: M_1^\mathrm{\prime}^\mathrm{2}
+    logM_min_HOD_ngal_0:
+      prior:
+        min: 10.85
+        max: 12.85
+      ref: 11.76
+      proposal: 0.005
+      latex: \log(10^{10} M_\mathrm{min}^\mathrm{2})
+      drop: true
+    M_min_HOD_ngal_0:
+      value: 'lambda logM_min_HOD_ngal_0: 10**(logM_min_HOD_ngal_0)'
+      latex: M_\mathrm{min}^\mathrm{2}
+    dndz_shift_ngal_0: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+      prior:
+        dist: norm
+        loc: -0.009
+        scale: 0.007
+      ref: -0.009
+      proposal: 0.003
+      latex: \delta_{z}
+    dndz_stretch_ngal_0:
+      prior:
+        dist: norm
+        loc: 0.975
+        scale: 0.062
+      ref: 0.975
+      proposal: 0.02
+      latex: \sigma_{z}
+    alpha_s_HOD_ngal_1: #Maglim 2
+      prior:
+        min: 0.1
+        max: 3.5
+      ref: 1.85
+      proposal: 0.04
+      latex: \alpha_{s}^\mathrm{2}
+    sigma_log10M_HOD_ngal_1:
+      prior:
+        min: 0.01
+        max: 2.00 #DES prior is 0.5, but that seems very low
+      ref: 0.3
+      proposal: 0.03
+      latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{2}}
+    logM1_prime_ngal_1: # mass priors inflated
+      prior:
+        min: 11.35
+        max: 14.5
+      ref: 13.42
+      proposal: 0.005
+      latex: \log(10^{10} M_1^\mathrm{\prime}^\mathrm{2})
+      drop: true
+    M1_prime_HOD_ngal_1:
+      value: 'lambda logM1_prime_ngal_1: 10**(logM1_prime_ngal_1)'
+      latex: M_1^\mathrm{\prime}^\mathrm{2}
+    logM_min_HOD_ngal_1:
+      prior:
+        min: 10.85
+        max: 12.85
+      ref: 11.91
+      proposal: 0.005
+      latex: \log(10^{10} M_\mathrm{min}^\mathrm{2})
+      drop: true
+    M_min_HOD_ngal_1:
+      value: 'lambda logM_min_HOD_ngal_1: 10**(logM_min_HOD_ngal_1)'
+      latex: M_\mathrm{min}^\mathrm{2}
+    dndz_shift_ngal_1: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+      prior:
+        dist: norm
+        loc: -0.035
+        scale: 0.01
+      ref: -0.035
+      proposal: 0.005
+      latex: \delta_{z}
+    dndz_stretch_ngal_1:
+      prior:
+        dist: norm
+        loc: 1.306
+        scale: 0.093
+      ref: 1.306
+      proposal: 0.05
+      latex: \sigma_{z}
+    alpha_s_HOD_ngal_2: #Maglim4 
+      prior:
+        min: 0.1
+        max: 3.5
+      ref: 2.29
+      proposal: 0.04
+      latex: \alpha_{s}^\mathrm{4}
+    sigma_log10M_HOD_ngal_2:
+      prior:
+        min: 0.01
+        max: 2.00 #DES prior is 0.5, but that seems very low
+      ref: 0.31
+      proposal: 0.03
+      latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{4}}
+    logM1_prime_ngal_2: # mass priors inflated
+      prior:
+        min: 11.35
+        max: 14.5
+      ref: 13.44
+      proposal: 0.005
+      latex: \log(10^{10} M_1^\mathrm{\prime}^\mathrm{4})
+      drop: true
+    M1_prime_HOD_ngal_2:
+      value: 'lambda logM1_prime_ngal_2: 10**(logM1_prime_ngal_2)'
+      latex: M_1^\mathrm{\prime}^\mathrm{4}
+    logM_min_HOD_ngal_2:
+      prior:
+        min: 10.85
+        max: 12.85
+      ref: 11.82
+      proposal: 0.005
+      latex: \log(10^{10} M_\mathrm{min}^\mathrm{4})
+      drop: true
+    M_min_HOD_ngal_2:
+      value: 'lambda logM_min_HOD_ngal_2: 10**(logM_min_HOD_ngal_2)'
+      latex: M_\mathrm{min}^\mathrm{4}
+    dndz_shift_ngal_2: # priors from Table2 in https://arxiv.org/pdf/2210.08633.pdf
+      prior:
+        dist: norm
+        loc: -0.007
+        scale: 0.006
+      ref: -0.007
+      proposal: 0.003
+      latex: \delta_{z}
+    dndz_stretch_ngal_2:
+      prior:
+        dist: norm
+        loc: 0.918
+        scale: 0.051
+      ref: 0.918
+      proposal: 0.03
+      latex: \sigma_{z}
+    alpha_s_HOD_ngal_3:
+      value: 'lambda alpha_s_HOD_ngal_0: alpha_s_HOD_ngal_0'
+      latex: \alpha_{s}^\mathrm{6}
+    alpha_s_HOD_ngal_4:
+      value: 'lambda alpha_s_HOD_ngal_1: alpha_s_HOD_ngal_1'
+      latex: \alpha_{s}^\mathrm{7}
+    alpha_s_HOD_ngal_5:
+      value: 'lambda alpha_s_HOD_ngal_2: alpha_s_HOD_ngal_2'
+      latex: \alpha_{s}^\mathrm{8}
+    sigma_log10M_HOD_ngal_3:
+      value: 'lambda sigma_log10M_HOD_ngal_0: sigma_log10M_HOD_ngal_0'
+      latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{6}}
+    sigma_log10M_HOD_ngal_4:
+      value: 'lambda sigma_log10M_HOD_ngal_1: sigma_log10M_HOD_ngal_1'
+      latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{7}}
+    sigma_log10M_HOD_ngal_5:
+      value: 'lambda sigma_log10M_HOD_ngal_2: sigma_log10M_HOD_ngal_2'
+      latex: \sigma_{log_{10} M_\mathrm{min}^\mathrm{8}}
+    M_min_HOD_ngal_3:
+      value: 'lambda logM_min_HOD_ngal_0: 10**(logM_min_HOD_ngal_0)'
+      latex: M_\mathrm{min}^\mathrm{6}
+    M_min_HOD_ngal_4:
+      value: 'lambda logM_min_HOD_ngal_1: 10**(logM_min_HOD_ngal_1)'
+      latex: M_\mathrm{min}^\mathrm{7}
+    M_min_HOD_ngal_5:
+      value: 'lambda logM_min_HOD_ngal_2: 10**(logM_min_HOD_ngal_2)'
+      latex: M_\mathrm{min}^\mathrm{8}
+    M1_prime_HOD_ngal_3:
+      value: 'lambda logM1_prime_ngal_0: 10**(logM1_prime_ngal_0)'
+      latex: M_1^\mathrm{\prime}^\mathrm{6}
+    M1_prime_HOD_ngal_4:
+      value: 'lambda logM1_prime_ngal_1: 10**(logM1_prime_ngal_1)'
+      latex: M_1^\mathrm{\prime}^\mathrm{7}
+    M1_prime_HOD_ngal_5:
+      value: 'lambda logM1_prime_ngal_2: 10**(logM1_prime_ngal_2)'
+      latex: M_1^\mathrm{\prime}^\mathrm{8}
+    dndz_shift_ngal_3:
+      value: 'lambda dndz_shift_ngal_0: dndz_shift_ngal_0'
+      latex: \delta_{z_6}
+    dndz_stretch_ngal_3:
+      value: 'lambda dndz_stretch_ngal_0: dndz_stretch_ngal_0'
+      latex: \sigma_{z_6}
+    dndz_shift_ngal_4:
+      value: 'lambda dndz_shift_ngal_1: dndz_shift_ngal_1'
+      latex: \delta_{z_7}
+    dndz_stretch_ngal_4:
+      value: 'lambda dndz_stretch_ngal_1: dndz_stretch_ngal_1'
+      latex: \sigma_{z_7}
+    dndz_shift_ngal_5:
+      value: 'lambda dndz_shift_ngal_2: dndz_shift_ngal_2'
+      latex: \delta_{z_8}
+    dndz_stretch_ngal_5:
+      value: 'lambda dndz_stretch_ngal_2: dndz_stretch_ngal_2'
+      latex: \sigma_{z_8}
+    # A_IA: #for kappa bin 4
+    #   prior:
+    #     min: -5.
+    #     max: 5.
+    #   ref: 0.
+    #   proposal: 0.05
+    #   latex: A_\mathrm{IA}
+    amplid_IA: #for kappa bin 4
+      prior:
+        min: -10.
+        max: 10.
+      ref: 0.
+      proposal: 0.05
+      latex: A_\mathrm{IA}
+    dndz_shift_source_gal: #for kappa bin 4
+      prior:
+        dist: norm
+        loc: 0.0
+        scale: 0.017
+      ref: 0.0
+      proposal: 0.008
+      latex: \delta_{z_s}
+    m_shear_calibration: #for kappa bin 4, E. 16 in https://arxiv.org/pdf/2105.13549
+      prior:
+        dist: norm
+        loc: -0.037
+        scale: 0.008
+      ref: -0.037
+      proposal: 0.003
+      latex: m
+    lnCmis0:
+      prior:
+        dist: norm
+        loc: -2.
+        scale: 0.5
+      ref: -2.
+      proposal: 0.5
+      latex: \ln(c_{mis}^0)
+      drop: true
+    cmis0:
+      value: 'lambda lnCmis0: np.exp(1)**(lnCmis0)'
+      latex: c_{mis}^0
+    lnCmis1:
+      prior:
+        dist: norm
+        loc: -2.
+        scale: 0.5
+      ref: -2.
+      proposal: 0.5
+      latex: \ln(c_{mis}^1)
+      drop: true
+    cmis1:
+      value: 'lambda lnCmis1: np.exp(1)**(lnCmis1)'
+      latex: c_{mis}^1
+    lnCmis2:
+      prior:
+        dist: norm
+        loc: -2.
+        scale: 0.5
+      ref: -2.
+      proposal: 0.5
+      latex: \ln(c_{mis}^2)
+      drop: true
+    cmis2:
+      value: 'lambda lnCmis2: np.exp(1)**(lnCmis2)'
+      latex: c_{mis}^2
+
+      
+# sampler:
+#     mcmc:
+#       covmat: null
+#       #covmat: "/global/homes/a/akusiak/software/SOLikeT/soliket/yg/chains/joint_all_Maglim_P0_z_betaB12_z_5-14_miscenter.covmat"
+#       Rminus1_stop: 0.01
+#       learn_proposal: True
+#       learn_proposal_Rminus1_max: 100.0
+#       learn_proposal_Rminus1_max_early: 300.0
+#       #drag: true
+#       #output_every: 10s
+#       proposal_scale: 2.4
+#       max_tries: 5000
+sampler:
+    evaluate:
+      override:
+         P0_B12: 2.2647802
+         alpha_z_P0_B12: -2.3855163
+         beta_B12: 3.7134635
+         alpha_z_beta_B12: -0.82393617
+         alpha_s_HOD_ngal_0: 1.6920765
+         sigma_log10M_HOD_ngal_0: 0.025469127
+         dndz_shift_ngal_0: -0.037421004
+         dndz_stretch_ngal_0: 1.211659
+         alpha_s_HOD_ngal_1: 1.2277313
+         sigma_log10M_HOD_ngal_1: 0.090924434
+         dndz_shift_ngal_1: -0.0061346504
+         dndz_stretch_ngal_1: 0.87735989
+         alpha_s_HOD_ngal_2: 2.025582
+         sigma_log10M_HOD_ngal_2: 0.21654219
+         dndz_shift_ngal_2: -0.0064946386
+         dndz_stretch_ngal_2: 0.84739421
+         amplid_IA: 2.3551736
+         m_shear_calibration: -0.037
+         dndz_shift_source_gal: 0.025811891
+         logM1_prime_ngal_0: 13.396579162471516
+         logM_min_HOD_ngal_0: 11.899009282837708
+         logM1_prime_ngal_1: 12.82154508730054
+         logM_min_HOD_ngal_1: 11.889230847886253
+         logM1_prime_ngal_2: 13.523606989077798
+         logM_min_HOD_ngal_2: 11.75434429858862
+         lnCmis1: -2.
+         lnCmis2: -1.5
+         lnCmis0: -1.3
+
+
+
+theory :
+  classy_szfast.classy_sz.classy_sz:
+     use_class_sz_fast_mode: 1
+     use_class_sz_no_cosmo_mode : 1
+     extra_args:
+                 output: 'galn_tsz_1h, galn_tsz_2h, lensmagn_tsz_1h, lensmagn_tsz_2h, galn_gallens_1h, galn_gallens_2h, lensmagn_gallens_1h, lensmagn_gallens_2h, galn_IA_2h'
+                 galaxy_samples_list_num : 6 # the number of galaxy samples
+                 galaxy_samples_list : '0,1,2,3,4,5' # the id string of each sample, can be any integer
+                 full_path_and_prefix_to_dndz_ngal : '/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_maglim_removeBin3_'
+                 full_path_to_source_dndz_gal: '/Users/aleksandra/software/class_sz/class_sz_auxiliary_files/nz_source_normalized_bin4.txt' # source galaxies
+
+                 ### Precision
+                 redshift_epsabs : 1.0e-40
+                 redshift_epsrel : 1.e-3
+                 mass_epsabs : 1.0e-40
+                 mass_epsrel : 1.e-3
+                 ndim_masses : 80
+                 ndim_redshifts : 80
+                 class_sz_verbose : 0
+                 nonlinear_verbose : 0
+
+                 dlogell: 0.3
+                 multipoles_sz: 'ell_mock'
+                 ell_max: 8200.0
+                 ell_min: 4.0
+
+                 z_min : 1.0e-8 #1.0e-8 problems on stampede
+                 z_max : 2.0
+                 M_min : 1.0e10
+                 M_max : 3.5e15
+
+                 hm_consistency : 1
+                 delta for galaxies : "200c"
+                 delta for matter density: "200c"
+                 mass function: 'T08M200c'
+                 concentration parameter: 'D08' #tbd
+
+                 ### Cosmology
+                 ### Planck 2018 (last column Table 2)
+                 omega_b: 0.02242
+                 omega_cdm: 0.11933
+                 # sigma8:  0.8102
+                 h: 0.6766
+                 tau_reio: 0.0561
+                 ln10^{10}A_s: 3.047
+                 n_s: 0.9665
+
+                 k_pivot: 0.05
+                 N_ncdm: 1
+                 N_ur: 2.0328
+                 m_ncdm: 0.06
+
+                 ####HOD PARAMS
+                 x_out_truncated_nfw_profile: 1.0 #for lensing
+
+                 M0_HOD_ngal_0: 0. # not automatically equal to 0
+                 M0_HOD_ngal_1: 0.
+                 M0_HOD_ngal_2: 0.
+                 M0_HOD_ngal_3: 0.
+                 M0_HOD_ngal_4: 0. # not automatically equal to 0
+                 M0_HOD_ngal_5: 0.
+                 x_out_truncated_nfw_profile_satellite_galaxies_ngal_0:  1.0
+                 x_out_truncated_nfw_profile_satellite_galaxies_ngal_1:  1.0
+                 x_out_truncated_nfw_profile_satellite_galaxies_ngal_2:  1.0
+                 x_out_truncated_nfw_profile_satellite_galaxies_ngal_3:  1.0
+                 x_out_truncated_nfw_profile_satellite_galaxies_ngal_4:  1.0
+                 x_out_truncated_nfw_profile_satellite_galaxies_ngal_5:  1.0
+                 f_cen_HOD_ngal_0: 1.
+                 f_cen_HOD_ngal_1: 1.
+                 f_cen_HOD_ngal_2: 1.
+                 f_cen_HOD_ngal_3: 1.
+                 f_cen_HOD_ngal_4: 1.
+                 f_cen_HOD_ngal_5: 1.
+
+
+                 #photo-z
+                 # Delta_z_lens : 0.0 #obsolete args
+                 # Delta_z_source : 0.0
+                 photo_z_params_ngal_0: 1.
+                 photo_z_params_ngal_1: 1.
+                 photo_z_params_ngal_2: 1.
+                 photo_z_params_ngal_3: 1.
+                 photo_z_params_ngal_4: 1.
+                 photo_z_params_ngal_5: 1.
+
+                 centrals_only_ngal_0: 0.
+                 centrals_only_ngal_1: 0.
+                 centrals_only_ngal_2: 0.
+                 centrals_only_ngal_3: 1.
+                 centrals_only_ngal_4: 1.
+                 centrals_only_ngal_5: 1.
+       
+
+                 #IA
+                 A_IA: 1.0 # IA amplidute sampled in cobaya!
+                 eta_IA: 1.6
+                 C1_IA: 5e-14
+                 use_pknl_in_2hterms_IA_only: 1
+
+                 # #### Pressure profile
+                 pressure profile : 'B12'
+                 units for tSZ spectrum: 'dimensionless'
+                 truncate_gas_pressure_wrt_rvir: 1. 
+                 x_outSZ: 4.
+
+
+                 ## fast params
+                 use_fft_for_profiles_transform : 1
+                 N_samp_fftw : 1024
+                 # l_min_samp_fftw: 1e-12
+                 # l_max_samp_fftw: 1e12
+                 x_min_gas_pressure_fftw : 1e-5
+                 x_max_gas_pressure_fftw : 1e5
+                 n_z_pressure_profile: 80
+                 n_m_pressure_profile: 80
+                 n_l_pressure_profile: 80
+
+                 l_min_gas_pressure_profile:  1.e-2
+                 l_max_gas_pressure_profile:  5.e4
+
+stop_at_error: True
+debug: False
+timing: True
