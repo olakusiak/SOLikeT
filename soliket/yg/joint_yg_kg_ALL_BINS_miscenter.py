@@ -83,8 +83,8 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         # Combine all data into one data vector
         self.cl_joint = np.concatenate((np.concatenate((Cl_kg_all)),np.concatenate((Cl_yg_all))), axis=0)
         self.ell_joint = np.concatenate((self.ell_kg, self.ell_kg,self.ell_kg, self.ell_kg, self.ell_yg, self.ell_yg, self.ell_yg, self.ell_yg,), axis=0)
-        print("self.ell_joint:", self.ell_joint)
-        print("self.cl_joint:", self.cl_joint)
+        # print("self.ell_joint:", self.ell_joint)
+        # print("self.cl_joint:", self.cl_joint)
         super().initialize()
 
     # def get_requirements(self):
@@ -247,7 +247,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
             # print("ell_theory_yg",ell_theory_yg)
             # print("cl_1h_theory_kg:", cl_1h_theory_kg[:10])
             # print("cl_2h_theory_kg:", cl_2h_theory_kg[:10])
-            print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
+            # print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
             # # dl_theory_yg = np.asarray(cl_1h_theory_yg) + np.asarray(cl_2h_theory_yg)
             ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
             ell_yg_bin, dl_yg_bin_2h = self._bin(ell_theory_yg, np.asarray(cl_2h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
@@ -267,7 +267,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
                 cmis = params_values_dict['cmis'+str(i)]
             if i>=4:
                 cmis = params_values_dict['cmis'+str(i-4)]
-            print(cmis)
+            # print(cmis)
             sigmaR_val = cmis * Rvir_list[i]
             ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
             ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
@@ -300,7 +300,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         # print("yg: ", yg_all)
 
         cl_joint = np.concatenate((np.concatenate(kg_all), np.concatenate(yg_all)), axis=0)
-        print("cl joint:", cl_joint)
+        # print("cl joint:", cl_joint)
 
         if np.isnan(cl_joint).any()==True:
             print("Nans in the theory prediction!")

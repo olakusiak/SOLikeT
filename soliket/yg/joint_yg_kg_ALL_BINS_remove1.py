@@ -46,7 +46,7 @@ class YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood(GaussianLikelihood):
         Nbins = 3
         self.Nbins = Nbins
         removeBin = self.remove_bin
-        print("remove bin=", removeBin)
+        # print("remove bin=", removeBin)
 
         covariance_full = np.loadtxt(os.path.join(self.data_directory, self.cov_data_file))
         self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
@@ -70,7 +70,7 @@ class YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood(GaussianLikelihood):
         Sig_yg_all, Sig_kg_all = [], []
         for i in range(1, 5):
             if i != removeBin:
-                print("Maglim", i)
+                # print("Maglim", i)
                 D_yg = np.loadtxt(self.data_directory + self.yxg_data_file + str(i) +"_dl.txt")
                 D_kg = np.loadtxt(self.data_directory + self.gxk_data_file + str(int(i)) + "_kappa4_dl.txt")
                 self.ell_yg = D_yg[0,:Np_yg]
@@ -96,8 +96,8 @@ class YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood(GaussianLikelihood):
         # Combine all data into one data vector
         self.cl_joint = np.concatenate((np.concatenate((Cl_kg_all)),np.concatenate((Cl_yg_all))), axis=0)
         self.ell_joint = np.concatenate((self.ell_kg, self.ell_kg,self.ell_kg, self.ell_yg, self.ell_yg, self.ell_yg,), axis=0)
-        print("self.ell_joint:", self.ell_joint)
-        print("self.cl_joint:", self.cl_joint)
+        # print("self.ell_joint:", self.ell_joint)
+        # print("self.cl_joint:", self.cl_joint)
         super().initialize()
 
     # def get_requirements(self):
@@ -228,14 +228,13 @@ class YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood(GaussianLikelihood):
         zbin_mean_list =[0.30066,0.45669, 0.62072, 0.76885, 0.30066,0.45669, 0.62072, 0.76885]
         Rvir_list = [0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725,0.5815186630703284,0.5416370667935042, 0.432821322403854,0.41465765872793725]
         index_remove  = self.remove_bin-1 
-    
 
         del zbin_mean_list[index_remove]
         del zbin_mean_list[index_remove+self.Nbins]
         del Rvir_list[index_remove]
         del Rvir_list[index_remove+self.Nbins]
         del alpha_lens_mag_list[index_remove]
-        print("alpha_lens_mag_list", alpha_lens_mag_list)
+        # print("alpha_lens_mag_list", alpha_lens_mag_list)
 
         m = params_values_dict['m_shear_calibration']
         A_IA = params_values_dict['amplid_IA']
@@ -249,7 +248,7 @@ class YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood(GaussianLikelihood):
         ellmax_bin_kg = 2200
         ellmax_bin_yg = 5600
         fmis = 1.0
-        print("Nins", Nbins)
+        
         # print("cmis", cmis)
 
         yg_all, kg_all = [], []
@@ -324,7 +323,7 @@ class YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood(GaussianLikelihood):
         # print("yg: ", yg_all)
 
         cl_joint = np.concatenate((np.concatenate(kg_all), np.concatenate(yg_all)), axis=0)
-        print("cl joint:", cl_joint)
+        # print("cl joint:", cl_joint)
 
         if np.isnan(cl_joint).any()==True:
             print("Nans in the theory prediction!")

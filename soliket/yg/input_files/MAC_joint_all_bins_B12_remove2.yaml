@@ -321,49 +321,49 @@ params:
       latex: c_{mis}^2
 
       
-# sampler:
-#     mcmc:
-#       covmat: null
-#       #covmat: "/global/homes/a/akusiak/software/SOLikeT/soliket/yg/chains/joint_all_Maglim_P0_z_betaB12_z_5-14_miscenter.covmat"
-#       Rminus1_stop: 0.01
-#       learn_proposal: True
-#       learn_proposal_Rminus1_max: 100.0
-#       learn_proposal_Rminus1_max_early: 300.0
-#       #drag: true
-#       #output_every: 10s
-#       proposal_scale: 2.4
-#       max_tries: 5000
 sampler:
-    evaluate:
-      override:
-         P0_B12: 2.2647802
-         alpha_z_P0_B12: -2.3855163
-         beta_B12: 3.7134635
-         alpha_z_beta_B12: -0.82393617
-         alpha_s_HOD_ngal_0: 1.6920765
-         sigma_log10M_HOD_ngal_0: 0.025469127
-         dndz_shift_ngal_0: -0.037421004
-         dndz_stretch_ngal_0: 1.211659
-         alpha_s_HOD_ngal_1: 1.2277313
-         sigma_log10M_HOD_ngal_1: 0.090924434
-         dndz_shift_ngal_1: -0.0061346504
-         dndz_stretch_ngal_1: 0.87735989
-         alpha_s_HOD_ngal_2: 2.025582
-         sigma_log10M_HOD_ngal_2: 0.21654219
-         dndz_shift_ngal_2: -0.0064946386
-         dndz_stretch_ngal_2: 0.84739421
-         amplid_IA: 2.3551736
-         m_shear_calibration: -0.037
-         dndz_shift_source_gal: 0.025811891
-         logM1_prime_ngal_0: 13.396579162471516
-         logM_min_HOD_ngal_0: 11.899009282837708
-         logM1_prime_ngal_1: 12.82154508730054
-         logM_min_HOD_ngal_1: 11.889230847886253
-         logM1_prime_ngal_2: 13.523606989077798
-         logM_min_HOD_ngal_2: 11.75434429858862
-         lnCmis1: -2.
-         lnCmis2: -1.5
-         lnCmis0: -1.3
+    mcmc:
+      covmat: null
+      #covmat: "/global/homes/a/akusiak/software/SOLikeT/soliket/yg/chains/joint_all_Maglim_P0_z_betaB12_z_5-14_miscenter.covmat"
+      Rminus1_stop: 0.01
+      learn_proposal: True
+      learn_proposal_Rminus1_max: 100.0
+      learn_proposal_Rminus1_max_early: 300.0
+      #drag: true
+      #output_every: 10s
+      proposal_scale: 2.4
+      max_tries: 5000
+# sampler:
+#     evaluate:
+#       override:
+#          P0_B12: 2.2647802
+#          alpha_z_P0_B12: -2.3855163
+#          beta_B12: 3.7134635
+#          alpha_z_beta_B12: -0.82393617
+#          alpha_s_HOD_ngal_0: 1.6920765
+#          sigma_log10M_HOD_ngal_0: 0.025469127
+#          dndz_shift_ngal_0: -0.037421004
+#          dndz_stretch_ngal_0: 1.211659
+#          alpha_s_HOD_ngal_1: 1.2277313
+#          sigma_log10M_HOD_ngal_1: 0.090924434
+#          dndz_shift_ngal_1: -0.0061346504
+#          dndz_stretch_ngal_1: 0.87735989
+#          alpha_s_HOD_ngal_2: 2.025582
+#          sigma_log10M_HOD_ngal_2: 0.21654219
+#          dndz_shift_ngal_2: -0.0064946386
+#          dndz_stretch_ngal_2: 0.84739421
+#          amplid_IA: 2.3551736
+#          m_shear_calibration: -0.037
+#          dndz_shift_source_gal: 0.025811891
+#          logM1_prime_ngal_0: 13.396579162471516
+#          logM_min_HOD_ngal_0: 11.899009282837708
+#          logM1_prime_ngal_1: 12.82154508730054
+#          logM_min_HOD_ngal_1: 11.889230847886253
+#          logM1_prime_ngal_2: 13.523606989077798
+#          logM_min_HOD_ngal_2: 11.75434429858862
+#          lnCmis1: -2.
+#          lnCmis2: -1.5
+#          lnCmis0: -1.3
 
 
 
