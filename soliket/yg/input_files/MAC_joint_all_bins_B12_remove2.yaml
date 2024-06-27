@@ -331,6 +331,7 @@ sampler:
       learn_proposal_Rminus1_max_early: 300.0
       #drag: true
       #output_every: 10s
+      learn_every: 100
       proposal_scale: 2.4
       max_tries: 5000
 # sampler:
