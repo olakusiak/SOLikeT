@@ -23,6 +23,8 @@ from astropy.cosmology import FlatLambdaCDM
 import astropy.units as u
 from scipy.special import jv
 from scipy.integrate import simps
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 class YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood(GaussianLikelihood):
     data_directory: Optional[str] = None
@@ -292,6 +294,7 @@ class YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood(GaussianLikelihood):
                 cmis = params_values_dict['cmis'+str(i-Nbins)]
             # print("cmis", i, cmis)
             sigmaR_val = cmis * Rvir_list[i]
+            warnings.filterwarnings("ignore", category=DeprecationWarning)
             ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
             ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
             ell_kg_bin, dl_kg_bin_1h_mis = self._bin(ell_theory_kg, cl_1h_theory_kg , self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
