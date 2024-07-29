@@ -29,8 +29,6 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
     cov_data_file: Optional[str] = None
     bp_wind_yg_file: Optional[str] = None
     bp_wind_gk_file: Optional[str] = None
-    pixwind_4096_file: Optional[str] = None
-    pixwind_1024_file: Optional[str] = None
     Nbins_yg: Optional[str] = None
     Nbins_kg: Optional[str] = None
     # Load the data
@@ -38,8 +36,6 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
         self.covmat = np.loadtxt(os.path.join(self.data_directory, self.cov_data_file))
         self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
         self.bpwf_kg = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
-        self.pw_bin_yg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
-        self.pw_bin_kg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_1024_file))
         Np_yg = self.Nbins_yg
         Np_kg = self.Nbins_kg
         Npoints = Np_kg + Np_yg
@@ -113,7 +109,7 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
 
         #multiply by the pixel window function (from healpix for given nside)
-        inter_cl = inter_cl*(pix_win[2:ellmax])**2
+        inter_cl = inter_cl
         #bin according to the bpwf
         cl_binned = np.zeros(Nellbins)
         for i in range (Nellbins):
@@ -129,8 +125,6 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
         A_IA = params_values_dict['amplid_IA']
         bpwf_yg = self.bpwf_yg[:,0,:]
         bpwf_kg = self.bpwf_kg[:,0,:]
-        pixwin_yg = self.pw_bin_yg
-        pixwin_kg = self.pw_bin_kg
         Np_yg = self.Nbins_yg
         Np_kg = self.Nbins_kg
         ellmax_bin_kg = 2200
@@ -155,11 +149,11 @@ class YXG_KXG_ALLBINS_Likelihood(GaussianLikelihood):
             # print("cl_1h_theory_kg:", cl_1h_theory_kg[:10])
             # print("cl_2h_theory_kg:", cl_2h_theory_kg[:10])
             # # dl_theory_yg = np.asarray(cl_1h_theory_yg) + np.asarray(cl_2h_theory_yg)
-            ell_yg_bin, dl_yg_bin = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg) + np.asarray(cl_2h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_kg_bin, dl_kg_bin = self._bin(ell_theory_kg, np.asarray(cl_1h_theory_kg) + np.asarray(cl_2h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_ym_bin, dl_ym_bin = self._bin(ell_theory_ym, np.asarray(cl_1h_theory_ym) + np.asarray(cl_2h_theory_ym), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_km_bin, dl_km_bin = self._bin(ell_theory_km, np.asarray(cl_1h_theory_km) + np.asarray(cl_2h_theory_km), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_gIA_bin, dl_gIA_bin = self._bin(ell_theory_gIA, np.asarray(cl_2h_theory_gIA), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
+            ell_yg_bin, dl_yg_bin = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg) + np.asarray(cl_2h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg,  Nellbins=Np_yg, conv2cl=True)
+            ell_kg_bin, dl_kg_bin = self._bin(ell_theory_kg, np.asarray(cl_1h_theory_kg) + np.asarray(cl_2h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg,  Nellbins=Np_kg, conv2cl=True)
+            ell_ym_bin, dl_ym_bin = self._bin(ell_theory_ym, np.asarray(cl_1h_theory_ym) + np.asarray(cl_2h_theory_ym), self.ell_yg_full, ellmax_bin_yg, bpwf_yg,  Nellbins=Np_yg, conv2cl=True)
+            ell_km_bin, dl_km_bin = self._bin(ell_theory_km, np.asarray(cl_1h_theory_km) + np.asarray(cl_2h_theory_km), self.ell_kg_full, ellmax_bin_kg, bpwf_kg,  Nellbins=Np_kg, conv2cl=True)
+            ell_gIA_bin, dl_gIA_bin = self._bin(ell_theory_gIA, np.asarray(cl_2h_theory_gIA), self.ell_kg_full, ellmax_bin_kg, bpwf_kg,  Nellbins=Np_kg, conv2cl=True)
             # print("dl_kg_bin:", dl_kg_bin)
             # print("dl_km_bin:", dl_km_bin)
             # print("dl_gIA_bin:", dl_gIA_bin)

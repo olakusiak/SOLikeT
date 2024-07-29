@@ -51,12 +51,10 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         self.ell_yg = D_yg[0,:Np_yg]
         self.ell_yg_full = D_yg[0,:Np_yg]
         self.yg = D_yg[1,:Np_yg]
-        self.sigma_yg = D_yg[2,:Np_yg]
 
         self.ell_kg = D_kg[0,:Np_kg]
         self.ell_kg_full = D_kg[0,:Np_kg]
         self.kg = D_kg[1,:Np_kg]
-        self.sigma_kg = D_kg[2,:Np_kg]
         # print("ell ola yg :", self.ell_yg)
         # print("yg ola:", self.yg)
         # # print("yg shape: ", self.yg.shape)

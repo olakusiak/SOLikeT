@@ -34,7 +34,6 @@ class KXG_MISCENTER_Likelihood(GaussianLikelihood):
     s_file: Optional[str] = None #s for lens mag
     miscenter_file: Optional[str] = None
     bp_wind_gk_file: Optional[str] = None
-    pixwind_1024_file: Optional[str] = None
     Nbins_kg: Optional[str] = None
     Maglim_bin: Optional[str] = None
     # Load the data
@@ -43,7 +42,6 @@ class KXG_MISCENTER_Likelihood(GaussianLikelihood):
         self.s = np.loadtxt(os.path.join(self.data_directory, self.s_file))
         self.R, self.z = np.loadtxt(os.path.join(self.data_directory, self.miscenter_file))
         self.bpwf_kg = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
-        self.pw_bin_kg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_1024_file))
         Np_kg = self.Nbins_kg
         Npoints = Np_kg
         M = self.Maglim_bin
@@ -88,7 +86,7 @@ class KXG_MISCENTER_Likelihood(GaussianLikelihood):
         cov = self.covmat
         return cov
 
-    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf, pix_win, Nellbins, conv2cl=True,):
+    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf, Nellbins, conv2cl=True,):
         """
         Interpolate the theory dl's, and bin according to the bandpower window function (bpwf)
         """
@@ -104,7 +102,7 @@ class KXG_MISCENTER_Likelihood(GaussianLikelihood):
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
 
         #multiply by the pixel window function (from healpix for given nside)
-        inter_cl = inter_cl*(pix_win[2:ellmax])**2
+        inter_cl = inter_cl
         #bin according to the bpwf
         cl_binned = np.zeros(Nellbins)
         for i in range (Nellbins):
@@ -202,7 +200,6 @@ class KXG_MISCENTER_Likelihood(GaussianLikelihood):
         m = params_values_dict['m_shear_calibration']
         A_IA = params_values_dict['amplid_IA']
         bpwf_kg = self.bpwf_kg[:,0,:]
-        pixwin_kg = self.pw_bin_kg
         Np_kg = self.Nbins_kg
         ellmax_bin_kg = 2200
         fmis = 1.0
@@ -224,10 +221,10 @@ class KXG_MISCENTER_Likelihood(GaussianLikelihood):
 
             # print("cl_1h_theory_kg:", cl_1h_theory_kg[:10])
             # print("cl_2h_theory_kg:", cl_2h_theory_kg[:10])
-            ell_kg_bin, dl_kg_bin_1h = self._bin(ell_theory_kg, np.asarray(cl_1h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_kg_bin, dl_kg_bin_2h = self._bin(ell_theory_kg, np.asarray(cl_2h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_km_bin, dl_km_bin = self._bin(ell_theory_km, np.asarray(cl_1h_theory_km) + np.asarray(cl_2h_theory_km), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_gIA_bin, dl_gIA_bin = self._bin(ell_theory_gIA, np.asarray(cl_2h_theory_gIA), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
+            ell_kg_bin, dl_kg_bin_1h = self._bin(ell_theory_kg, np.asarray(cl_1h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, Nellbins=Np_kg, conv2cl=True)
+            ell_kg_bin, dl_kg_bin_2h = self._bin(ell_theory_kg, np.asarray(cl_2h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg,  Nellbins=Np_kg, conv2cl=True)
+            ell_km_bin, dl_km_bin = self._bin(ell_theory_km, np.asarray(cl_1h_theory_km) + np.asarray(cl_2h_theory_km), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, Nellbins=Np_kg, conv2cl=True)
+            ell_gIA_bin, dl_gIA_bin = self._bin(ell_theory_gIA, np.asarray(cl_2h_theory_gIA), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, Nellbins=Np_kg, conv2cl=True)
             # print("dl_kg_bin:", dl_kg_bin_1h+dl_kg_bin_2h)
             # print("dl_km_bin:", dl_km_bin)
             # print("dl_gIA_bin:", dl_gIA_bin
@@ -236,7 +233,7 @@ class KXG_MISCENTER_Likelihood(GaussianLikelihood):
             #First bin, then miscenter (do it for all 8 bins)
             sigmaR_val = cmis * Rvir
             warnings.filterwarnings("ignore", category=DeprecationWarning)
-            #ell_kg_bin, dl_kg_bin_1h_mis = self._bin(ell_theory_kg, cl_1h_theory_kg , self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
+            #ell_kg_bin, dl_kg_bin_1h_mis = self._bin(ell_theory_kg, cl_1h_theory_kg , self.ell_kg_full, ellmax_bin_kg, bpwf_kg,  Nellbins=Np_kg, conv2cl=True)
             ell_miscenter_kg, dl_kg_bin_1h_miscenter = self._miscenter(dl_kg_bin_1h/self._cl2dl(ell_kg_bin), ell_kg_bin, fmis, sigmaR_val, zbin_mean)
             ## Append
             kg_1h_all.append(dl_kg_bin_1h), kg_2h_all.append(dl_kg_bin_2h), km_all.append(dl_km_bin), IA_all.append(dl_gIA_bin)

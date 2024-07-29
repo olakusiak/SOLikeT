@@ -31,13 +31,12 @@ class YXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
     params = {"m_shear_calibration": 0., "amplid_IA": 1.0, 'cmis': 0}
     cov_data_file: Optional[str] = None
     bp_wind_yg_file: Optional[str] = None
-    pixwind_4096_file: Optional[str] = None
+
     Nbins_yg: Optional[str] = None
     # Load the data
     def initialize(self):
         self.covmat = np.loadtxt(os.path.join(self.data_directory, self.cov_data_file))
         self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
-        self.pw_bin_yg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
         Np_yg = self.Nbins_yg
         Npoints = Np_yg
         Nbins = 4
@@ -89,7 +88,7 @@ class YXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         cov = self.covmat
         return cov
 
-    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf, pix_win, Nellbins, conv2cl=True,):
+    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf, Nellbins, conv2cl=True,):
         """
         Interpolate the theory dl's, and bin according to the bandpower window function (bpwf)
         """
@@ -105,7 +104,7 @@ class YXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
 
         #multiply by the pixel window function (from healpix for given nside)
-        inter_cl = inter_cl*(pix_win[2:ellmax])**2
+        inter_cl = inter_cl
         #bin according to the bpwf
         cl_binned = np.zeros(Nellbins)
         for i in range (Nellbins):
@@ -203,7 +202,7 @@ class YXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         alpha_lens_mag_list=[1.21, 1.15, 1.88, 1.97]
         zbin_mean_list =[0.30066,0.45669, 0.62072, 0.76885, 0.30066,0.45669, 0.62072, 0.76885]
         bpwf_yg = self.bpwf_yg[:,0,:]
-        pixwin_yg = self.pw_bin_yg
+
         Np_yg = self.Nbins_yg
         ellmax_bin_yg = 5600
         fmis = 1.0
@@ -224,12 +223,12 @@ class YXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
             #print("cl_2h_theory_yg:", cl_2h_theory_yg[:10])
 
             #Bin
-            ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_yg_bin, dl_yg_bin_2h = self._bin(ell_theory_yg, cl_2h_theory_yg, self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_ym_bin, dl_ym_bin = self._bin(ell_theory_ym, cl_1h_theory_ym + cl_2h_theory_ym, self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
+            ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, Nellbins=Np_yg, conv2cl=True)
+            ell_yg_bin, dl_yg_bin_2h = self._bin(ell_theory_yg, cl_2h_theory_yg, self.ell_yg_full, ellmax_bin_yg, bpwf_yg, Nellbins=Np_yg, conv2cl=True)
+            ell_ym_bin, dl_ym_bin = self._bin(ell_theory_ym, cl_1h_theory_ym + cl_2h_theory_ym, self.ell_yg_full, ellmax_bin_yg, bpwf_yg, Nellbins=Np_yg, conv2cl=True)
             #Miscenter
             # print("before:", cl_1h_theory_yg/self._cl2dl(ell_theory_yg))
-            ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
+            ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, Nellbins=Np_yg, conv2cl=True)
             ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
             # print("mis:", dl_yg_bin_1h_miscenter)
             # print("dl_yg_bin:", dl_yg_bin[:10])

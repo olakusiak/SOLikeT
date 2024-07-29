@@ -35,8 +35,6 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
     cov_data_file: Optional[str] = None
     bp_wind_yg_file: Optional[str] = None
     bp_wind_gk_file: Optional[str] = None
-    pixwind_4096_file: Optional[str] = None
-    pixwind_1024_file: Optional[str] = None
     Nbins_yg: Optional[str] = None
     Nbins_kg: Optional[str] = None
     # Load the data
@@ -48,8 +46,6 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         self.covmat = np.loadtxt(os.path.join(self.data_directory, self.cov_data_file))[:Npoints*4,:Npoints*4]
         self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
         self.bpwf_kg = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
-        self.pw_bin_yg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
-        self.pw_bin_kg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_1024_file))
         
 
         Cl_yg_all, Cl_kg_all = [], []
@@ -61,16 +57,15 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
             self.ell_yg = D_yg[0,:Np_yg]
             self.ell_yg_full = D_yg[0,:Np_yg]
             self.yg = D_yg[1,:Np_yg]
-            self.sigma_yg = D_yg[2,:Np_yg]
+        
 
             self.ell_kg = D_kg[0,:Np_kg]
             self.ell_kg_full = D_kg[0,:Np_kg]
             self.kg = D_kg[1,:Np_kg]
-            self.sigma_kg = D_kg[2,:Np_kg]
+ 
             Cl_yg_all.append(D_yg[1,:Np_yg])
             Cl_kg_all.append(D_kg[1,:Np_kg])
-            Sig_yg_all.append(D_yg[2,:Np_yg])
-            Sig_kg_all.append(D_kg[2,:Np_kg])
+ 
 
 
         # Sig_all = np.concatenate((np.concatenate((Cl_yg_all)),np.concatenate((Cl_kg_all))), axis=0)
@@ -104,7 +99,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         cov = self.covmat
         return cov
 
-    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf, pix_win, Nellbins, conv2cl=True,):
+    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf, Nellbins, conv2cl=True,):
         """
         Interpolate the theory dl's, and bin according to the bandpower window function (bpwf)
         """
@@ -119,7 +114,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         if conv2cl==True: #go from dls to cls because the bpwf mutliplies by ell*(ell+1)/2pi
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
         #multiply by the pixel window function (from healpix for given nside)
-        inter_cl = inter_cl*(pix_win[2:ellmax])**2
+        inter_cl = inter_cl
         #bin according to the bpwf
         cl_binned = np.zeros(Nellbins)
         for i in range (Nellbins):
@@ -219,8 +214,7 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
         A_IA = params_values_dict['amplid_IA']
         bpwf_yg = self.bpwf_yg[:,0,:]
         bpwf_kg = self.bpwf_kg[:,0,:]
-        pixwin_yg = self.pw_bin_yg
-        pixwin_kg = self.pw_bin_kg
+     
         Np_yg = self.Nbins_yg
         Np_kg = self.Nbins_kg
         ellmax_bin_kg = 2200
@@ -251,16 +245,18 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
             # print("cl_2h_theory_kg:", cl_2h_theory_kg[:10])
             # print("cl_1h_theory_yg:", cl_1h_theory_yg[:10])
             # # dl_theory_yg = np.asarray(cl_1h_theory_yg) + np.asarray(cl_2h_theory_yg)
-            ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_yg_bin, dl_yg_bin_2h = self._bin(ell_theory_yg, np.asarray(cl_2h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_kg_bin, dl_kg_bin_1h = self._bin(ell_theory_kg, np.asarray(cl_1h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_kg_bin, dl_kg_bin_2h = self._bin(ell_theory_kg, np.asarray(cl_2h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_ym_bin, dl_ym_bin = self._bin(ell_theory_ym, np.asarray(cl_1h_theory_ym) + np.asarray(cl_2h_theory_ym), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_km_bin, dl_km_bin = self._bin(ell_theory_km, np.asarray(cl_1h_theory_km) + np.asarray(cl_2h_theory_km), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_gIA_bin, dl_gIA_bin = self._bin(ell_theory_gIA, np.asarray(cl_2h_theory_gIA), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            # print("dl_kg_bin:", dl_kg_bin)
+            ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg,  Nellbins=Np_yg, conv2cl=True)
+            ell_yg_bin, dl_yg_bin_2h = self._bin(ell_theory_yg, np.asarray(cl_2h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg,  Nellbins=Np_yg, conv2cl=True)
+            ell_kg_bin, dl_kg_bin_1h = self._bin(ell_theory_kg, np.asarray(cl_1h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg,  Nellbins=Np_kg, conv2cl=True)
+            ell_kg_bin, dl_kg_bin_2h = self._bin(ell_theory_kg, np.asarray(cl_2h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg,  Nellbins=Np_kg, conv2cl=True)
+            ell_ym_bin, dl_ym_bin = self._bin(ell_theory_ym, np.asarray(cl_1h_theory_ym) + np.asarray(cl_2h_theory_ym), self.ell_yg_full, ellmax_bin_yg, bpwf_yg,  Nellbins=Np_yg, conv2cl=True)
+            ell_km_bin, dl_km_bin = self._bin(ell_theory_km, np.asarray(cl_1h_theory_km) + np.asarray(cl_2h_theory_km), self.ell_kg_full, ellmax_bin_kg, bpwf_kg,  Nellbins=Np_kg, conv2cl=True)
+            ell_gIA_bin, dl_gIA_bin = self._bin(ell_theory_gIA, np.asarray(cl_2h_theory_gIA), self.ell_kg_full, ellmax_bin_kg, bpwf_kg,  Nellbins=Np_kg, conv2cl=True)
+            # print("dl_yg_bin 1h:", dl_yg_bin_1h)
+            # print("dl_ym_bin:", dl_ym_bin)
+            # print("dl_kg_bin 1h :", dl_kg_bin_1h)
             # print("dl_km_bin:", dl_km_bin)
-            # print("dl_gIA_bin:", dl_gIA_bin
+            # print("dl_gIA_bin:", dl_gIA_bin)
 
 
             ### Miscenter
@@ -272,14 +268,16 @@ class YXG_KXG_ALLBINS_MISCENTER_Likelihood(GaussianLikelihood):
             # print(cmis)
             sigmaR_val = cmis * Rvir_list[i]
             warnings.filterwarnings("ignore", category=DeprecationWarning)
-            ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg, cl_1h_theory_yg , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-            ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
-            ell_kg_bin, dl_kg_bin_1h_mis = self._bin(ell_theory_kg, cl_1h_theory_kg , self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-            ell_miscenter_kg, dl_kg_bin_1h_miscenter = self._miscenter(dl_kg_bin_1h_mis/self._cl2dl(ell_kg_bin), ell_kg_bin, fmis, sigmaR_val, zbin_mean_list[i],)
+            ell_yg_bin, dl_yg_bin_1h_mis = self._bin(ell_theory_yg,  np.asarray(cl_1h_theory_yg) , self.ell_yg_full, ellmax_bin_yg, bpwf_yg, Nellbins=Np_yg, conv2cl=True)
+            ell_miscenter, dl_yg_bin_1h_miscenter = self._miscenter(dl_yg_bin_1h_mis/self._cl2dl(ell_yg_bin), ell_yg_bin, fmis=fmis, sigmaR_val=sigmaR_val, zbin_mean=zbin_mean_list[i])
+            ell_kg_bin, dl_kg_bin_1h_mis = self._bin(ell_theory_kg, cl_1h_theory_kg , self.ell_kg_full, ellmax_bin_kg, bpwf_kg, Nellbins=Np_kg, conv2cl=True)
+            ell_miscenter_kg, dl_kg_bin_1h_miscenter = self._miscenter(dl_kg_bin_1h_mis/self._cl2dl(ell_kg_bin), ell_kg_bin, fmis=fmis, sigmaR_val=sigmaR_val, zbin_mean=zbin_mean_list[i])
             ## Append
             yg_1h_all.append(dl_yg_bin_1h), yg_2h_all.append(dl_yg_bin_2h), ym_all.append(dl_ym_bin),
             kg_1h_all.append(dl_kg_bin_1h), kg_2h_all.append(dl_kg_bin_2h), km_all.append(dl_km_bin), IA_all.append(dl_gIA_bin)
             yg_1h_all_miscenter.append(dl_yg_bin_1h_miscenter*self._cl2dl(ell_miscenter)),  kg_1h_all_miscenter.append(dl_kg_bin_1h_miscenter*self._cl2dl(ell_miscenter_kg))
+            # print("1h yg cent mis: ", dl_yg_bin_1h_miscenter*self._cl2dl(ell_miscenter))
+            # print("1h kg cent mis: ", dl_kg_bin_1h_miscenter*self._cl2dl(ell_miscenter_kg))
         # print(yg_1h_all)
         # print(yg_2h_all)
 
