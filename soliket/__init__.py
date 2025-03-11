@@ -20,6 +20,10 @@ from .yg.joint_yg_kg_ALL_BINS_miscenter import YXG_KXG_ALLBINS_MISCENTER_Likelih
 from .yg.joint_yg_kg_ALL_BINS_remove1 import YXG_KXG_ALLBINS_MISCENTER_REMOVEONE_Likelihood
 from .yg.joint_yg_kg_miscenter import YXG_KXG_MISCENTER_Likelihood
 from .yg.kg_miscenter import KXG_MISCENTER_Likelihood
+from .yg.kSZ2_x_galaxy import KSZ2XG_Likelihood
+from .sims.joint_kg_gg_hod import GXG_KXG_Likelihood
+from .sims.joint_kg_hod import KXG_Likelihood
+from .sims.joint_gg_hod import GXG_Likelihood
 try:
     from .clusters import ClusterLikelihood  # noqa: F401
 except ImportError:

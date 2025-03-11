@@ -1,0 +1,168 @@
+output: /Users/aleksandra/software/SOLikeT/soliket/sims/chains/joint_gg_kg_Maglim4_test
+
+likelihood:
+  soliket.sims.joint_kg_gg_hod.GXG_KXG_Likelihood:
+    Mbin: 4 
+    data_directory: "/Users/aleksandra/software/data_for_SOLikeT_sims/"
+    gxg_data_file: "gg_cardinal_4096_DES_Maglim_4_dl_noPWcorr.txt"
+    gxk_data_file: "kg_cardinal_1024_DES_Maglim_4_kappa4_dl_noPWcorr.txt"
+    cov_data_file: "cov/covar-cardinal_gk_gg_nside_2048_kappa4_bin_"
+    bp_wind_gg_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2230_ellmin30_dl.npy"
+    bp_wind_gk_file: "const/bpwf_namaster_ggkappa_Maglim_ellmax2230_ellmin30_dl.npy"
+    pixwind_4096_file: const/pixel_window_bin_nside4096.txt
+    pixwind_1024_file: const/pixel_window_bin_nside1024.txt
+    Nbins_gg: 9
+    Nbins_kg: 9
+    
+params:
+    alpha_s_HOD:
+      prior:
+        min: 0.1
+        max: 2.5
+      ref: 1.85
+      proposal: 0.03
+      latex: \alpha_{HOD}
+    sigma_log10M_HOD:
+      prior:
+        min: 0.01
+        max: 1.20
+      ref: 0.3
+      proposal: 0.03
+      latex: \sigma_{HOD}
+    logM1_prime:
+      prior:
+        min: 11.35
+        max: 14.
+      ref: 13.248466547352677
+      proposal: 0.005
+      latex: \log(10^{10} M1_\mathrm{prime})
+      drop: true
+    M1_prime_HOD:
+      value: 'lambda logM1_prime: 10**(logM1_prime)'
+      latex: M1_\mathrm{prime}
+    logM_min_HOD:
+      prior:
+        min: 10.85
+        max: 12.85
+      ref: 11.738466547352678
+      proposal: 0.005
+      latex: \log(10^{10} M_\mathrm{min})
+      drop: true
+    M_min_HOD:
+      value: 'lambda logM_min_HOD: 10**(logM_min_HOD)'
+      latex: M_\mathrm{min}
+    x_out_truncated_nfw_profile_satellite_galaxies:  
+      prior:
+        min: 0.1
+        max: 3.0
+      ref: 1.0
+      proposal: 0.05
+      latex: \lambda_{1}
+    A_shot_noise:
+      prior:
+        min: 0.0
+        max: 12.0
+      ref:
+        dist: norm
+        loc: 5.93
+        scale: 0.5
+      proposal: 0.05
+      latex: A_{sn} 
+
+sampler:
+    mcmc:
+      covmat: null
+      #covmat: "/global/homes/a/akusiak/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+      Rminus1_stop: 0.01
+      learn_proposal: True
+      learn_proposal_Rminus1_max: 100.0
+      learn_proposal_Rminus1_max_early: 300.0
+      #drag: true
+      #output_every: 10s
+      learn_every: 100
+      proposal_scale: 2.4
+      max_tries: 5000
+# sampler:
+#     evaluate:
+#       override:
+#         #Bin 1
+#         sigma_log10M_HOD:  1.1957107
+#         alpha_s_HOD: 1.5788525
+#         logM_min_HOD: 11.876914082286715
+#         logM1_prime: 13.706525694672465
+#         A_shot_noise: 8.782
+
+
+theory :
+  classy_szfast.classy_sz.classy_sz:
+     use_class_sz_fast_mode: 1
+     use_class_sz_no_cosmo_mode : 1
+     extra_args:
+                 output: 'gal_gallens_1h,gal_gallens_2h, gal_gal_1h,gal_gal_2h'
+                 galaxy_sample : 'custom' # the id string of each sample, can be any integer
+                 full_path_to_dndz_gal : '/Users/aleksandra/maps/DES_data/cardinal/nz_maglim_zbin_4.txt'
+                 full_path_to_source_dndz_gal: '/Users/aleksandra/maps/DES_data/cardinal/nz_sourcegal_zbin_4.txt' # source galaxies
+
+                 ### Precision
+                 redshift_epsabs : 1.0e-40
+                 redshift_epsrel : 1.e-3
+                 mass_epsabs : 1.0e-40
+                 mass_epsrel : 1.e-3
+                 ndim_masses : 80
+                 ndim_redshifts : 80
+                 class_sz_verbose : 0
+                 nonlinear_verbose : 0
+
+                 dlogell: 0.3
+                 multipoles_sz: 'ell_mock'
+                 ell_max: 8200.0
+                 ell_min: 4.0
+
+                 z_min : 1.0e-8 #1.0e-8 problems on stampede
+                 z_max : 3.0
+                 M_min : 1.0e+10
+                 M_max : 5.e+15
+
+                 ### Cosmology
+                 # 2.2 in https://arxiv.org/pdf/2303.12104
+                 Omega_b: 0.047 
+                 Omega_cdm: 0.239 #0.286-0.047 #0.286-0.047
+                 h: 0.7
+                 tau_reio: 0.0561
+                 sigma8: 0.82
+                 n_s: 0.96
+            
+                 k_pivot: 0.05
+                 N_ncdm: 1
+                 N_ur: 2.0328
+                 m_ncdm: 0.06
+
+                #  ####HOD PARAMS
+                 x_out_truncated_nfw_profile: 1.0 #for lensing
+                 f_cen_HOD: 1.
+                 M0_HOD: 0.
+                 photo_z_params: 0
+            
+
+                #  # #### Pressure profile
+                #  pressure profile : 'B12'
+                #  units for tSZ spectrum: 'dimensionless'
+                #  truncate_gas_pressure_wrt_rvir: 1. 
+                #  x_outSZ: 4. 
+
+
+                 hm_consistency : 1
+                 delta for galaxies : "200c"
+                 delta for matter density: "200c"
+                 delta for electron pressure: "200c"
+                 mass function: 'T08M200c'
+                 concentration parameter: 'D08' # As in the SPT paper 
+
+                 ## fast params
+                 use_fft_for_profiles_transform : 1
+                 N_samp_fftw : 1024
+
+
+stop_at_error: True
+debug: False
+timing: True
