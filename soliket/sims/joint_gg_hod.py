@@ -31,18 +31,22 @@ print(scipy.__version__)
 class GXG_Likelihood(GaussianLikelihood):
     data_directory: Optional[str] = None
     gxg_data_file: Optional[str] = None
-    cov_gg_data_file: Optional[str] = None
+    cov_data_file: Optional[str] = None
     bp_wind_gg_file: Optional[str] = None
+    pixwind_4096_file: Optional[str] = None
     Nbins_gg: Optional[str] = None
+    Mbin: Optional[str] = None
     params = {"A_shot_noise": 0}
 
     # Load the data
     def initialize(self):
+        Mbin = self.Mbin
         self.bpwf_gg = np.load(os.path.join(self.data_directory, self.bp_wind_gg_file))[0]
+        self.pw_bin_gg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
         Np_gg = self.Nbins_gg
 
         D_gg = np.loadtxt(os.path.join(self.data_directory, self.gxg_data_file))
-        cov_gg = np.loadtxt(os.path.join(self.data_directory, self.cov_gg_data_file))
+        cov_gg = np.load(os.path.join(self.data_directory, self.cov_data_file)+f'{Mbin}_{Mbin}_{Mbin}_{Mbin}_dl.pk', allow_pickle=True)[f'bin_{Mbin}_{Mbin}_{Mbin}_{Mbin}']
         cov_gg= cov_gg[:Np_gg,:Np_gg]
 
 
@@ -52,7 +56,7 @@ class GXG_Likelihood(GaussianLikelihood):
         Npoints = Np_gg 
 
         self.covmat =  cov_gg
-        print(self.covmat.shape)
+        # print(self.covmat.shape)
         
         self.inv_covmat = np.linalg.inv(self.covmat)
         self.det_covmat = np.linalg.det(self.covmat)
@@ -77,7 +81,7 @@ class GXG_Likelihood(GaussianLikelihood):
         cov = self.covmat
         return cov
 
-    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf,  Nellbins, conv2cl=True,):
+    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf,  pix_win,  Nellbins, conv2cl=True,):
         """
         Interpolate the theory dl's, and bin according to the bandpower window function (bpwf)
         """
@@ -93,7 +97,7 @@ class GXG_Likelihood(GaussianLikelihood):
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
 
         #multiply by the pixel window function (from healpix for given nside)
-        inter_cl = inter_cl
+        inter_cl = inter_cl*(pix_win[2:ellmax])**2
         #bin according to the bpwf
         cl_binned = np.zeros(Nellbins)
         for i in range (Nellbins):
@@ -110,10 +114,11 @@ class GXG_Likelihood(GaussianLikelihood):
     def _get_theory(self, **params_values_dict):
         bpwf_gg = self.bpwf_gg[:,0,:]
         Np_gg = self.Nbins_gg
+        pixwin_gg = self.pw_bin_gg
         ellmax_bin_gg = 2200
         A_shotnoise = params_values_dict['A_shot_noise']
         shot_noise = A_shotnoise*1.e-7
-        print("A_shotnoise=", A_shotnoise)
+        # print("A_shotnoise=", A_shotnoise)
 
         gg_all, gg_1h_all, gg_2h_all = [], [], [],
 
@@ -122,13 +127,13 @@ class GXG_Likelihood(GaussianLikelihood):
         # print("cl_1h_theory_gg:", cl_1h_theory_gg)
         # print("cl_2h_theory_gg:", cl_2h_theory_gg)
 
-        ell_gg_bin, dl_gg_bin_1h = self._bin(ell_theory_gg, np.asarray(cl_1h_theory_gg), self.ell_gg_full, ellmax_bin_gg, bpwf_gg,  Nellbins=Np_gg, conv2cl=True)
-        ell_gg_bin, dl_gg_bin_2h = self._bin(ell_theory_gg, np.asarray(cl_2h_theory_gg), self.ell_gg_full, ellmax_bin_gg, bpwf_gg,  Nellbins=Np_gg, conv2cl=True)
-        print("dl_gg_bin_1h:", dl_gg_bin_1h)
-        print("dl_gg_bin_2h:", dl_gg_bin_2h)
+        ell_gg_bin, dl_gg_bin_1h = self._bin(ell_theory_gg, np.asarray(cl_1h_theory_gg), self.ell_gg_full, ellmax_bin_gg, bpwf_gg, pixwin_gg, Nellbins=Np_gg, conv2cl=True)
+        ell_gg_bin, dl_gg_bin_2h = self._bin(ell_theory_gg, np.asarray(cl_2h_theory_gg), self.ell_gg_full, ellmax_bin_gg, bpwf_gg, pixwin_gg,  Nellbins=Np_gg, conv2cl=True)
+        # print("dl_gg_bin_1h:", dl_gg_bin_1h)
+        # print("dl_gg_bin_2h:", dl_gg_bin_2h)
 
         cl_joint = (dl_gg_bin_1h+dl_gg_bin_2h+ shot_noise* self._cl2dl(ell_gg_bin) )
-        print("cl joint:", cl_joint)
+        # print("cl joint:", cl_joint)
 
         if np.isnan(cl_joint).any()==True:
             print("Nans in the theory prediction!")
