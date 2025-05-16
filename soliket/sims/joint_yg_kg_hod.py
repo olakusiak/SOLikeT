@@ -28,19 +28,18 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 import scipy
 print(scipy.__version__)
 
-class GXG_KXG_Likelihood(GaussianLikelihood):
+class YXG_KXG_Likelihood(GaussianLikelihood):
     data_directory: Optional[str] = None
-    gxg_data_file: Optional[str] = None
+    yxg_data_file: Optional[str] = None
     gxk_data_file: Optional[str] = None
     cov_data_file: Optional[str] = None
-    bp_wind_gg_file: Optional[str] = None
+    bp_wind_yg_file: Optional[str] = None
     bp_wind_gk_file: Optional[str] = None
     pixwind_4096_file: Optional[str] = None
     pixwind_1024_file: Optional[str] = None
     Nbins_kg: Optional[str] = None
-    Nbins_gg: Optional[str] = None
+    Nbins_yg: Optional[str] = None
     Mbin: Optional[str] = None
-    params = {"A_shot_noise": 0}
 
     # Load the data
     def initialize(self):
@@ -48,39 +47,37 @@ class GXG_KXG_Likelihood(GaussianLikelihood):
         print("Maglim bin = ", Mbin)
 
         self.bpwf_kg = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
-        self.bpwf_gg = np.load(os.path.join(self.data_directory, self.bp_wind_gg_file))[0]
-        self.pw_bin_gg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
+        self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
+        self.pw_bin_yg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
         self.pw_bin_kg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_1024_file))
         Np_kg = self.Nbins_kg
-        Np_gg = self.Nbins_gg
+        Np_yg = self.Nbins_yg
         
         D_kg = np.loadtxt(os.path.join(self.data_directory, self.gxk_data_file))
-        D_gg = np.loadtxt(os.path.join(self.data_directory, self.gxg_data_file))
+        D_yg = np.loadtxt(os.path.join(self.data_directory, self.yxg_data_file))
         cov_kg = np.load(os.path.join(self.data_directory, self.cov_data_file)+f'{Mbin}_5_{Mbin}_{Mbin}_dl.pk', allow_pickle=True)[f'bin_{Mbin}_5_{Mbin}_{Mbin}']
-        cov_gg = np.load(os.path.join(self.data_directory, self.cov_data_file)+f'{Mbin}_{Mbin}_{Mbin}_{Mbin}_dl.pk', allow_pickle=True)[f'bin_{Mbin}_{Mbin}_{Mbin}_{Mbin}']
+        cov_yg = np.load(os.path.join(self.data_directory, self.cov_data_file)+f'{Mbin}_{Mbin}_{Mbin}_{Mbin}_dl.pk', allow_pickle=True)[f'bin_{Mbin}_{Mbin}_{Mbin}_{Mbin}']
         cov_cross = np.load(os.path.join(self.data_directory, self.cov_data_file)+f'{Mbin}_5_{Mbin}_5_dl.pk', allow_pickle=True)[f'bin_{Mbin}_5_{Mbin}_5']
-        
+
         cov_kg= cov_kg[:Np_kg,:Np_kg]
-        cov_gg= cov_gg[:Np_gg,:Np_gg]
-        cov_cross= cov_cross[:Np_gg,:Np_kg]
-        print(cov_kg.shape)
-        print(cov_gg.shape)
-        print(cov_cross.shape)
+        cov_yg= cov_yg[:Np_yg,:Np_yg]
+        cov_cross= cov_cross[:Np_kg,:Np_yg]
+
         self.ell_kg = D_kg[0,:Np_kg]
         self.ell_kg_full = D_kg[0,:Np_kg]
         self.kg = D_kg[1,:Np_kg]
 
 
-        self.ell_gg = D_gg[0,:Np_gg]
-        self.ell_gg_full = D_gg[0,:Np_gg]
-        self.gg = D_gg[1,:Np_gg]
+        self.ell_yg = D_yg[0,:Np_yg]
+        self.ell_yg_full = D_yg[0,:Np_yg]
+        self.yg = D_yg[1,:Np_yg]
 
         # print("ell ola kg :", self.ell_kg)
         # print("kg ola:", self.kg)
         # print("kg shape: ", self.kg.shape)
-        Npoints = Np_gg + Np_kg
-        print("here")
-        self.covmat =  np.vstack( (np.hstack((cov_kg, cov_cross.T)), np.hstack((cov_cross, cov_gg))) )
+        Npoints = Np_yg + Np_kg
+
+        self.covmat =  np.block([[cov_kg, cov_cross],[cov_cross, cov_yg]])
         print(self.covmat.shape)
         
         self.inv_covmat = np.linalg.inv(self.covmat)
@@ -88,13 +85,13 @@ class GXG_KXG_Likelihood(GaussianLikelihood):
         #print(np.linalg.eig(self.covmat))
         # print("cov:", np.diag(self.covmat))
         ###Combine into 1 data vector
-        self.cl_joint = np.concatenate((self.kg, self.gg), axis=0)
-        self.ell_joint = np.concatenate((self.ell_kg, self.ell_gg), axis=0)
+        self.cl_joint = np.concatenate((self.kg, self.yg), axis=0)
+        self.ell_joint = np.concatenate((self.ell_kg, self.ell_yg), axis=0)
         super().initialize()
 
 
     def get_requirements(self):
-        return {'Cl_gxg':{},'Cl_kgxg':{}}
+        return {'Cl_yxg':{},'Cl_kgxg':{}}
 
     # this is the data to fit
     def _get_data(self):
@@ -138,38 +135,36 @@ class GXG_KXG_Likelihood(GaussianLikelihood):
 
     def _get_theory(self, **params_values_dict):
         bpwf_kg = self.bpwf_kg[:,0,:]
-        bpwf_gg = self.bpwf_gg[:,0,:]
-        pixwin_gg = self.pw_bin_gg
+        bpwf_yg = self.bpwf_yg[:,0,:]
+        pixwin_yg = self.pw_bin_yg
         pixwin_kg = self.pw_bin_kg
         Np_kg = self.Nbins_kg
-        Np_gg = self.Nbins_gg
-        ellmax_bin_gg = 2200
+        Np_yg = self.Nbins_yg
+        ellmax_bin_yg = 2200
         ellmax_bin_kg = 2200
-        A_shotnoise = params_values_dict['A_shot_noise']
-        shot_noise = A_shotnoise*1.e-7
 
-        kg_all, gg_all,= [], [],
+        kg_all, yg_all= [], [],
   
 
         theory_kg = self.provider.get_Cl_kgxg()
-        theory_gg = self.provider.get_Cl_gxg()
+        theory_yg = self.provider.get_Cl_yxg()
         ell_theory_kg, cl_1h_theory_kg, cl_2h_theory_kg = theory_kg['ell'], theory_kg['1h'], theory_kg['2h']
-        ell_theory_gg, cl_1h_theory_gg, cl_2h_theory_gg = theory_gg['ell'], theory_gg['1h'], theory_gg['2h']
+        ell_theory_yg, cl_1h_theory_yg, cl_2h_theory_yg = theory_yg['ell'], theory_yg['1h'], theory_yg['2h']
 
         ell_kg_bin, dl_kg_bin_1h = self._bin(ell_theory_kg, np.asarray(cl_1h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg,  Nellbins=Np_kg, conv2cl=True)
         ell_kg_bin, dl_kg_bin_2h = self._bin(ell_theory_kg, np.asarray(cl_2h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-        ell_gg_bin, dl_gg_bin_1h = self._bin(ell_theory_gg, np.asarray(cl_1h_theory_gg), self.ell_gg_full, ellmax_bin_gg, bpwf_gg, pixwin_gg, Nellbins=Np_gg, conv2cl=True)
-        ell_gg_bin, dl_gg_bin_2h = self._bin(ell_theory_gg, np.asarray(cl_2h_theory_gg), self.ell_gg_full, ellmax_bin_gg, bpwf_gg, pixwin_gg,  Nellbins=Np_gg, conv2cl=True)
-        # print("dl_kg_bin:", dl_kg_bin_1h+dl_kg_bin_2h)
-        # print("dl_gg_bin:", dl_gg_bin_1h+dl_gg_bin_2h)
+        ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
+        ell_yg_bin, dl_yg_bin_2h = self._bin(ell_theory_yg, np.asarray(cl_2h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg,  Nellbins=Np_yg, conv2cl=True)
+        print("dl_kg_bin:", dl_kg_bin_1h+dl_kg_bin_2h)
+        print("dl_yg_bin:", dl_yg_bin_1h+dl_yg_bin_2h)
 
         kg_all.append(dl_kg_bin_1h+dl_kg_bin_2h)
-        gg_all.append(dl_gg_bin_1h+dl_gg_bin_2h+shot_noise* self._cl2dl(ell_gg_bin))
-        print("gg: ", gg_all)
-        print("kg: ", kg_all)
+        yg_all.append(dl_yg_bin_1h+dl_yg_bin_2h)
+        # print("yg: ", yg_all)
+        # print("kg: ", kg_all)
 
-        cl_joint = np.concatenate((np.concatenate(kg_all), np.concatenate(gg_all)), axis=0)
-        print("cl joint:", cl_joint)
+        cl_joint = np.concatenate((np.concatenate(kg_all), np.concatenate(yg_all)), axis=0)
+        # print("cl joint:", cl_joint)
 
         if np.isnan(cl_joint).any()==True:
             print("Nans in the theory prediction!")
