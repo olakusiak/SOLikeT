@@ -284,10 +284,10 @@ class YXG_CMBKXG_MISCENTER_Likelihood(GaussianLikelihood):
         # print("1h kg cent mis: ", kg_1h_cen_mis)
         yg_1h_sat = yg_1h_all[0] - yg_1h_all[1]
         kg_1h_sat = kg_1h_all[0] - kg_1h_all[1]
-        print("yg 1h =", yg_1h_cen_mis+yg_1h_sat)
-        print("yg 2h =", yg_2h_all[0])
-        print("kg 1h =", kg_1h_cen_mis+kg_1h_sat)
-        print("kg 2h =", kg_2h_all[0])
+        # print("yg 1h =", yg_1h_cen_mis+yg_1h_sat)
+        # print("yg 2h =", yg_2h_all[0])
+        # print("kg 1h =", kg_1h_cen_mis+kg_1h_sat)
+        # print("kg 2h =", kg_2h_all[0])
         yg = 1.e-6*( yg_1h_cen_mis+yg_1h_sat +yg_2h_all[0]+ 2*(alpha-1)*ym_all[0] )
         kg = (kg_1h_cen_mis+kg_1h_sat +kg_2h_all[0] + 2*(alpha-1)*km_all[0]) # shear calibration m
         yg_all.append(yg)
