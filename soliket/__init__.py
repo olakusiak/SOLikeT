@@ -23,6 +23,7 @@ from .yg.kg_miscenter import KXG_MISCENTER_Likelihood
 from .yg.kSZ2_x_galaxy import KSZ2XG_Likelihood
 from .sims.joint_kg_gg_hod import GXG_KXG_Likelihood
 from .sims.joint_kg_hod import KXG_Likelihood
+from .sims.yy import YXY_Likelihood
 from .sims.joint_gg_hod import GXG_Likelihood
 from .sims.joint_yg_kg_hod import YXG_KXG_Likelihood
 from .sims.joint_yg_gg_hod import YXG_GXG_Likelihood
