@@ -28,15 +28,15 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 import scipy
 print(scipy.__version__)
 
-class YXG_KXG_Likelihood(GaussianLikelihood):
+class YXG_KCMBXG_Likelihood(GaussianLikelihood):
     data_directory: Optional[str] = None
     yxg_data_file: Optional[str] = None
     gxk_data_file: Optional[str] = None
     cov_data_file: Optional[str] = None
     bp_wind_yg_file: Optional[str] = None
     bp_wind_gk_file: Optional[str] = None
-    pixwind_4096_file: Optional[str] = None
-    pixwind_1024_file: Optional[str] = None
+    # pixwind_4096_file: Optional[str] = None
+    # pixwind_1024_file: Optional[str] = None
     Nbins_kg: Optional[str] = None
     Nbins_yg: Optional[str] = None
     Mbin: Optional[str] = None
@@ -44,12 +44,10 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
     # Load the data
     def initialize(self):
         Mbin = self.Mbin
-        print("Maglim bin = ", Mbin)
+        # print("Maglim bin = ", Mbin)
 
         self.bpwf_kg = np.load(os.path.join(self.data_directory, self.bp_wind_gk_file))[0]
         self.bpwf_yg = np.load(os.path.join(self.data_directory, self.bp_wind_yg_file))[0]
-        self.pw_bin_yg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_4096_file))
-        self.pw_bin_kg  = np.loadtxt(os.path.join(self.data_directory, self.pixwind_1024_file))
         Np_kg = self.Nbins_kg
         Np_yg = self.Nbins_yg
         
@@ -96,7 +94,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
 
 
     def get_requirements(self):
-        return {'Cl_yxg':{},'Cl_kgxg':{}}
+        return {'Cl_yxg':{},'Cl_kxg':{}}
 
     # this is the data to fit
     def _get_data(self):
@@ -108,7 +106,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
         cov = self.covmat
         return cov
 
-    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf, pix_win, Nellbins, conv2cl=True,):
+    def _bin(self, ell_theory, cl_theory, ell_data, ellmax, bpwf, Nellbins, conv2cl=True,):
         """
         Interpolate the theory dl's, and bin according to the bandpower window function (bpwf)
         """
@@ -124,7 +122,7 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
             inter_cl= inter_cl*(2.0*np.pi)/(new_ell)/(new_ell+1.0)
 
         #multiply by the pixel window function (from healpix for given nside)
-        inter_cl = inter_cl*(pix_win[2:ellmax])**2
+        inter_cl = inter_cl #*(pix_win[2:ellmax])**2
         #bin according to the bpwf
         cl_binned = np.zeros(Nellbins)
         for i in range (Nellbins):
@@ -141,30 +139,32 @@ class YXG_KXG_Likelihood(GaussianLikelihood):
     def _get_theory(self, **params_values_dict):
         bpwf_kg = self.bpwf_kg[:,0,:]
         bpwf_yg = self.bpwf_yg[:,0,:]
-        pixwin_yg = self.pw_bin_yg
-        pixwin_kg = self.pw_bin_kg
+        # pixwin_yg = self.pw_bin_yg
+        # pixwin_kg = self.pw_bin_kg
         Np_kg = self.Nbins_kg
         Np_yg = self.Nbins_yg
-        ellmax_bin_yg = 2200
+        ellmax_bin_yg = 5200
         ellmax_bin_kg = 2200
 
         kg_all, yg_all= [], [],
   
 
-        theory_kg = self.provider.get_Cl_kgxg()
+        theory_kg = self.provider.get_Cl_kxg()
         theory_yg = self.provider.get_Cl_yxg()
         ell_theory_kg, cl_1h_theory_kg, cl_2h_theory_kg = theory_kg['ell'], theory_kg['1h'], theory_kg['2h']
         ell_theory_yg, cl_1h_theory_yg, cl_2h_theory_yg = theory_yg['ell'], theory_yg['1h'], theory_yg['2h']
+        # print("cl_1h_theory_yg", cl_1h_theory_yg )
+        # print("cl_2h_theory_yg", cl_2h_theory_yg )
 
-        ell_kg_bin, dl_kg_bin_1h = self._bin(ell_theory_kg, np.asarray(cl_1h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg,  Nellbins=Np_kg, conv2cl=True)
-        ell_kg_bin, dl_kg_bin_2h = self._bin(ell_theory_kg, np.asarray(cl_2h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, pixwin_kg, Nellbins=Np_kg, conv2cl=True)
-        ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg, Nellbins=Np_yg, conv2cl=True)
-        ell_yg_bin, dl_yg_bin_2h = self._bin(ell_theory_yg, np.asarray(cl_2h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, pixwin_yg,  Nellbins=Np_yg, conv2cl=True)
-        print("dl_kg_bin:", dl_kg_bin_1h+dl_kg_bin_2h)
-        print("dl_yg_bin:", dl_yg_bin_1h+dl_yg_bin_2h)
+        ell_kg_bin, dl_kg_bin_1h = self._bin(ell_theory_kg, np.asarray(cl_1h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, Nellbins=Np_kg, conv2cl=True)
+        ell_kg_bin, dl_kg_bin_2h = self._bin(ell_theory_kg, np.asarray(cl_2h_theory_kg), self.ell_kg_full, ellmax_bin_kg, bpwf_kg, Nellbins=Np_kg, conv2cl=True)
+        ell_yg_bin, dl_yg_bin_1h = self._bin(ell_theory_yg, np.asarray(cl_1h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, Nellbins=Np_yg, conv2cl=True)
+        ell_yg_bin, dl_yg_bin_2h = self._bin(ell_theory_yg, np.asarray(cl_2h_theory_yg), self.ell_yg_full, ellmax_bin_yg, bpwf_yg, Nellbins=Np_yg, conv2cl=True)
+        # print("dl_kg_bin:", dl_kg_bin_1h+dl_kg_bin_2h)
+        # print("dl_yg_bin:", dl_yg_bin_1h+dl_yg_bin_2h)
 
         kg_all.append(dl_kg_bin_1h+dl_kg_bin_2h)
-        yg_all.append(dl_yg_bin_1h+dl_yg_bin_2h)
+        yg_all.append(1e-6*dl_yg_bin_1h+1e-6*dl_yg_bin_2h)
         # print("yg: ", yg_all)
         # print("kg: ", kg_all)
 

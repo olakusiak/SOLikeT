@@ -26,6 +26,7 @@ from .sims.joint_kg_hod import KXG_Likelihood
 from .sims.joint_gg_hod import GXG_Likelihood
 from .sims.joint_yg_kg_hod import YXG_KXG_Likelihood
 from .sims.joint_yg_gg_hod import YXG_GXG_Likelihood
+from .sims.joint_yg_kcmbg_hod import YXG_KCMBXG_Likelihood
 from .yg.joint_yg_CMBkg_ALL_BINS import YXG_CMBKXG_ALLBINS_MISCENTER_Likelihood
 from .yg.joint_yg_CMBkg_miscenter import YXG_CMBKXG_MISCENTER_Likelihood
 from .yg.kg_ALL_BINS_CMBlens import CMBKXG_ALLBINS_Likelihood
