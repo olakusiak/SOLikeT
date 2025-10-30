@@ -1,0 +1,153 @@
+output: /Users/aleksandra/software/SOLikeT/soliket/sims/chains/yh_websky_test
+
+#To change each time
+#Mmin HOD 
+#dndz 
+
+# B12 start point
+likelihood:
+  soliket.sims.yh.YXHALOS_Likelihood:
+    zmin: 0.20
+    zmax: 0.50
+    Mmin: 6.0e13
+    Mmax: 5.0e+15
+    data_directory: "/Users/aleksandra/software/data_for_SOLikeT_sims/yh/"
+    yxh_data_file: "ell_cl_nmt_websky_healpyNSIDE8192_tSZxhalos"
+    cov_data_file: 'cov/cov_nmt_websky_healpyNSIDE8192_tSZxhalos' #"yh/cov/covar-GNG_websky_yh_nside_8192"
+    bp_wind_yh_file: "bpwf_namaster_yg_MaglimxACT_ellmax5630_ellmin30_dl.npy"
+    pixwin_yh_file: "pixel_window_nside8192.txt"
+    Nbins_yh: 25
+params:
+    P0_B12:
+      prior:
+        min: 16.0001
+        max: 25.00
+      ref:  18.1 #calibrated to match the data
+      proposal: 0.05
+      latex: P0_{B12}
+    # alpha_z_P0_B12: # = -0.758;
+    #   prior:
+    #     min: -7.0
+    #     max: 7.0
+    #   ref: -0.758
+    #   proposal: 0.07
+    #   latex: \alpha_z^{P0_{B12}}
+    beta_B12: #outer slope
+      prior:
+        min: 1.00
+        max: 10.0
+      ref: 4.35
+      proposal: 0.05
+      latex: \beta_{B12}
+    # alpha_z_beta_B12: #0.415;
+    #   prior:
+    #     min: -7.0
+    #     max: 7.0
+    #   ref:  0.415
+    #   proposal: 0.05
+    #   latex: \alpha_z^{\beta_{B12}}
+
+
+
+# sampler:
+#     mcmc:
+#       covmat: null
+#       #covmat: "/Users/aleksandra/software/Likelihoods_sz/soliket/ymap/chains/joint_DES_alpha_sigma_M1prime_Mmin_shotnoise_blue_10-28.covmat"
+#       Rminus1_stop: 0.01
+#       learn_proposal: True
+#       learn_proposal_Rminus1_max: 100.0
+#       learn_proposal_Rminus1_max_early: 300.0
+#       #drag: true
+#       #output_every: 10s
+#       learn_every: 100
+#       proposal_scale: 2.4
+#       max_tries: 5000
+sampler:
+    evaluate:
+      override:
+        P0_B12: 18.1
+        beta_B12: 4.35
+
+
+theory :
+  classy_szfast.classy_sz.classy_sz:
+     use_class_sz_fast_mode: 0
+     use_class_sz_no_cosmo_mode : 0
+     extra_args:
+                 output: 'tSZ_gal_1h,tSZ_gal_2h'
+                 galaxy_sample : 'custom' # the id string of each sample, can be any integer
+                 full_path_to_dndz_gal : '/Users/aleksandra/Desktop/Maglim_tSZ/sims/yxhalos_websky/data//halos_distributions/norm_dndz/halo_z_mass_websky_z0.20-0.50_MinMass_6.0e+13_MaxMass_5.0e+15.txt'
+
+                 dlogell: 0.1
+                 multipoles_sz: 'ell_mock'
+                 ell_max: 8200.0
+                 ell_min: 2.0
+
+                 z_min : 0.005 
+                 z_max : 1.2
+                 M_min : 884000000000.0001 #Mmin_websky_msun*websky_h,
+                 M_max : 6800000000000000.0 #Max_websky_msun*websky_h,
+
+                 ### Cosmology
+                 # Websky
+                 omega_b: 0.022657600000000007
+                 omega_cdm: 0.12068640000000003
+                 h : 0.68
+                 tau_reio : 0.0543
+                 sigma8 : 0.81 
+                 n_s : 0.965 
+                 
+                 N_ncdm : 0
+                 N_ur : 3.046
+                 cosmo_model: 0
+
+                 #websky things
+                 use_websky_m200m_to_m200c_conversion : 1
+                 mass function : 'T08'       
+                 delta_for_galaxies: "200m"
+                 delta_for_matter_density: "200m"
+                 delta_for_electron_pressure: "200c"
+                 hm_consistency: 0
+                 concentration parameter: 'D08' 
+         
+
+                #####HOD PARAMS
+                 sigma_log10M_HOD: 0.00001
+                 centrals_only_HOD: 1
+                 M_min_HOD: 40800000000000.0 #Mmin*websky_h #Msun/h  
+                 x_out_truncated_nfw_profile: 1.0 #for lensing
+
+    
+                 # #### Pressure profile
+                 pressure profile : 'B12'
+                 units for tSZ spectrum: 'dimensionless'
+                 x_outSZ: 4. 
+                
+
+                 ### Precision
+                 redshift_epsabs : 1.0e-40
+                 redshift_epsrel : 1.e-3
+                 mass_epsabs : 1.0e-40
+                 mass_epsrel : 1.e-3
+                 ndim_masses : 80
+                 ndim_redshifts : 80
+                 class_sz_verbose : 0
+                 nonlinear_verbose : 0
+
+                 ## fast params
+                 use_fft_for_profiles_transform : 1
+                 N_samp_fftw : 1024
+                 n_z_pressure_profile : 100
+                 n_m_pressure_profile : 100
+                 n_l_pressure_profile : 100    
+                 l_min_gas_pressure_profile :  1.e-2
+                 l_max_gas_pressure_profile :  5.e4      
+                 x_min_gas_pressure_fftw : 1.e-4
+                 x_max_gas_pressure_fftw : 1.e3 
+                 pressure_profile_epsrel: 1.e-3 
+                 pressure_profile_epsabs: 1.e-40   
+
+
+stop_at_error: True
+debug: False
+timing: True
